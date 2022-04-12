@@ -1,4 +1,4 @@
-﻿namespace PDFTemplator.Shared
+﻿namespace pdfTemplator.Shared
 {
     public enum PdfFieldTypes
     {
