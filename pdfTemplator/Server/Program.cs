@@ -23,6 +23,9 @@ builder.Services.AddAuthentication()
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
+builder.Services.Configure<PathsOptions>(
+    builder.Configuration.GetSection(PathsOptions.Paths));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

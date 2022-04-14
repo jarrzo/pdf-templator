@@ -3,6 +3,5 @@
     public enum PdfFieldTypes
     {
         Text,
-        Image,
     }
 }
