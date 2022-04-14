@@ -6,9 +6,8 @@ using pdfTemplator.Shared;
 
 namespace pdfTemplator.Server.Controllers
 {
-    //[Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class PdfTemplateController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -40,7 +39,7 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPost("{id}/convert")]
-        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] Dictionary<string, string> data)
+        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] List<PdfKeyValue> data)
         {
             var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 

@@ -1,9 +1,11 @@
 ﻿@page "/fetchdata"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using pdfTemplator.Client.Services
 @using pdfTemplator.Shared
 @attribute [Authorize]
 @inject HttpClient Http
+@inject IPdfTemplateService PdfTemplateService
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -45,6 +47,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        var templates = await PdfTemplateService.GetPdfTemplates();
         try
         {
             forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");

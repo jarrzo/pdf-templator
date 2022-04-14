@@ -23,7 +23,11 @@ namespace pdfTemplator.Test
                 Content = _content
             };
             _converter.Data = new();
-            _converter.Data.Add("name", "test");
+            _converter.Data.Add(new PdfKeyValue
+            {
+                Key = "name",
+                Value = "test"
+            });
 
             _converter.FillPdf();
 
@@ -40,7 +44,11 @@ namespace pdfTemplator.Test
                 Content = _content
             };
             _converter.Data = new();
-            _converter.Data.Add("name", "test");
+            _converter.Data.Add(new PdfKeyValue
+            {
+                Key = "name",
+                Value = "test"
+            });
 
             _converter.FillPdf();
 

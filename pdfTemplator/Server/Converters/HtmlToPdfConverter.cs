@@ -13,7 +13,7 @@ namespace pdfTemplator.Server.Converters
         private readonly ILogger<HtmlToPdfConverter> _logger;
         private readonly PathsOptions _paths;
         public PdfTemplate? Template;
-        public Dictionary<string, string>? Data;
+        public List<PdfKeyValue>? Data;
         private string? _pdfPath;
 
         public HtmlToPdfConverter() { }
