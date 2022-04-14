@@ -6,7 +6,7 @@ using pdfTemplator.Shared;
 
 namespace pdfTemplator.Server.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PdfTemplateController : ControllerBase
