@@ -12,8 +12,8 @@ using pdfTemplator.Server.Data;
 namespace pdfTemplator.Server.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220412201638_CreatePdfEntities")]
-    partial class CreatePdfEntities
+    [Migration("20220414212533_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -367,7 +367,7 @@ namespace pdfTemplator.Server.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("PDFTemplator.Shared.PdfField", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.PdfConversion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -375,30 +375,26 @@ namespace pdfTemplator.Server.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Name")
+                    b.Property<string>("DataJSON")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Path")
+                    b.Property<string>("PdfPath")
                         .IsRequired()
-                        .HasMaxLength(64)
-                        .HasColumnType("nvarchar(64)");
+                        .HasMaxLength(128)
+                        .HasColumnType("nvarchar(128)");
 
-                    b.Property<int?>("PdfTemplateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
+                    b.Property<int>("PdfTemplateId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PdfTemplateId");
 
-                    b.ToTable("PdfFields");
+                    b.ToTable("PdfConversions");
                 });
 
-            modelBuilder.Entity("PDFTemplator.Shared.PdfTemplate", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.PdfTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -471,16 +467,15 @@ namespace pdfTemplator.Server.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PDFTemplator.Shared.PdfField", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.PdfConversion", b =>
                 {
-                    b.HasOne("PDFTemplator.Shared.PdfTemplate", null)
-                        .WithMany("Insertables")
-                        .HasForeignKey("PdfTemplateId");
-                });
+                    b.HasOne("pdfTemplator.Shared.PdfTemplate", "PdfTemplate")
+                        .WithMany()
+                        .HasForeignKey("PdfTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-            modelBuilder.Entity("PDFTemplator.Shared.PdfTemplate", b =>
-                {
-                    b.Navigation("Insertables");
+                    b.Navigation("PdfTemplate");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,35 +1,63 @@
 ﻿using iText.Html2pdf;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
+using pdfTemplator.Shared;
 
 namespace pdfTemplator.Server.Converters
 {
     public class HtmlToPdfConverter
     {
+        private readonly ApplicationDbContext _db;
         private readonly ILogger<HtmlToPdfConverter> _logger;
         private readonly PathsOptions _paths;
-        public string Content;
+        public PdfTemplate? Template;
+        public Dictionary<string, string>? Data;
+        private string? _pdfPath;
 
-        public HtmlToPdfConverter(ILogger<HtmlToPdfConverter> logger, PathsOptions paths)
+        public HtmlToPdfConverter() { }
+
+        public HtmlToPdfConverter(ILogger<HtmlToPdfConverter> logger, IOptions<PathsOptions> options, ApplicationDbContext db)
         {
             _logger = logger;
-            _paths = paths;
-
-            Content = "";
+            _paths = options.Value;
+            _db = db;
         }
 
-        public FileStream GetPdf()
+        public void FillPdf()
         {
+            if (Template != null && Data != null)
+            {
+                foreach (var item in Data)
+                {
+                    var key = "{{" + item.Key + "}}";
+                    var value = item.Value;
+                    Template.Content = Template.Content.Replace(key, value);
+                }
+            }
+        }
+
+        public string CreatePdf()
+        {
+            FillPdf();
+
             ConverterProperties converterProperties = new ConverterProperties();
 
-            var fileName = Guid.NewGuid().ToString() + ".pdf";
-            var path = _paths.PdfStoringPath + DateTime.Now.ToString("\\yyyy\\MM\\dd") + "\\";
+            var fileName = Path.GetRandomFileName() + ".pdf";
 
-            FileStream pdf = File.Open(path+fileName, FileMode.Create);
+            var path = _paths.PdfStoringPath + DateTime.Now.ToString("\\\\yyyy\\\\MM\\\\dd") + "\\";
+            Directory.CreateDirectory(path);
+
+            FileStream pdf = File.Open(path + fileName, FileMode.Create);
 
             try
             {
-                HtmlConverter.ConvertToPdf(Content, pdf, converterProperties);
-                _logger.LogInformation("Converted file: {fileName}", fileName);
+                if (Template != null)
+                {
+                    HtmlConverter.ConvertToPdf(Template.Content, pdf, converterProperties);
+                    _logger.LogInformation("Converted file: {fileName}", fileName);
+                }
             }
             catch (Exception ex)
             {
@@ -39,7 +67,22 @@ namespace pdfTemplator.Server.Converters
 
             pdf.Close();
 
-            return pdf;
+            _pdfPath = pdf.Name;
+
+            CreatePdfConversion();
+
+            return Convert.ToBase64String(File.ReadAllBytes(_pdfPath));
+        }
+
+        private void CreatePdfConversion()
+        {
+            _db.PdfConversions.Add(new PdfConversion
+            {
+                DataJSON = JsonConvert.SerializeObject(Data),
+                PdfTemplate = Template!,
+                PdfPath = _pdfPath!,
+            });
+            _db.SaveChanges();
         }
     }
 }

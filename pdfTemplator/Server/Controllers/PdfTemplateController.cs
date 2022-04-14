@@ -1,6 +1,6 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Shared;
 
@@ -13,11 +13,13 @@ namespace pdfTemplator.Server.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly ILogger<PdfTemplateController> _logger;
+        private readonly HtmlToPdfConverter _converter;
 
-        public PdfTemplateController(ILogger<PdfTemplateController> logger, ApplicationDbContext db)
+        public PdfTemplateController(ILogger<PdfTemplateController> logger, ApplicationDbContext db, HtmlToPdfConverter converter)
         {
             _logger = logger;
             _db = db;
+            _converter = converter;
         }
 
         [HttpGet]
@@ -35,6 +37,22 @@ namespace pdfTemplator.Server.Controllers
                 return NotFound();
 
             return Ok(pdfTemplate);
+        }
+
+        [HttpPost("{id}/convert")]
+        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] Dictionary<string, string> data)
+        {
+            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (pdfTemplate == null)
+                return NotFound();
+
+            _converter.Template = pdfTemplate;
+            _converter.Data = data;
+
+            var pdfBase64String = _converter.CreatePdf();
+
+            return Ok(pdfBase64String);
         }
 
         [HttpPost]
@@ -56,7 +74,6 @@ namespace pdfTemplator.Server.Controllers
 
             dbPdfTemplate.Name = pdfTemplate.Name;
             dbPdfTemplate.Content = pdfTemplate.Content;
-            dbPdfTemplate.Insertables = pdfTemplate.Insertables;
 
             await _db.SaveChangesAsync();
 

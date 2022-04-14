@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
 
@@ -27,6 +28,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<PathsOptions>(
     builder.Configuration.GetSection(PathsOptions.Paths));
+builder.Services.AddTransient<HtmlToPdfConverter>();
 
 var app = builder.Build();
 
