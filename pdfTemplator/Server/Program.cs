@@ -3,8 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .CreateLogger();
+
+builder.Logging.AddSerilog(logger);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
