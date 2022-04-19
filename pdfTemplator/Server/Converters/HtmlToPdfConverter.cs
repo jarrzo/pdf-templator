@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
-using pdfTemplator.Shared;
+using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Server.Converters
 {
@@ -12,9 +12,11 @@ namespace pdfTemplator.Server.Converters
         private readonly ApplicationDbContext _db;
         private readonly ILogger<HtmlToPdfConverter> _logger;
         private readonly PathsOptions _paths;
+        private readonly ConverterProperties _converterProperties;
         public PdfTemplate? Template;
         public List<PdfKeyValue>? Data;
         private string? _pdfPath;
+        private string? _pdfName;
 
         public HtmlToPdfConverter() { }
 
@@ -23,11 +25,40 @@ namespace pdfTemplator.Server.Converters
             _logger = logger;
             _paths = options.Value;
             _db = db;
+
+            _converterProperties = new();
         }
 
-        public void FillPdf()
+        public string CreatePdf()
         {
-            if (Template != null && Data != null)
+            if (Template == null) return "";
+
+            FillTemplate();
+
+            GenerateFileName();
+            CreateDir();
+
+            FileStream pdf = File.Open(_pdfPath + _pdfName, FileMode.Create);
+            try
+            {
+                HtmlConverter.ConvertToPdf(Template.Content, pdf, _converterProperties);
+                _logger.LogInformation("Converted file: {fileName}", _pdfName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogCritical("Convertation failed: {error}", ex.Message);
+                throw;
+            }
+            pdf.Close();
+
+            CreatePdfConversion();
+
+            return Convert.ToBase64String(File.ReadAllBytes(_pdfPath + _pdfName));
+        }
+
+        public void FillTemplate()
+        {
+            if (Data != null)
             {
                 foreach (var item in Data)
                 {
@@ -38,40 +69,14 @@ namespace pdfTemplator.Server.Converters
             }
         }
 
-        public string CreatePdf()
+        private void GenerateFileName()
         {
-            FillPdf();
+            _pdfName = Path.GetRandomFileName() + ".pdf";
+        }
 
-            ConverterProperties converterProperties = new ConverterProperties();
-
-            var fileName = Path.GetRandomFileName() + ".pdf";
-
-            var path = _paths.PdfStoringPath + DateTime.Now.ToString("\\\\yyyy\\\\MM\\\\dd") + "\\";
-            Directory.CreateDirectory(path);
-
-            FileStream pdf = File.Open(path + fileName, FileMode.Create);
-
-            try
-            {
-                if (Template != null)
-                {
-                    HtmlConverter.ConvertToPdf(Template.Content, pdf, converterProperties);
-                    _logger.LogInformation("Converted file: {fileName}", fileName);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogCritical("Convertation failed: {error}", ex.Message);
-                throw;
-            }
-
-            pdf.Close();
-
-            _pdfPath = pdf.Name;
-
-            CreatePdfConversion();
-
-            return Convert.ToBase64String(File.ReadAllBytes(_pdfPath));
+        private void CreateDir()
+        {
+            _pdfPath = Directory.CreateDirectory(_paths.PdfStoringPath + DateTime.Now.ToString("\\\\yyyy\\\\MM\\\\dd\\")).FullName;
         }
 
         private void CreatePdfConversion()
@@ -80,7 +85,7 @@ namespace pdfTemplator.Server.Converters
             {
                 DataJSON = JsonConvert.SerializeObject(Data),
                 PdfTemplate = Template!,
-                PdfPath = _pdfPath!,
+                PdfPath = _pdfPath + _pdfName,
             });
             _db.SaveChanges();
         }

@@ -11,8 +11,6 @@ var logger = new LoggerConfiguration()
     .ReadFrom.Configuration(builder.Configuration)
     .CreateLogger();
 
-builder.Logging.AddSerilog(logger);
-
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -36,6 +34,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<PathsOptions>(
     builder.Configuration.GetSection(PathsOptions.Paths));
 builder.Services.AddTransient<HtmlToPdfConverter>();
+
+builder.Logging.ClearProviders();
+builder.Logging.AddSerilog(logger);
 
 var app = builder.Build();
 

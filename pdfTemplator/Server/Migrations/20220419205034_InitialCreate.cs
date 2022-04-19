@@ -1,8 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace pdfTemplator.Server.Data.Migrations
+#nullable disable
+
+namespace pdfTemplator.Server.Migrations
 {
-    public partial class CreateIdentitySchema : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -57,7 +60,7 @@ namespace pdfTemplator.Server.Data.Migrations
                     Description = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52030, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -71,15 +74,31 @@ namespace pdfTemplator.Server.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Version = table.Column<int>(type: "int", nullable: false),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Use = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
+                    Use = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Algorithm = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     IsX509Certificate = table.Column<bool>(type: "bit", nullable: false),
                     DataProtected = table.Column<bool>(type: "bit", nullable: false),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52030, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keys", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PdfTemplates",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PdfTemplates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,7 +114,7 @@ namespace pdfTemplator.Server.Data.Migrations
                     CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Expiration = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ConsumedTime = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 52030, nullable: false)
+                    Data = table.Column<string>(type: "nvarchar(max)", maxLength: 50000, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -208,6 +227,29 @@ namespace pdfTemplator.Server.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "PdfConversions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PdfTemplateId = table.Column<int>(type: "int", nullable: false),
+                    DataJSON = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PdfPath = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PdfConversions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PdfConversions_PdfTemplates_PdfTemplateId",
+                        column: x => x.PdfTemplateId,
+                        principalTable: "PdfTemplates",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -264,6 +306,11 @@ namespace pdfTemplator.Server.Data.Migrations
                 column: "Use");
 
             migrationBuilder.CreateIndex(
+                name: "IX_PdfConversions_PdfTemplateId",
+                table: "PdfConversions",
+                column: "PdfTemplateId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_PersistedGrants_ConsumedTime",
                 table: "PersistedGrants",
                 column: "ConsumedTime");
@@ -308,6 +355,9 @@ namespace pdfTemplator.Server.Data.Migrations
                 name: "Keys");
 
             migrationBuilder.DropTable(
+                name: "PdfConversions");
+
+            migrationBuilder.DropTable(
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
@@ -315,6 +365,9 @@ namespace pdfTemplator.Server.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "PdfTemplates");
         }
     }
 }

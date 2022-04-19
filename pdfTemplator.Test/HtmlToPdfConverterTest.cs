@@ -1,5 +1,5 @@
 using pdfTemplator.Server.Converters;
-using pdfTemplator.Shared;
+using pdfTemplator.Shared.Models;
 using Xunit;
 
 namespace pdfTemplator.Test
@@ -29,7 +29,7 @@ namespace pdfTemplator.Test
                 Value = "test"
             });
 
-            _converter.FillPdf();
+            _converter.FillTemplate();
 
             Assert.Equal(_content, _converter.Template.Content);
         }
@@ -50,7 +50,7 @@ namespace pdfTemplator.Test
                 Value = "test"
             });
 
-            _converter.FillPdf();
+            _converter.FillTemplate();
 
             Assert.NotEqual(_content, _converter.Template.Content);
             Assert.Equal("<h1>Hello test</h1>", _converter.Template.Content);

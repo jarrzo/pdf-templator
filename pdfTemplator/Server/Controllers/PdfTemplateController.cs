@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
-using pdfTemplator.Shared;
+using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Server.Controllers
 {

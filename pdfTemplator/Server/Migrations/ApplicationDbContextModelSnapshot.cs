@@ -3,19 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using pdfTemplator.Server.Data;
 
 #nullable disable
 
-namespace pdfTemplator.Server.Data.Migrations
+namespace pdfTemplator.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220414212533_InitialCreate")]
-    partial class InitialCreate
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -367,13 +365,17 @@ namespace pdfTemplator.Server.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("pdfTemplator.Shared.PdfConversion", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.PdfConversion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
 
                     b.Property<string>("DataJSON")
                         .IsRequired()
@@ -387,6 +389,10 @@ namespace pdfTemplator.Server.Data.Migrations
                     b.Property<int>("PdfTemplateId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("PdfTemplateId");
@@ -394,7 +400,7 @@ namespace pdfTemplator.Server.Data.Migrations
                     b.ToTable("PdfConversions");
                 });
 
-            modelBuilder.Entity("pdfTemplator.Shared.PdfTemplate", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.PdfTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -406,10 +412,18 @@ namespace pdfTemplator.Server.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasPrecision(3)
+                        .HasColumnType("datetime2(3)");
 
                     b.HasKey("Id");
 
@@ -467,9 +481,9 @@ namespace pdfTemplator.Server.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("pdfTemplator.Shared.PdfConversion", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.PdfConversion", b =>
                 {
-                    b.HasOne("pdfTemplator.Shared.PdfTemplate", "PdfTemplate")
+                    b.HasOne("pdfTemplator.Shared.Models.PdfTemplate", "PdfTemplate")
                         .WithMany()
                         .HasForeignKey("PdfTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)

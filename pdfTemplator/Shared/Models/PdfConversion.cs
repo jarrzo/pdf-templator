@@ -1,10 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace pdfTemplator.Shared
+namespace pdfTemplator.Shared.Models
 {
-    public class PdfConversion
+    public class PdfConversion : BaseModel
     {
-        public int Id { get; set; }
         [Required, MaxLength(64)]
         public PdfTemplate PdfTemplate { get; set; } = null!;
         [Required]
