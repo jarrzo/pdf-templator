@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using pdfTemplator.Server.Models;
-using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Server.Data
 {
@@ -38,5 +37,6 @@ namespace pdfTemplator.Server.Data
 
         public DbSet<PdfTemplate> PdfTemplates { get; set; } = null!;
         public DbSet<PdfConversion> PdfConversions { get; set; } = null!;
+        public DbSet<Category> Categories { get; set; } = null!;
     }
 }

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
-using pdfTemplator.Shared.Models;
+using pdfTemplator.Server.Models;
 
 namespace pdfTemplator.Server.Controllers
 {
@@ -60,7 +60,7 @@ namespace pdfTemplator.Server.Controllers
             _db.PdfTemplates.Add(pdfTemplate);
             await _db.SaveChangesAsync();
 
-            return Ok(pdfTemplate);
+            return Ok(true);
         }
 
         [HttpPut("{id}")]
@@ -76,7 +76,7 @@ namespace pdfTemplator.Server.Controllers
 
             await _db.SaveChangesAsync();
 
-            return Ok(dbPdfTemplate);
+            return Ok(true);
         }
 
         [HttpDelete("{id}")]
@@ -90,7 +90,7 @@ namespace pdfTemplator.Server.Controllers
             _db.PdfTemplates.Remove(dbPdfTemplate);
             await _db.SaveChangesAsync();
 
-            return Ok(dbPdfTemplate);
+            return Ok(true);
         }
     }
 }

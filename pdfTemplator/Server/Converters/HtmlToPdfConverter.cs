@@ -1,9 +1,8 @@
 ﻿using iText.Html2pdf;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
-using pdfTemplator.Shared.Models;
+using System.Text.Json;
 
 namespace pdfTemplator.Server.Converters
 {
@@ -83,7 +82,7 @@ namespace pdfTemplator.Server.Converters
         {
             _db.PdfConversions.Add(new PdfConversion
             {
-                DataJSON = JsonConvert.SerializeObject(Data),
+                DataJSON = JsonSerializer.Serialize(Data),
                 PdfTemplate = Template!,
                 PdfPath = _pdfPath + _pdfName,
             });
