@@ -373,9 +373,6 @@ namespace pdfTemplator.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasPrecision(3)
                         .HasColumnType("datetime2(3)");
@@ -398,8 +395,6 @@ namespace pdfTemplator.Server.Migrations
                         .HasColumnType("datetime2(3)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ParentId");
 
@@ -449,9 +444,6 @@ namespace pdfTemplator.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
@@ -478,8 +470,6 @@ namespace pdfTemplator.Server.Migrations
                         .HasColumnType("datetime2(3)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("CategoryId");
 
@@ -539,15 +529,9 @@ namespace pdfTemplator.Server.Migrations
 
             modelBuilder.Entity("pdfTemplator.Server.Models.Category", b =>
                 {
-                    b.HasOne("pdfTemplator.Server.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("pdfTemplator.Server.Models.Category", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
-
-                    b.Navigation("ApplicationUser");
 
                     b.Navigation("Parent");
                 });
@@ -565,15 +549,9 @@ namespace pdfTemplator.Server.Migrations
 
             modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
                 {
-                    b.HasOne("pdfTemplator.Server.Models.ApplicationUser", "ApplicationUser")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId");
-
                     b.HasOne("pdfTemplator.Server.Models.Category", null)
                         .WithMany("PdfTemplates")
                         .HasForeignKey("CategoryId");
-
-                    b.Navigation("ApplicationUser");
                 });
 
             modelBuilder.Entity("pdfTemplator.Server.Models.Category", b =>

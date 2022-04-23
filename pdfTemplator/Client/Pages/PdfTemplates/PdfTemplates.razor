@@ -7,10 +7,6 @@
 
 <PageTitle>Templates</PageTitle>
 
-<h1>Template list</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
-
 @if (_list == null)
 {
     <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
@@ -18,6 +14,13 @@
 else
 {
     <MudTable Hover="true" Elevation="25" Items="_list" Filter="new Func<PdfTemplate, bool>(Search)" @bind-template="_template">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" OnClick="(() => InvokeModal())" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
+            </div>
+            <MudSpacer />
+            <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Brands"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+        </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>

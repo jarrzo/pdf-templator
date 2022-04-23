@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
@@ -24,7 +25,8 @@ namespace pdfTemplator.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _db.PdfTemplates.ToListAsync());
+            var pdfTemplates = await _db.PdfTemplates.ToListAsync();
+            return Ok(await Result<List<PdfTemplate>>.SuccessAsync(pdfTemplates));
         }
 
         [HttpGet("{id}")]
@@ -33,9 +35,9 @@ namespace pdfTemplator.Server.Controllers
             var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
             if (pdfTemplate == null)
-                return NotFound();
+                return Ok(await Result<PdfTemplate>.FailAsync("Not found!"));
 
-            return Ok(pdfTemplate);
+            return Ok(await Result<PdfTemplate>.SuccessAsync(pdfTemplate));
         }
 
         [HttpPost("{id}/convert")]
@@ -44,14 +46,14 @@ namespace pdfTemplator.Server.Controllers
             var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
             if (pdfTemplate == null)
-                return NotFound();
+                return Ok(await Result<string>.FailAsync("Not found!"));
 
             _converter.Template = pdfTemplate;
             _converter.Data = data;
 
             var pdfBase64String = _converter.CreatePdf();
 
-            return Ok(pdfBase64String);
+            return Ok(await Result<string>.SuccessAsync(pdfBase64String, "Template converted"));
         }
 
         [HttpPost]
@@ -60,7 +62,7 @@ namespace pdfTemplator.Server.Controllers
             _db.PdfTemplates.Add(pdfTemplate);
             await _db.SaveChangesAsync();
 
-            return Ok(true);
+            return Ok(await Result<int>.SuccessAsync(pdfTemplate.Id, "Template created"));
         }
 
         [HttpPut("{id}")]
@@ -69,14 +71,16 @@ namespace pdfTemplator.Server.Controllers
             var dbPdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
             if (dbPdfTemplate == null)
-                return NotFound();
+                return Ok(await Result<int>.FailAsync("Not found!"));
 
             dbPdfTemplate.Name = pdfTemplate.Name;
+            dbPdfTemplate.Description = pdfTemplate.Description;
             dbPdfTemplate.Content = pdfTemplate.Content;
 
+            _db.Update(dbPdfTemplate);
             await _db.SaveChangesAsync();
 
-            return Ok(true);
+            return Ok(await Result<int>.SuccessAsync(dbPdfTemplate.Id, "Template updated"));
         }
 
         [HttpDelete("{id}")]
@@ -85,12 +89,12 @@ namespace pdfTemplator.Server.Controllers
             var dbPdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
             if (dbPdfTemplate == null)
-                return NotFound();
+                return Ok(await Result<int>.FailAsync("Not found!"));
 
             _db.PdfTemplates.Remove(dbPdfTemplate);
             await _db.SaveChangesAsync();
 
-            return Ok(true);
+            return Ok(await Result<int>.SuccessAsync(dbPdfTemplate.Id, "Template deleted"));
         }
     }
 }

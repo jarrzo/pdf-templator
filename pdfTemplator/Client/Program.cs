@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 using pdfTemplator.Client;
-using pdfTemplator.Client.Managers.Models.PdfTemplate;
+using pdfTemplator.Client.Managers.Models;
 using pdfTemplator.Client.Managers.Preferences;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

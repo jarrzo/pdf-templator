@@ -12,7 +12,5 @@ namespace pdfTemplator.Server.Models
         public Category? Parent { get; set; }
         public ICollection<Category> Children { get; set; } = null!;
         public ICollection<PdfTemplate> PdfTemplates { get; set; } = null!;
-
-        public ApplicationUser ApplicationUser { get; set; } = null!;
     }
 }

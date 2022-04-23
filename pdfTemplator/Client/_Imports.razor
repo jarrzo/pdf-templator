@@ -9,10 +9,11 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Http
 @using Microsoft.JSInterop
 @using pdfTemplator.Client
-@using pdfTemplator.Client.Managers.Models.PdfTemplate
+@using pdfTemplator.Client.Managers.Models
 @using pdfTemplator.Client.Managers.Preferences
 @using pdfTemplator.Client.Shared
 @using MudBlazor
+@using Blazored.FluentValidation
 
 @inject IPdfTemplateManager _pdfTemplateManager
 @inject ISnackbar _snackBar
@@ -20,3 +21,4 @@
 @inject ClientPreferenceManager _clientPreferenceManager
 @inject ILocalStorageService _localStorage;
 @inject NavigationManager _navigationManager
+@inject IJSRuntime _jsRuntime;

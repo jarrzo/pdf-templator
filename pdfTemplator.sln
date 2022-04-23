@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pdfTemplator.Client", "pdfT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pdfTemplator.Shared", "pdfTemplator\Shared\pdfTemplator.Shared.csproj", "{54EC08A6-9574-405B-A212-C7CDD60B4F8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pdfTemplator.Test", "pdfTemplator.Test\pdfTemplator.Test.csproj", "{BDE13A59-FE42-4B5E-9392-C17B37E1BA9F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "pdfTemplator.Test", "pdfTemplator.Test\pdfTemplator.Test.csproj", "{BDE13A59-FE42-4B5E-9392-C17B37E1BA9F}"
 	ProjectSection(ProjectDependencies) = postProject
 		{D03F7818-134B-4C74-BAB0-A1FCAB65702F} = {D03F7818-134B-4C74-BAB0-A1FCAB65702F}
 		{54EC08A6-9574-405B-A212-C7CDD60B4F8F} = {54EC08A6-9574-405B-A212-C7CDD60B4F8F}
