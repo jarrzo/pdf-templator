@@ -45,7 +45,7 @@ namespace pdfTemplator.Client.Managers.Models
             HttpResponseMessage response;
 
             if(request.Id > 0)
-                response = await _httpClient.PutAsJsonAsync($"PdfTemplateEndpoints.Put/{request.Id}", request);
+                response = await _httpClient.PutAsJsonAsync($"{PdfTemplateEndpoints.Put}/{request.Id}", request);
             else
                 response = await _httpClient.PostAsJsonAsync(PdfTemplateEndpoints.Post, request);
 

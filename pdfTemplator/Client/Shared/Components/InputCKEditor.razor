@@ -3,10 +3,14 @@
 @inherits InputTextArea
 
 <div id="toolBar-@Id"></div>
-<div @attributes="AdditionalAttributes"
-          id="@Id"
-          class="@CssClass"
-          value="@CurrentValue"></div>
+<div class="row-editor">
+    <div class="editor-container">
+        <div @attributes="AdditionalAttributes"
+             id="@Id"
+             class="editor @CssClass"
+             value="@CurrentValue"></div>
+    </div>
+</div>
 
 @code {
     string _id;

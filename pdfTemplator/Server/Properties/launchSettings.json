@@ -10,7 +10,6 @@
   "profiles": {
     "pdfTemplator.Server": {
       "commandName": "Project",
-      "commandLineArgs": "watch run",
       "dotnetRunMessages": true,
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",

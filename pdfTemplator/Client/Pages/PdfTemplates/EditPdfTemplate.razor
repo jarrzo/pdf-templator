@@ -1,53 +1,49 @@
-﻿@using pdfTemplator.Client.Shared.Components
-
+﻿@page "/templates/new"
+@page "/templates/{id:int}"
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using pdfTemplator.Client.Models
+@using pdfTemplator.Client.Shared.Components
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EditPdfTemplate> _localizer
 
 <PageTitle>Edit template</PageTitle>
 
 <EditForm Model="@Template" OnValidSubmit="SaveAsync">
-    <FluentValidationValidator @ref="_fluentValidationValidator" />
-    <MudDialog>
-        <TitleContent>
-            @{
-                if (Template.Id == 0)
-                {
-                    <MudText Typo="Typo.h6">
-                        <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
-                        @_localizer["Add template"]
-                    </MudText>
-                }
-                else
-                {
-                    <MudText Typo="Typo.h6">
-                        <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
-                        @_localizer["Update template"] #@Template.Id
-                    </MudText>
-                }
-            }
-        </TitleContent>
-        <DialogContent>
-            <MudGrid>
-                <MudItem xs="12" md="3">
-                    <MudTextField T="string" For="@(() => Template.Name)" @bind-Value="Template.Name" Label="@_localizer["Name"]" />
-                </MudItem>
-                <MudItem xs="12" md="9">
-                    <MudTextField For="@(() => Template.Description)" @bind-Value="Template.Description" Label="@_localizer["Description"]" />
-                </MudItem>
-                <MudItem xs="12" md="12">
-                    <InputCKEditor For="@(() => Template.Content)" @bind-Value="Template.Content" Label="@_localizer["Content"]"></InputCKEditor>
-                </MudItem>
-            </MudGrid>
-        </DialogContent>
-        <DialogActions>
-            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">@_localizer["Cancel"]</MudButton>
-            @if (Template.Id != 0)
-            {
-                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Secondary">@_localizer["Update"]</MudButton>
-            }
-            else
-            {
-                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Disabled="@(!Validated)" Color="Color.Success">@_localizer["Save"]</MudButton>
-            }
-        </DialogActions>
-    </MudDialog>
+    <FluentValidationValidator />
+    @if (Template.Id == 0)
+    {
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+            @_localizer["Add template"]
+        </MudText>
+    }
+    else
+    {
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+            @_localizer["Update template"] #@Template.Id
+        </MudText>
+    }
+    <MudGrid>
+        <MudItem xs="12" md="3">
+            <MudTextField T="string" For="@(() => Template.Name)" @bind-Value="Template.Name" Label="@_localizer["Name"]" />
+        </MudItem>
+        <MudItem xs="12" md="9">
+            <MudTextField For="@(() => Template.Description)" @bind-Value="Template.Description" Label="@_localizer["Description"]" />
+        </MudItem>
+        <MudItem xs="12" md="12">
+            <InputCKEditor For="@(() => Template.Content)" @bind-Value="Template.Content" Label="@_localizer["Content"]"></InputCKEditor>
+        </MudItem>
+    </MudGrid>
+    <div class="mt-3">
+        @if (Template.Id != 0)
+        {
+            <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Secondary">@_localizer["Update"]</MudButton>
+        }
+        else
+        {
+            <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">@_localizer["Save"]</MudButton>
+        }
+        <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Button" Class="ml-2" Color="Color.Info" Href="/templates">@_localizer["Go back"]</MudButton>
+    </div>
 </EditForm>

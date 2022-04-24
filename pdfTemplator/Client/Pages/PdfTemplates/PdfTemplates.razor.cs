@@ -35,32 +35,6 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             return template.Description?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
         }
 
-        private async Task InvokeModal(int id = 0)
-        {
-            var parameters = new DialogParameters();
-            if (id != 0)
-            {
-                _template = _list.FirstOrDefault(c => c.Id == id);
-                if (_template != null)
-                {
-                    parameters.Add(nameof(EditPdfTemplate.Template), _template);
-                }
-            }
-            var options = new DialogOptions { 
-                CloseButton = true, 
-                MaxWidth = MaxWidth.ExtraLarge, 
-                FullWidth = true, 
-                DisableBackdropClick = true, 
-                Position = DialogPosition.TopCenter,
-            };
-            var dialog = _dialogService.Show<EditPdfTemplate>(id == 0 ? _localizer["Create"] : _localizer["Edit"], parameters, options);
-            var result = await dialog.Result;
-            if (!result.Cancelled)
-            {
-                await Reset();
-            }
-        }
-
         private async Task Delete(int id)
         {
             string deleteContent = _localizer["Delete Content"];

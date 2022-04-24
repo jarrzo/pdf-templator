@@ -1,3 +1,24 @@
-﻿.ck-editor__editable {
-    min-height: 500px;
+﻿.row-editor .editor {
+    /* A pixel is added for each of the border. */
+    width: calc(21cm + 2px);
+    min-height: calc(29.7cm + 2px);
+    /* To avoid having extra scrolls inside the editor container. */
+    height: fit-content;
+    padding: 2cm 1.2cm;
+    margin: 2.5rem;
+    border: 1px hsl( 0, 0%, 82.7% ) solid;
+    background-color: #fff;
+    box-shadow: 0 0 5px hsla( 0, 0%, 0%, .1 );
+    box-sizing: border-box;
+}
+
+.row-editor {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    overflow-y: auto;
+    background-color: #f2f2f2;
+    border: 1px solid hsl(0, 0%, 77%);
+    /* Limit the max-height of the editor to avoid scrolling from bottom to top to see the toolbar. */
+    max-height: 700px;
 }
