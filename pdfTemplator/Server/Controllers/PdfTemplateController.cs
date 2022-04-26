@@ -8,7 +8,7 @@ using pdfTemplator.Shared.Wrapper;
 namespace pdfTemplator.Server.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/pdfTemplate")]
     public class PdfTemplateController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -43,12 +43,12 @@ namespace pdfTemplator.Server.Controllers
         [HttpGet("{id}/conversions")]
         public async Task<IActionResult> GetConversions(int id)
         {
-            var pdfTemplate = await _db.PdfTemplates.Include(x => x.Conversions).FirstOrDefaultAsync(x => x.Id == id);
+            var pdfConversions = await _db.PdfConversions.Where(x => x.PdfTemplateId == id).ToListAsync();
 
-            if (pdfTemplate == null)
-                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
+            if (pdfConversions == null)
+                return Ok(await Result<List<PdfConversion>>.FailAsync("No conversions found!"));
 
-            return Ok(await Result<List<PdfConversion>>.SuccessAsync(pdfTemplate.Conversions));
+            return Ok(await Result<List<PdfConversion>>.SuccessAsync(pdfConversions));
         }
 
         [HttpPost("{id}/convert")]

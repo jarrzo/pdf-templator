@@ -75,7 +75,7 @@ namespace pdfTemplator.Server.Converters
 
         private void CreateDir()
         {
-            _pdfPath = Directory.CreateDirectory(_paths.PdfStoringPath + DateTime.Now.ToString("\\\\yyyy\\\\MM\\\\dd\\")).FullName;
+            _pdfPath = Directory.CreateDirectory(_paths.PdfStoringPath + DateTime.Now.ToString("\\\\yyyy\\\\MM\\\\dd") + "\\").FullName;
         }
 
         private void CreatePdfConversion()

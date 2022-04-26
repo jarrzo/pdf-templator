@@ -11,6 +11,6 @@ namespace pdfTemplator.Server.Models
         [Required]
         public string Content { get; set; } = null!;
 
-        public List<PdfConversion> Conversions { get; set; }
+        public List<PdfConversion>? Conversions { get; set; }
     }
 }

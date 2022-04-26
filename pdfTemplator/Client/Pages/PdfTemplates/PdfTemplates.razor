@@ -25,7 +25,9 @@ else
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
-            <MudTh Style="text-align:right">Veiksmai</MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.CreatedAt)">@_localizer["CreatedAt"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.UpdatedAt)">@_localizer["UpdatedAt"]</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
         </HeaderContent>
         <RowTemplate>
             <MudTd DataLabel="Id">@context.Id</MudTd>
@@ -35,8 +37,14 @@ else
             <MudTd DataLabel="Description">
                 <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
             </MudTd>
+            <MudTd DataLabel="Created At">
+                <MudHighlighter Text="@context.CreatedAt.ToString("yyyy-MM-dd")" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Updated At">
+                <MudHighlighter Text="@context.UpdatedAt.ToString("yyyy-MM-dd")" HighlightedText="@_searchString" />
+            </MudTd>
             <MudTd DataLabel="Actions" Style="text-align: right">
-                <MudMenu Label="Veiksmai" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
+                <MudMenu Label="@_localizer["Actions"]" Variant="Variant.Filled" DisableElevation="true" EndIcon="@Icons.Filled.KeyboardArrowDown" IconColor="Color.Secondary" Direction="Direction.Left" OffsetX="true">
                     <MudMenuItem Href="@("/templates/"+context.Id)">@_localizer["Edit"]</MudMenuItem>
                     <MudMenuItem @onclick="@(() => Delete(@context.Id))">@_localizer["Delete"]</MudMenuItem>
                 </MudMenu>

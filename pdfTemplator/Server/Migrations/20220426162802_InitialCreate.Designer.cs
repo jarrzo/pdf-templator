@@ -12,7 +12,7 @@ using pdfTemplator.Server.Data;
 namespace pdfTemplator.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220422223828_InitialCreate")]
+    [Migration("20220426162802_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -541,7 +541,7 @@ namespace pdfTemplator.Server.Migrations
             modelBuilder.Entity("pdfTemplator.Server.Models.PdfConversion", b =>
                 {
                     b.HasOne("pdfTemplator.Server.Models.PdfTemplate", "PdfTemplate")
-                        .WithMany()
+                        .WithMany("Conversions")
                         .HasForeignKey("PdfTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -561,6 +561,11 @@ namespace pdfTemplator.Server.Migrations
                     b.Navigation("Children");
 
                     b.Navigation("PdfTemplates");
+                });
+
+            modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
+                {
+                    b.Navigation("Conversions");
                 });
 #pragma warning restore 612, 618
         }

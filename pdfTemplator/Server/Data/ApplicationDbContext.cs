@@ -20,6 +20,24 @@ namespace pdfTemplator.Server.Data
             return base.SaveChanges();
         }
 
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            AddTimestamps();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            AddTimestamps();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            AddTimestamps();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
         private void AddTimestamps()
         {
             var entities = ChangeTracker.Entries()

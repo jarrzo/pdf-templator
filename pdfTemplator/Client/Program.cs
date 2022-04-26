@@ -33,6 +33,7 @@ builder.Services.AddMudServices(configuration =>
 });
 
 builder.Services.AddScoped<IPdfTemplateManager, PdfTemplateManager>();
+builder.Services.AddScoped<IChartManager, ChartManager>();
 builder.Services.AddScoped<ClientPreferenceManager>();
 
 await builder.Build().RunAsync();

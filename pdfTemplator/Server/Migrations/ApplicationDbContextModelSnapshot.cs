@@ -539,7 +539,7 @@ namespace pdfTemplator.Server.Migrations
             modelBuilder.Entity("pdfTemplator.Server.Models.PdfConversion", b =>
                 {
                     b.HasOne("pdfTemplator.Server.Models.PdfTemplate", "PdfTemplate")
-                        .WithMany()
+                        .WithMany("Conversions")
                         .HasForeignKey("PdfTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -559,6 +559,11 @@ namespace pdfTemplator.Server.Migrations
                     b.Navigation("Children");
 
                     b.Navigation("PdfTemplates");
+                });
+
+            modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
+                {
+                    b.Navigation("Conversions");
                 });
 #pragma warning restore 612, 618
         }

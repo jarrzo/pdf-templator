@@ -2,11 +2,11 @@
 {
     public static class PdfTemplateEndpoints
     {
-        public static string GetList = "api/PdfTemplate";
-        public static string Get = "api/PdfTemplate";
-        public static string Delete = "api/PdfTemplate";
-        public static string Post = "api/PdfTemplate";
-        public static string Put = "api/PdfTemplate";
-        public static string Convert = "api/PdfTemplate";
+        public static string GetList = "api/pdfTemplate";
+        public static string Get = "api/pdfTemplate";
+        public static string Delete = "api/pdfTemplate";
+        public static string Post = "api/pdfTemplate";
+        public static string Put = "api/pdfTemplate";
+        public static string Convert = "api/pdfTemplate";
   }
 }

@@ -1,0 +1,4 @@
+﻿@namespace pdfTemplator.Client.Shared.Charts
+@inject Microsoft.Extensions.Localization.IStringLocalizer<WeeklyConversionsChart> _localizer
+
+<MudChart ChartType="ChartType.Line" ChartSeries="@_series" XAxisLabels="@_dates" Width="100%" Height="350px"></MudChart>
