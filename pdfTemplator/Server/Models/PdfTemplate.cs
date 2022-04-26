@@ -10,5 +10,7 @@ namespace pdfTemplator.Server.Models
         public string Description { get; set; } = null!;
         [Required]
         public string Content { get; set; } = null!;
+
+        public List<PdfConversion> Conversions { get; set; }
     }
 }

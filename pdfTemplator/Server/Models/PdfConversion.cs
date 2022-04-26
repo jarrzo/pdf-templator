@@ -4,6 +4,7 @@ namespace pdfTemplator.Server.Models
 {
     public class PdfConversion : BaseModel
     {
+        public int PdfTemplateId { get; set; }
         [Required, MaxLength(64)]
         public PdfTemplate PdfTemplate { get; set; } = null!;
         [Required]

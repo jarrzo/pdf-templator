@@ -40,6 +40,17 @@ namespace pdfTemplator.Server.Controllers
             return Ok(await Result<PdfTemplate>.SuccessAsync(pdfTemplate));
         }
 
+        [HttpGet("{id}/conversions")]
+        public async Task<IActionResult> GetConversions(int id)
+        {
+            var pdfTemplate = await _db.PdfTemplates.Include(x => x.Conversions).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (pdfTemplate == null)
+                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
+
+            return Ok(await Result<List<PdfConversion>>.SuccessAsync(pdfTemplate.Conversions));
+        }
+
         [HttpPost("{id}/convert")]
         public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] List<PdfKeyValue> data)
         {
