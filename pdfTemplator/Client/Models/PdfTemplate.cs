@@ -10,7 +10,7 @@ namespace pdfTemplator.Client.Models
         public string Description { get; set; } = null!;
         [Required]
         public string Content { get; set; } = null!;
-
+        public List<PdfInsertable> Insertables { get; set; } = new();
         public ApplicationUser ApplicationUser { get; set; } = null!;
     }
 }

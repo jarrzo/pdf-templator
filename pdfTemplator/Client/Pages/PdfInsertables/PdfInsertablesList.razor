@@ -1,0 +1,24 @@
+﻿@using pdfTemplator.Shared.Constants.Enums
+
+<MudPaper>
+    <MudList Clickable="true">
+        <MudListSubheader>
+            Variables:
+            <MudFab Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="CreateNewInsertable"/>
+        </MudListSubheader>
+        @foreach (InsertableType type in Enum.GetValues(typeof(InsertableType)))
+        {
+            <MudListItem Text="@type.ToString()" Icon="@GetInsertableIcon(type)" Expanded="Template.Insertables.Any(x => x.Type == type)">
+                <NestedList>
+                    @if (Template.Insertables.Any(x => x.Type == type))
+                    {
+                        @foreach (var insertable in Template.Insertables.Where(x => x.Type == type))
+                        {
+                            <MudListItem Icon="@GetInsertableIcon(type)" @onclick="() => InsertIntoTextEditor(insertable.Key)">{{ @insertable.Key }}</MudListItem>
+                        }
+                    }
+                </NestedList>
+            </MudListItem>
+        }
+    </MudList>
+</MudPaper>

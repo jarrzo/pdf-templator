@@ -1,5 +1,4 @@
-﻿using Blazored.FluentValidation;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using pdfTemplator.Client.Models;
 
@@ -12,7 +11,6 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 
         private async Task SaveAsync()
         {
-            Console.WriteLine(Template.Id);
             var response = await _pdfTemplateManager.SaveAsync(Template);
             if (response.Succeeded)
             {
@@ -39,7 +37,6 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
                 var response = await _pdfTemplateManager.GetPdfTemplate(Id);
                 Template = response.Data;
             }
-            Console.WriteLine(Template.Id);
             await Task.CompletedTask;
         }
     }

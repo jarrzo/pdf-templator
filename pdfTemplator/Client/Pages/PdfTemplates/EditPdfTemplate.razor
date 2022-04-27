@@ -3,7 +3,8 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using pdfTemplator.Client.Models
-@using pdfTemplator.Client.Shared.Components
+@using TinyMCE.Blazor
+@using pdfTemplator.Client.Pages.PdfInsertables
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EditPdfTemplate> _localizer
 
 <PageTitle>Edit template</PageTitle>
@@ -31,8 +32,15 @@
         <MudItem xs="12" md="9">
             <MudTextField For="@(() => Template.Description)" @bind-Value="Template.Description" Label="@_localizer["Description"]" />
         </MudItem>
-        <MudItem xs="12" md="12">
-            <InputCKEditor For="@(() => Template.Content)" @bind-Value="Template.Content" Label="@_localizer["Content"]"></InputCKEditor>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem xs="3" md="3">
+                    <PdfInsertablesList Template="Template"/>
+                </MudItem>
+                <MudItem xs="9" md="9">
+                    <Editor @bind-Value="Template.Content" Field="@(() => Template.Content)" JsConfSrc="tinyMceConfig" ApiKey="rfpfxrfnp78icateetm3og391acozegprg8fs8pxvxqgcwds" />
+                </MudItem>
+            </MudGrid>
         </MudItem>
     </MudGrid>
     <div class="mt-3">

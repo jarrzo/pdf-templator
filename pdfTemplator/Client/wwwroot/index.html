@@ -8,7 +8,6 @@
     <base href="/" />
     <link href="_content/MudBlazor/MudBlazor.min.css?v=0.1" rel="stylesheet" />
     <link href="css/loader.css" rel="stylesheet" />
-    <link href="css/ckeditor.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -66,13 +65,16 @@
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
     </div>
+
+    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
+    <script src="_content/MudBlazor/MudBlazor.min.js?v=0.1"></script>
+    <script src="_content/TinyMCE.Blazor/tinymce-blazor.js"></script>
+
+    <script src="_framework/blazor.webassembly.js"></script>
+
     <script src="js/scroll.js"></script>
     <script src="js/file.js"></script>
-    <script src="_content/Microsoft.AspNetCore.Components.WebAssembly.Authentication/AuthenticationService.js"></script>
-    <script src="_framework/blazor.webassembly.js"></script>
-    <script src="_content/MudBlazor/MudBlazor.min.js?v=0.1"></script>
-    <script src="js/ckeditor.js"></script>
-    <script src="js/ckeditorInit.js"></script>
+    <script src="js/tinymceInit.js"></script>
 </body>
 
 </html>
