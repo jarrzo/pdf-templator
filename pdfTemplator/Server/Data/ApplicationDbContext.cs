@@ -55,6 +55,7 @@ namespace pdfTemplator.Server.Data
 
         public DbSet<PdfTemplate> PdfTemplates { get; set; } = null!;
         public DbSet<PdfConversion> PdfConversions { get; set; } = null!;
+        public DbSet<PdfInsertable> PdfInsertables { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
     }
 }

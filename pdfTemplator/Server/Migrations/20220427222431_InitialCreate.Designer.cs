@@ -12,8 +12,8 @@ using pdfTemplator.Server.Data;
 namespace pdfTemplator.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220427201654_AddPdfInsertables")]
-    partial class AddPdfInsertables
+    [Migration("20220427222431_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -455,7 +455,7 @@ namespace pdfTemplator.Server.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
-                    b.Property<int?>("PdfTemplateId")
+                    b.Property<int>("PdfTemplateId")
                         .HasColumnType("int");
 
                     b.Property<int>("Type")
@@ -469,7 +469,7 @@ namespace pdfTemplator.Server.Migrations
 
                     b.HasIndex("PdfTemplateId");
 
-                    b.ToTable("PdfInsertable");
+                    b.ToTable("PdfInsertables");
                 });
 
             modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
@@ -585,9 +585,13 @@ namespace pdfTemplator.Server.Migrations
 
             modelBuilder.Entity("pdfTemplator.Server.Models.PdfInsertable", b =>
                 {
-                    b.HasOne("pdfTemplator.Server.Models.PdfTemplate", null)
-                        .WithMany("PdfInsertables")
-                        .HasForeignKey("PdfTemplateId");
+                    b.HasOne("pdfTemplator.Server.Models.PdfTemplate", "PdfTemplate")
+                        .WithMany("Insertables")
+                        .HasForeignKey("PdfTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PdfTemplate");
                 });
 
             modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
@@ -608,7 +612,7 @@ namespace pdfTemplator.Server.Migrations
                 {
                     b.Navigation("Conversions");
 
-                    b.Navigation("PdfInsertables");
+                    b.Navigation("Insertables");
                 });
 #pragma warning restore 612, 618
         }
