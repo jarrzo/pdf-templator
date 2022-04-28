@@ -9,7 +9,6 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
     {
         [Inject] private IPdfTemplateService pdfTemplateService { get; set; } = null!;
         private List<PdfTemplate> _list = new();
-        private PdfTemplate _template = new();
         private string _searchString = "";
         private bool _loaded = false;
 
@@ -64,9 +63,17 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             }
         }
 
+        private void Preview(PdfTemplate template)
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(PreviewPdfTemplate.Template), template);
+
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true, DisableBackdropClick = true };
+            _dialogService.Show<PreviewPdfTemplate>("Create", parameters, options);
+        }
+
         private async Task Reset()
         {
-            _template = new();
             await GetPdfTemplates();
         }
     }
