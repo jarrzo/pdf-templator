@@ -1,4 +1,5 @@
-﻿using MudBlazor;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
 using pdfTemplator.Client.Settings;
 
 namespace pdfTemplator.Client.Shared
@@ -8,22 +9,22 @@ namespace pdfTemplator.Client.Shared
         private MudTheme _currentTheme;
         private bool _rightToLeft = false;
         private bool _drawerOpen = true;
+        [Parameter] public EventCallback OnDarkModeToggle { get; set; }
 
         private void DrawerToggle()
         {
             _drawerOpen = !_drawerOpen;
         }
-        private async Task RightToLeftToggle(bool value)
+
+        public async Task ToggleDarkMode()
         {
-            _rightToLeft = value;
-            await Task.CompletedTask;
+            await OnDarkModeToggle.InvokeAsync();
         }
 
         protected override async Task OnInitializedAsync()
         {
             _currentTheme = BlazorHeroTheme.DefaultTheme;
             _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
-            _rightToLeft = await _clientPreferenceManager.IsRTL();
         }
 
         private async Task DarkMode()
