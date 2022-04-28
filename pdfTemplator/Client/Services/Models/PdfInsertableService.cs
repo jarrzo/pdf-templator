@@ -1,6 +1,6 @@
-﻿using pdfTemplator.Shared.Models;
-using pdfTemplator.Client.Services.Routes;
+﻿using pdfTemplator.Client.Services.Routes;
 using pdfTemplator.Shared.Extensions;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 using System.Net.Http.Json;
 

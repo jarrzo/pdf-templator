@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
@@ -7,6 +8,7 @@ using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/chart")]
     public class ChartsController : ControllerBase

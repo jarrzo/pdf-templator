@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Data;
@@ -6,6 +7,7 @@ using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/pdfTemplate")]
     public class PdfTemplateController : ControllerBase
