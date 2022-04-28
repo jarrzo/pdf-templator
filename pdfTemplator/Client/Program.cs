@@ -1,9 +1,11 @@
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 using pdfTemplator.Client;
+using pdfTemplator.Client.Services.Identity;
 using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Client.Services.Preferences;
 
@@ -21,7 +23,11 @@ builder.Services.AddLocalization(options =>
     options.ResourcesPath = "Resources";
 });
 builder.Services.AddBlazoredLocalStorage();
-builder.Services.AddApiAuthorization();
+
+builder.Services.AddAuthorizationCore();
+builder.Services.AddScoped<IdentityAuthenticationStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<IdentityAuthenticationStateProvider>());
+builder.Services.AddScoped<IAuthorizeApi, AuthorizeApi>();
 
 builder.Services.AddMudServices(configuration =>
 {
