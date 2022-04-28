@@ -1,4 +1,4 @@
-﻿using pdfTemplator.Client.Models;
+﻿using pdfTemplator.Shared.Models;
 using pdfTemplator.Client.Services.Routes;
 using pdfTemplator.Shared.Extensions;
 using pdfTemplator.Shared.Wrapper;
@@ -15,37 +15,27 @@ namespace pdfTemplator.Client.Services.Models
             _httpClient = httpClient;
         }
 
-        public async Task<IResult<List<PdfInsertable>>> GetAllAsync(PdfTemplate pdfTemplate)
+        public async Task<IResult<PdfInsertable>> GetAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"{GetBaseUrl(pdfTemplate)}");
-            return await response.ToResult<List<PdfInsertable>>();
-        }
-        public async Task<IResult<PdfInsertable>> GetAsync(PdfTemplate pdfTemplate, int pdfInsertableId)
-        {
-            var response = await _httpClient.GetAsync($"{GetBaseUrl(pdfTemplate)}/{pdfInsertableId}");
+            var response = await _httpClient.GetAsync($"{PdfInsertableEndpoints.BaseUrl}/{id}");
             return await response.ToResult<PdfInsertable>();
         }
 
-        public async Task<IResult<PdfInsertable>> SaveAsync(PdfTemplate pdfTemplate, PdfInsertable pdfInsertable)
+        public async Task<IResult<PdfInsertable>> SaveAsync(PdfInsertable pdfInsertable)
         {
             HttpResponseMessage response;
 
             if (pdfInsertable.Id > 0)
-                response = await _httpClient.PutAsJsonAsync($"{GetBaseUrl(pdfTemplate)}/{pdfInsertable.Id}", pdfInsertable);
+                response = await _httpClient.PutAsJsonAsync($"{PdfInsertableEndpoints.BaseUrl}/{pdfInsertable.Id}", pdfInsertable);
             else
-                response = await _httpClient.PostAsJsonAsync($"{GetBaseUrl(pdfTemplate)}", pdfInsertable);
+                response = await _httpClient.PostAsJsonAsync($"{PdfInsertableEndpoints.BaseUrl}", pdfInsertable);
 
             return await response.ToResult<PdfInsertable>();
         }
-        public async Task<IResult<int>> DeleteAsync(PdfTemplate pdfTemplate, int pdfInsertableId)
+        public async Task<IResult<int>> DeleteAsync(int id)
         {
-            var response = await _httpClient.DeleteAsync($"{GetBaseUrl(pdfTemplate)}/{pdfInsertableId}");
+            var response = await _httpClient.DeleteAsync($"{PdfInsertableEndpoints.BaseUrl}/{id}");
             return await response.ToResult<int>();
-        }
-
-        private static string GetBaseUrl(PdfTemplate pdfTemplate)
-        {
-            return $"{PdfTemplateEndpoints.BaseUrl}/{pdfTemplate.Id}/{PdfInsertableEndPoints.BaseUrl}";
         }
     }
 }

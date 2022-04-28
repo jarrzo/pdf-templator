@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Server.Data
 {

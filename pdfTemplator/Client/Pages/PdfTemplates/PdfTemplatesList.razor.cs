@@ -1,10 +1,13 @@
-﻿using MudBlazor;
-using pdfTemplator.Client.Models;
+﻿using Microsoft.AspNetCore.Components;
+using MudBlazor;
+using pdfTemplator.Client.Services.Models;
+using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Pages.PdfTemplates
 {
     public partial class PdfTemplatesList
     {
+        [Inject] private IPdfTemplateService pdfTemplateService { get; set; } = null!;
         private List<PdfTemplate> _list = new();
         private PdfTemplate _template = new();
         private string _searchString = "";
@@ -17,7 +20,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 
         private async Task GetPdfTemplates()
         {
-            var response = await _pdfTemplateService.GetAllAsync();
+            var response = await pdfTemplateService.GetAllAsync();
             if (response != null)
             {
                 _list = response.Data.ToList();
@@ -47,7 +50,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
-                var response = await _pdfTemplateService.DeleteAsync(id);
+                var response = await pdfTemplateService.DeleteAsync(id);
                 if (response.Succeeded)
                 {
                     await Reset();

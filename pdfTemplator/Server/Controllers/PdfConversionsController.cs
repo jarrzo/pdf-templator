@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
-using pdfTemplator.Server.Models;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 
@@ -23,13 +22,6 @@ namespace pdfTemplator.Server.Controllers
             _converter = converter;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var pdfConversions = await _db.PdfConversions.ToListAsync();
-            return Ok(await Result<List<PdfConversion>>.SuccessAsync(pdfConversions));
-        }
-
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -39,6 +31,20 @@ namespace pdfTemplator.Server.Controllers
                 return Ok(await Result<PdfConversion>.FailAsync("Not found!"));
 
             return Ok(await Result<PdfConversion>.SuccessAsync(pdfConversion));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(PdfConversion pdfConversion)
+        {
+            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfConversion.PdfTemplateId);
+
+            if (pdfTemplate == null)
+                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
+
+            _db.PdfConversions.Add(pdfConversion);
+            await _db.SaveChangesAsync();
+
+            return Ok(await Result<PdfConversion>.SuccessAsync(pdfConversion, "Conversion created"));
         }
 
         [HttpPost("{id}/convert")]

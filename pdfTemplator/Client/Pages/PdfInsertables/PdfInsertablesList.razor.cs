@@ -2,14 +2,32 @@
 using Microsoft.JSInterop;
 using MudBlazor;
 using pdfTemplator.Shared.Constants.Enums;
-using pdfTemplator.Client.Models;
+using pdfTemplator.Shared.Models;
+using pdfTemplator.Client.Services.Models;
 
 namespace pdfTemplator.Client.Pages.PdfInsertables
 {
     public partial class PdfInsertablesList
     {
+        [Inject] private IPdfTemplateService pdfTemplateService { get; set; } = null!;
         [Parameter] public PdfTemplate Template { get; set; } = null!;
         public List<PdfInsertable> Insertables { get; set; } = new();
+
+        protected override async Task OnInitializedAsync()
+        {
+            await GetPdfInsertables();
+        }
+
+        private async Task GetPdfInsertables()
+        {
+            if (Template.Id == 0) return;
+
+            var response = await pdfTemplateService.GetPdfInsertablesAsync(Template.Id);
+            if (response != null)
+            {
+                Insertables = response.Data.ToList();
+            }
+        }
 
         private async Task CreateNewInsertable()
         {
@@ -18,9 +36,10 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<EditPdfInsertable>("Create", parameters, options);
-            var result = await dialog.Result;
-            if (!result.Cancelled)
+            var response = await dialog.Result;
+            if (!response.Cancelled)
             {
+                await GetPdfInsertables();
             }
         }
         private static string GetInsertableIcon(InsertableType type) => type switch

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace pdfTemplator.Server.Models
+namespace pdfTemplator.Shared.Models
 {
     public class PdfTemplate : BaseModel
     {
@@ -10,8 +10,5 @@ namespace pdfTemplator.Server.Models
         public string Description { get; set; } = null!;
         [Required(AllowEmptyStrings = true)]
         public string Content { get; set; } = null!;
-        public ICollection<PdfInsertable>? Insertables { get; set; }
-
-        public ICollection<PdfConversion>? Conversions { get; set; }
     }
 }

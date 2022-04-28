@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Data;
-using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
     [ApiController]
-    [Route("api/pdfTemplate/{pdfTemplateId}/pdfInsertable")]
+    [Route("api/pdfInsertable")]
     public class PdfInsertableController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -19,27 +19,10 @@ namespace pdfTemplator.Server.Controllers
             _db = db;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll(int pdfTemplateId)
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
         {
-            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfTemplateId);
-
-            if (pdfTemplate == null)
-                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
-
-            var pdfInsertables = pdfTemplate.Insertables?.ToList() ?? new();
-            return Ok(await Result<List<PdfInsertable>>.SuccessAsync(pdfInsertables));
-        }
-
-        [HttpGet("{pdfInsertableId}")]
-        public async Task<IActionResult> Get(int pdfTemplateId, int pdfInsertableId)
-        {
-            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfTemplateId);
-
-            if (pdfTemplate == null)
-                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
-
-            var pdfInsertable = pdfTemplate.Insertables?.FirstOrDefault(x => x.Id == pdfInsertableId);
+            var pdfInsertable = await _db.PdfInsertables.FirstOrDefaultAsync(x => x.Id == id);
 
             if (pdfInsertable == null)
                 return Ok(await Result<PdfInsertable>.FailAsync("Insertable not found!"));
@@ -48,9 +31,11 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(PdfInsertable pdfInsertable, int pdfTemplateId)
+        public async Task<IActionResult> Create(PdfInsertable pdfInsertable)
         {
-            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfTemplateId);
+            _logger.LogInformation("here");
+
+            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfInsertable.PdfTemplateId);
 
             if (pdfTemplate == null)
                 return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
@@ -61,18 +46,18 @@ namespace pdfTemplator.Server.Controllers
             return Ok(await Result<PdfInsertable>.SuccessAsync(pdfInsertable, "Insertable created"));
         }
 
-        [HttpPut("{pdfInsertableId}")]
-        public async Task<IActionResult> Update(PdfInsertable pdfInsertable, int pdfTemplateId, int pdfInsertableId)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(PdfInsertable pdfInsertable, int id)
         {
-            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfTemplateId);
+            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfInsertable.PdfTemplateId);
 
             if (pdfTemplate == null)
                 return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
 
-            var dbPdfInsertable = pdfTemplate.Insertables?.FirstOrDefault(x => x.Id == pdfInsertableId);
+            var dbPdfInsertable = await _db.PdfInsertables.FirstOrDefaultAsync(x => x.Id == id);
 
             if (dbPdfInsertable == null)
-                return Ok(await Result<int>.FailAsync("Not found!"));
+                return Ok(await Result<int>.FailAsync("Insertable not found!"));
 
             dbPdfInsertable.Key = pdfInsertable.Key;
             dbPdfInsertable.Type = pdfInsertable.Type;
@@ -83,16 +68,10 @@ namespace pdfTemplator.Server.Controllers
             return Ok(await Result<PdfInsertable>.SuccessAsync(dbPdfInsertable, "Insertable updated"));
         }
 
-        [HttpDelete("{pdfInsertableId}")]
-        public async Task<IActionResult> Delete(int pdfTemplateId, int pdfInsertableId)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
         {
-
-            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == pdfTemplateId);
-
-            if (pdfTemplate == null)
-                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
-
-            var dbPdfInsertable = pdfTemplate.Insertables?.FirstOrDefault(x => x.Id == pdfInsertableId);
+            var dbPdfInsertable = await _db.PdfInsertables.FirstOrDefaultAsync(x => x.Id == id);
 
             if (dbPdfInsertable == null)
                 return Ok(await Result<int>.FailAsync("Not found!"));

@@ -12,7 +12,7 @@ using pdfTemplator.Server.Data;
 namespace pdfTemplator.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220427222431_InitialCreate")]
+    [Migration("20220428120826_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -1,17 +1,19 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using pdfTemplator.Client.Models;
+using pdfTemplator.Client.Services.Models;
+using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Pages.PdfTemplates
 {
     public partial class EditPdfTemplate
     {
+        [Inject] private IPdfTemplateService pdfTemplateService { get; set; } = null!;
         [Parameter] public int Id { get; set; }
         public PdfTemplate Template { get; set; } = new();
 
         private async Task SaveAsync()
         {
-            var response = await _pdfTemplateService.SaveAsync(Template);
+            var response = await pdfTemplateService.SaveAsync(Template);
             if (response.Succeeded)
             {
                 _snackBar.Add(response.Messages[0], Severity.Success);
@@ -34,12 +36,12 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
         {
             if (Id > 0)
             {
-                var response = await _pdfTemplateService.GetAsync(Id);
+                var response = await pdfTemplateService.GetAsync(Id);
                 Template = response.Data;
             }
             else
             {
-                var response = await _pdfTemplateService.SaveAsync(new()
+                var response = await pdfTemplateService.SaveAsync(new()
                 {
                     Name = "New Template",
                     Description = "",

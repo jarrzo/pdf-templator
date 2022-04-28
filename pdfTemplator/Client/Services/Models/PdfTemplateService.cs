@@ -1,6 +1,6 @@
 ﻿using pdfTemplator.Client.Services.Routes;
 using pdfTemplator.Shared.Extensions;
-using pdfTemplator.Client.Models;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 using System.Net.Http.Json;
 
@@ -43,6 +43,17 @@ namespace pdfTemplator.Client.Services.Models
         {
             var response = await _httpClient.DeleteAsync($"{PdfTemplateEndpoints.BaseUrl}/{id}");
             return await response.ToResult<int>();
+        }
+
+        public async Task<IResult<List<PdfInsertable>>> GetPdfInsertablesAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"{PdfTemplateEndpoints.BaseUrl}/{id}/{PdfTemplateEndpoints.PdfInsertables}");
+            return await response.ToResult<List<PdfInsertable>>();
+        }
+        public async Task<IResult<List<PdfConversion>>> GetPdfConversionsAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"{PdfTemplateEndpoints.BaseUrl}/{id}/{PdfTemplateEndpoints.PdfConversions}");
+            return await response.ToResult<List<PdfConversion>>();
         }
     }
 }

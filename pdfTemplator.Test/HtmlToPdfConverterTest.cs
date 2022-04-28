@@ -1,5 +1,5 @@
 using pdfTemplator.Server.Converters;
-using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Models;
 using Xunit;
 
 namespace pdfTemplator.Test

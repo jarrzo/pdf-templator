@@ -4,7 +4,7 @@
     <MudList Clickable="true">
         <MudListSubheader>
             Variables:
-            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="CreateNewInsertable"/>
+            <MudIconButton Color="Color.Primary" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="CreateNewInsertable"/>
         </MudListSubheader>
         @foreach (InsertableType type in Enum.GetValues(typeof(InsertableType)))
         {

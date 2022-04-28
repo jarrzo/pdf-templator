@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Data;
-using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
@@ -23,7 +23,7 @@ namespace pdfTemplator.Server.Controllers
         public async Task<IActionResult> GetAll()
         {
             var pdfTemplates = await _db.PdfTemplates.ToListAsync();
-            return base.Ok(await Result<List<Models.PdfTemplate>>.SuccessAsync(pdfTemplates));
+            return base.Ok(await Result<List<PdfTemplate>>.SuccessAsync(pdfTemplates));
         }
 
         [HttpGet("{id}")]
@@ -32,13 +32,13 @@ namespace pdfTemplator.Server.Controllers
             var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
             if (pdfTemplate == null)
-                return base.Ok(await Result<Models.PdfTemplate>.FailAsync("Not found!"));
+                return base.Ok(await Result<PdfTemplate>.FailAsync("Not found!"));
 
-            return base.Ok(await Result<Models.PdfTemplate>.SuccessAsync(pdfTemplate));
+            return base.Ok(await Result<PdfTemplate>.SuccessAsync(pdfTemplate));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(Models.PdfTemplate pdfTemplate)
+        public async Task<IActionResult> Create(PdfTemplate pdfTemplate)
         {
             _db.PdfTemplates.Add(pdfTemplate);
             await _db.SaveChangesAsync();
@@ -47,7 +47,7 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Models.PdfTemplate pdfTemplate, int id)
+        public async Task<IActionResult> Update(PdfTemplate pdfTemplate, int id)
         {
             var dbPdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
@@ -76,6 +76,31 @@ namespace pdfTemplator.Server.Controllers
             await _db.SaveChangesAsync();
 
             return Ok(await Result<int>.SuccessAsync(dbPdfTemplate.Id, "Template deleted"));
+        }
+
+        [HttpGet("{id}/pdfInsertables")]
+        public async Task<IActionResult> GetPdfInsertables(int id)
+        {
+            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (pdfTemplate == null)
+                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
+
+            var pdfInsertables = _db.PdfInsertables.Where(x => x.PdfTemplateId == id).ToList() ?? new();
+            return Ok(await Result<List<PdfInsertable>>.SuccessAsync(pdfInsertables));
+        }
+
+        [HttpGet("{id}/pdfConversions")]
+        public async Task<IActionResult> GetPdfConversions(int id)
+        {
+            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (pdfTemplate == null)
+                return Ok(await Result<PdfTemplate>.FailAsync("Template not found!"));
+
+            var pdfConversions = _db.PdfConversions.Where(x => x.PdfTemplateId == id).ToList() ?? new();
+
+            return base.Ok(await Result<List<PdfConversion>>.SuccessAsync(pdfConversions));
         }
     }
 }

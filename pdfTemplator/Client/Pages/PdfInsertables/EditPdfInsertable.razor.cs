@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using pdfTemplator.Client.Models;
+using pdfTemplator.Client.Services.Models;
+using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Pages.PdfInsertables
 {
     public partial class EditPdfInsertable
     {
         public PdfInsertable Insertable = new();
+        [Inject] private IPdfInsertableService pdfInsertableService { get; set; } = null!;
         [Parameter] public PdfTemplate Template { get; set; } = null!;
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
@@ -15,9 +17,10 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
             MudDialog.Cancel();
         }
 
-        private void AddInsertable()
+        private async Task AddInsertable()
         {
-            //Template.Insertables.Add(Insertable);
+            Insertable.PdfTemplateId = Template.Id;
+            await pdfInsertableService.SaveAsync(Insertable);
             _snackBar.Add("Created", Severity.Success);
             MudDialog.Close();
         }

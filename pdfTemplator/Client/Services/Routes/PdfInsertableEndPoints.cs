@@ -1,7 +1,7 @@
 ﻿namespace pdfTemplator.Client.Services.Routes
 {
-    public static class PdfInsertableEndPoints
+    public static class PdfInsertableEndpoints
     {
-        public static string BaseUrl = "pdfInsertable";
+        public static string BaseUrl = "api/pdfInsertable";
     }
 }

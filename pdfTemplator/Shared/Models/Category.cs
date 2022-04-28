@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace pdfTemplator.Server.Models
+namespace pdfTemplator.Shared.Models
 {
     public class Category : BaseModel
     {
