@@ -1,9 +1,9 @@
-﻿using pdfTemplator.Client.Models;
+﻿using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 
-namespace pdfTemplator.Client.Managers.Models
+namespace pdfTemplator.Client.Services.Models
 {
-    public interface IPdfTemplateManager : IManager
+    public interface IPdfTemplateService : IService
     {
         Task<IResult<List<PdfTemplate>>> GetPdfTemplates();
         Task<IResult<PdfTemplate>> GetPdfTemplate(int id);

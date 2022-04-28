@@ -1,16 +1,16 @@
-﻿using pdfTemplator.Client.Managers.Routes;
-using pdfTemplator.Client.Models;
+﻿using pdfTemplator.Client.Services.Routes;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 using pdfTemplator.Shared.Extensions;
 using System.Net.Http.Json;
 
-namespace pdfTemplator.Client.Managers.Models
+namespace pdfTemplator.Client.Services.Models
 {
-    public class PdfTemplateManager : IPdfTemplateManager
+    public class PdfTemplateService : IPdfTemplateService
     {
         private readonly HttpClient _httpClient;
 
-        public PdfTemplateManager(HttpClient httpClient)
+        public PdfTemplateService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using pdfTemplator.Client.Models;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Constants.Enums;
 
 namespace pdfTemplator.Client.Pages.PdfInsertables

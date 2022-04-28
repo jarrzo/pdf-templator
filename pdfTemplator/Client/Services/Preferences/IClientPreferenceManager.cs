@@ -1,7 +1,6 @@
 ﻿using MudBlazor;
-using pdfTemplator.Shared.Managers;
 
-namespace pdfTemplator.Client.Managers.Preferences
+namespace pdfTemplator.Client.Services.Preferences
 {
     public interface IClientPreferenceManager : IPreferenceManager
     {

@@ -1,14 +1,14 @@
-﻿using pdfTemplator.Client.Managers.Routes;
+﻿using pdfTemplator.Client.Services.Routes;
 using pdfTemplator.Shared.Extensions;
 using pdfTemplator.Shared.Wrapper;
 
-namespace pdfTemplator.Client.Managers.Models
+namespace pdfTemplator.Client.Services.Models
 {
-    public class ChartManager : IChartManager
+    public class ChartService : IChartService
     {
         private readonly HttpClient _httpClient;
 
-        public ChartManager(HttpClient httpClient)
+        public ChartService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

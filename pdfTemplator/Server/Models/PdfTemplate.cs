@@ -10,8 +10,8 @@ namespace pdfTemplator.Server.Models
         public string Description { get; set; } = null!;
         [Required]
         public string Content { get; set; } = null!;
-        public List<PdfInsertable>? Insertables { get; set; }
+        public ICollection<PdfInsertable>? Insertables { get; set; }
 
-        public List<PdfConversion>? Conversions { get; set; }
+        public ICollection<PdfConversion>? Conversions { get; set; }
     }
 }

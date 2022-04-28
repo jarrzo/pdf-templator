@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using MudBlazor;
 using MudBlazor.Services;
 using pdfTemplator.Client;
-using pdfTemplator.Client.Managers.Models;
-using pdfTemplator.Client.Managers.Preferences;
+using pdfTemplator.Client.Services.Models;
+using pdfTemplator.Client.Services.Preferences;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -32,8 +32,8 @@ builder.Services.AddMudServices(configuration =>
     configuration.SnackbarConfiguration.ShowCloseIcon = false;
 });
 
-builder.Services.AddScoped<IPdfTemplateManager, PdfTemplateManager>();
-builder.Services.AddScoped<IChartManager, ChartManager>();
+builder.Services.AddScoped<IPdfTemplateService, PdfTemplateService>();
+builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<ClientPreferenceManager>();
 
 await builder.Build().RunAsync();

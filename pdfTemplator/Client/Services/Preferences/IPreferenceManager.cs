@@ -1,7 +1,7 @@
 ﻿using pdfTemplator.Shared.Settings;
 using pdfTemplator.Shared.Wrapper;
 
-namespace pdfTemplator.Shared.Managers
+namespace pdfTemplator.Client.Services.Preferences
 {
     public interface IPreferenceManager
     {

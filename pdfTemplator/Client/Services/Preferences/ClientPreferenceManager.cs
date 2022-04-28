@@ -6,7 +6,7 @@ using pdfTemplator.Shared.Constants.Storage;
 using pdfTemplator.Shared.Settings;
 using pdfTemplator.Shared.Wrapper;
 
-namespace pdfTemplator.Client.Managers.Preferences
+namespace pdfTemplator.Client.Services.Preferences
 {
     public class ClientPreferenceManager : IClientPreferenceManager
     {

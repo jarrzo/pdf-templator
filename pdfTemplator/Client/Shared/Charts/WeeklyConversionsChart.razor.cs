@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using pdfTemplator.Client.Managers.Models;
+using pdfTemplator.Client.Services.Models;
 
 namespace pdfTemplator.Client.Shared.Charts
 {
     public partial class WeeklyConversionsChart
     {
-        [Inject] private IChartManager _chartManager { get; set; }
+        [Inject] private IChartService _chartManager { get; set; }
         private List<ChartSeries> _series = new();
         private string[] _dates = Array.Empty<string>();
         private readonly int _numberOfDays = 7;

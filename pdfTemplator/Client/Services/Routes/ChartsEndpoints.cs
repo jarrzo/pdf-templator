@@ -1,4 +1,4 @@
-﻿namespace pdfTemplator.Client.Managers.Routes
+﻿namespace pdfTemplator.Client.Services.Routes
 {
     public static class ChartsEndpoints
     {

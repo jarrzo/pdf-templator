@@ -1,4 +1,4 @@
-﻿namespace pdfTemplator.Client.Models
+﻿namespace pdfTemplator.Shared.Models
 {
     public class BaseModel
     {
