@@ -1,4 +1,4 @@
-﻿namespace pdfTemplator.Shared
+﻿namespace pdfTemplator.Shared.Models
 {
     public class UserInfo
     {

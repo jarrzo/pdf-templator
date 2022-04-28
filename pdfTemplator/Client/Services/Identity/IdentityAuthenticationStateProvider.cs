@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
-using pdfTemplator.Shared;
+using pdfTemplator.Shared.Models;
 using System.Security.Claims;
 
 namespace pdfTemplator.Client.Services.Identity

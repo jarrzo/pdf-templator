@@ -1,6 +1,7 @@
 ﻿@page "/login"
 @using pdfTemplator.Client.Services.Identity
-@using pdfTemplator.Shared
+@using pdfTemplator.Shared;
+@using pdfTemplator.Shared.Models
 @inject IdentityAuthenticationStateProvider authStateProvider
 
 <PageTitle>Login</PageTitle>
@@ -35,7 +36,7 @@
     </NavLink>
 </EditForm>
 
-@code{
+@code {
     LoginParameters loginParameters { get; set; } = new LoginParameters();
     string error { get; set; }
 

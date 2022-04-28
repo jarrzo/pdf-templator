@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using pdfTemplator.Server.Models;
-using pdfTemplator.Shared;
+using pdfTemplator.Shared.Models;
 
-namespace blazorwithidentity.Server.Controllers
+namespace pdfTemplator.Server.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]

@@ -1,4 +1,4 @@
-﻿using pdfTemplator.Shared;
+﻿using pdfTemplator.Shared.Models;
 using System.Net.Http.Json;
 
 namespace pdfTemplator.Client.Services.Identity

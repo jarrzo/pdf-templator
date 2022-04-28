@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace pdfTemplator.Shared
+namespace pdfTemplator.Shared.Models
 {
     public class RegisterParameters
     {

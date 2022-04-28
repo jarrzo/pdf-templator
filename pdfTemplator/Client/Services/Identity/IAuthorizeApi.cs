@@ -1,4 +1,4 @@
-﻿using pdfTemplator.Shared;
+﻿using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Services.Identity
 {

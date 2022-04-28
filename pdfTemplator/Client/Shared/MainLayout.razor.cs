@@ -7,19 +7,6 @@ namespace pdfTemplator.Client.Shared
     public partial class MainLayout
     {
         private MudTheme _currentTheme;
-        private bool _rightToLeft = false;
-        private bool _drawerOpen = true;
-        [Parameter] public EventCallback OnDarkModeToggle { get; set; }
-
-        private void DrawerToggle()
-        {
-            _drawerOpen = !_drawerOpen;
-        }
-
-        public async Task ToggleDarkMode()
-        {
-            await OnDarkModeToggle.InvokeAsync();
-        }
 
         protected override async Task OnInitializedAsync()
         {
