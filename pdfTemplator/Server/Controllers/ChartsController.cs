@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
-using pdfTemplator.Server.Models;
 using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
@@ -29,9 +28,9 @@ namespace pdfTemplator.Server.Controllers
         {
             DateTime today = DateTime.Now.Date;
             List<double> counts = new();
-            for(int i = _numberOfDays; i >= 0; i--)
+            for (int i = _numberOfDays; i >= 0; i--)
             {
-                counts.Add(await _db.PdfConversions.Where(x => x.CreatedAt.Date == today.AddDays(-1*i)).CountAsync());
+                counts.Add(await _db.PdfConversions.Where(x => x.CreatedAt.Date == today.AddDays(-1 * i)).CountAsync());
             }
             return Ok(await Result<List<double>>.SuccessAsync(counts));
         }

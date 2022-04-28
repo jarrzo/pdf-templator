@@ -25,7 +25,7 @@ namespace pdfTemplator.Client.Shared.Charts
             List<string> dates = new();
             DateTime today = DateTime.Today;
 
-            for (int i = _numberOfDays; i >= 0; i--) dates.Add(today.AddDays(-1*i).ToString("MM-dd"));
+            for (int i = _numberOfDays; i >= 0; i--) dates.Add(today.AddDays(-1 * i).ToString("MM-dd"));
 
             _dates = dates.ToArray();
         }

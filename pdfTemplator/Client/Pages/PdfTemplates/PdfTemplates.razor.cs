@@ -5,8 +5,8 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 {
     public partial class PdfTemplates
     {
-        private List<PdfTemplate> _list = new();
-        private PdfTemplate _template = new();
+        private List<PdfTemplateDto> _list = new();
+        private PdfTemplateDto _template = new();
         private string _searchString = "";
         private bool _loaded = false;
 
@@ -17,7 +17,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 
         private async Task GetPdfTemplates()
         {
-            var response = await _pdfTemplateManager.GetPdfTemplates();
+            var response = await _pdfTemplateService.GetPdfTemplates();
             if (response != null)
             {
                 _list = response.Data.ToList();
@@ -25,7 +25,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             }
         }
 
-        private bool Search(PdfTemplate template)
+        private bool Search(PdfTemplateDto template)
         {
             if (string.IsNullOrWhiteSpace(_searchString)) return true;
             if (template.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)
@@ -47,7 +47,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
-                var response = await _pdfTemplateManager.DeleteAsync(id);
+                var response = await _pdfTemplateService.DeleteAsync(id);
                 if (response.Succeeded)
                 {
                     await Reset();

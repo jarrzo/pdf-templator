@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Constants.Enums;
+using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Pages.PdfInsertables
 {
     public partial class PdfInsertablesList
     {
-        [Parameter] public PdfTemplate Template { get; set; } = null!;
+        [Parameter] public PdfTemplateDto Template { get; set; } = null!;
 
         private async Task CreateNewInsertable()
         {

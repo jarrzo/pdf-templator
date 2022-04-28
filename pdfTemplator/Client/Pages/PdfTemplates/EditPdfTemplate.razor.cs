@@ -7,11 +7,11 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
     public partial class EditPdfTemplate
     {
         [Parameter] public int Id { get; set; }
-        public PdfTemplate Template { get; set; } = new();
+        public PdfTemplateDto Template { get; set; } = new();
 
         private async Task SaveAsync()
         {
-            var response = await _pdfTemplateManager.SaveAsync(Template);
+            var response = await _pdfTemplateService.SaveAsync(Template);
             if (response.Succeeded)
             {
                 _snackBar.Add(response.Messages[0], Severity.Success);
@@ -34,7 +34,17 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
         {
             if (Id > 0)
             {
-                var response = await _pdfTemplateManager.GetPdfTemplate(Id);
+                var response = await _pdfTemplateService.GetPdfTemplate(Id);
+                Template = response.Data;
+            }
+            else
+            {
+                var response = await _pdfTemplateService.SaveAsync(new()
+                {
+                    Name = "New Template",
+                    Description = "",
+                    Content = "",
+                });
                 Template = response.Data;
             }
             await Task.CompletedTask;

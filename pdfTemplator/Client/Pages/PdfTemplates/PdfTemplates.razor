@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @using pdfTemplator.Shared.Models
 @using pdfTemplator.Client.Shared.Components
-@inject Microsoft.Extensions.Localization.IStringLocalizer<PdfTemplate> _localizer
+@inject Microsoft.Extensions.Localization.IStringLocalizer<PdfTemplateDto> _localizer
 
 <PageTitle>Templates</PageTitle>
 
@@ -13,7 +13,7 @@
 }
 else
 {
-    <MudTable Hover="true" Elevation="25" Items="_list" Filter="new Func<PdfTemplate, bool>(Search)" @bind-template="_template">
+    <MudTable Hover="true" Elevation="25" Items="_list" Filter="new Func<PdfTemplateDto, bool>(Search)" @bind-template="_template">
         <ToolBarContent>
             <div class="justify-center mud-text-align-center">
                 <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" Href="/templates/new" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
@@ -22,11 +22,11 @@ else
             <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for Brands"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
         </ToolBarContent>
         <HeaderContent>
-            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.CreatedAt)">@_localizer["CreatedAt"]</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.UpdatedAt)">@_localizer["UpdatedAt"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplateDto, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplateDto, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplateDto, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplateDto, object>(x => x.CreatedAt)">@_localizer["CreatedAt"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplateDto, object>(x => x.UpdatedAt)">@_localizer["UpdatedAt"]</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
         </HeaderContent>
         <RowTemplate>

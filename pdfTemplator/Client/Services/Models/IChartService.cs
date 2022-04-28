@@ -1,5 +1,4 @@
-﻿using pdfTemplator.Shared.Models;
-using pdfTemplator.Shared.Wrapper;
+﻿using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Client.Services.Models
 {

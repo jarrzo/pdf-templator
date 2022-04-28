@@ -8,5 +8,5 @@
         public static string Post = "api/pdfTemplate";
         public static string Put = "api/pdfTemplate";
         public static string Convert = "api/pdfTemplate";
-  }
+    }
 }

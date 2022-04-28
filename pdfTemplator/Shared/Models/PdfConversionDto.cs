@@ -2,10 +2,8 @@
 
 namespace pdfTemplator.Shared.Models
 {
-    public class PdfConversion : BaseModel
+    public class PdfConversionDto : BaseModelDto
     {
-        [Required, MaxLength(64)]
-        public PdfTemplate PdfTemplate { get; set; } = null!;
         [Required]
         public string DataJSON { get; set; } = null!;
         [Required, MaxLength(128)]
