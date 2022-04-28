@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace pdfTemplator.Shared.Models
+namespace pdfTemplator.Client.Models
 {
-    public class PdfTemplateDto : BaseModelDto
+    public class PdfTemplate : BaseModel
     {
         [Required, MaxLength(64)]
         public string Name { get; set; } = null!;

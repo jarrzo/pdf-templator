@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Models;
 using System.Text.Json;
 
 namespace pdfTemplator.Server.Converters
@@ -12,7 +13,7 @@ namespace pdfTemplator.Server.Converters
         private readonly ILogger<HtmlToPdfConverter> _logger;
         private readonly PathsOptions _paths;
         private readonly ConverterProperties _converterProperties;
-        public PdfTemplate? Template;
+        public Models.PdfTemplate? Template;
         public List<PdfKeyValue>? Data;
         private string? _pdfPath;
         private string? _pdfName;
@@ -80,9 +81,9 @@ namespace pdfTemplator.Server.Converters
 
         private void CreatePdfConversion()
         {
-            _db.PdfConversions.Add(new PdfConversion
+            _db.PdfConversions.Add(new Models.PdfConversion
             {
-                DataJSON = JsonSerializer.Serialize(Data),
+                DataJSON = JsonSerializer.Serialize<List<PdfKeyValue>>(Data),
                 PdfTemplate = Template!,
                 PdfPath = _pdfPath + _pdfName,
             });

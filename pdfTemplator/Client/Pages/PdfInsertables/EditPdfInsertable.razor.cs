@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using pdfTemplator.Shared.Models;
+using pdfTemplator.Client.Models;
 
 namespace pdfTemplator.Client.Pages.PdfInsertables
 {
-    public partial class CreatePdfInsertable
+    public partial class EditPdfInsertable
     {
-        public PdfInsertableDto Insertable = new();
-        [Parameter] public PdfTemplateDto Template { get; set; } = null!;
+        public PdfInsertable Insertable = new();
+        [Parameter] public PdfTemplate Template { get; set; } = null!;
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
 
         public void Cancel()

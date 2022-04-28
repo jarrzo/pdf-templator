@@ -2,21 +2,22 @@
 using Microsoft.JSInterop;
 using MudBlazor;
 using pdfTemplator.Shared.Constants.Enums;
-using pdfTemplator.Shared.Models;
+using pdfTemplator.Client.Models;
 
 namespace pdfTemplator.Client.Pages.PdfInsertables
 {
     public partial class PdfInsertablesList
     {
-        [Parameter] public PdfTemplateDto Template { get; set; } = null!;
+        [Parameter] public PdfTemplate Template { get; set; } = null!;
+        public List<PdfInsertable> Insertables { get; set; } = new();
 
         private async Task CreateNewInsertable()
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(CreatePdfInsertable.Template), Template);
+            parameters.Add(nameof(EditPdfInsertable.Template), Template);
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<CreatePdfInsertable>("Create", parameters, options);
+            var dialog = _dialogService.Show<EditPdfInsertable>("Create", parameters, options);
             var result = await dialog.Result;
             if (!result.Cancelled)
             {

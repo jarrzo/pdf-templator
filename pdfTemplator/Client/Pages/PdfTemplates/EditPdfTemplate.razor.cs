@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using pdfTemplator.Shared.Models;
+using pdfTemplator.Client.Models;
 
 namespace pdfTemplator.Client.Pages.PdfTemplates
 {
     public partial class EditPdfTemplate
     {
         [Parameter] public int Id { get; set; }
-        public PdfTemplateDto Template { get; set; } = new();
+        public PdfTemplate Template { get; set; } = new();
 
         private async Task SaveAsync()
         {
@@ -34,7 +34,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
         {
             if (Id > 0)
             {
-                var response = await _pdfTemplateService.GetPdfTemplate(Id);
+                var response = await _pdfTemplateService.GetAsync(Id);
                 Template = response.Data;
             }
             else
@@ -46,6 +46,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
                     Content = "",
                 });
                 Template = response.Data;
+                _navigationManager.NavigateTo($"/templates/{Template.Id}", false, true);
             }
             await Task.CompletedTask;
         }

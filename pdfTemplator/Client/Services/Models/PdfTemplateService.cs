@@ -1,6 +1,6 @@
 ﻿using pdfTemplator.Client.Services.Routes;
 using pdfTemplator.Shared.Extensions;
-using pdfTemplator.Shared.Models;
+using pdfTemplator.Client.Models;
 using pdfTemplator.Shared.Wrapper;
 using System.Net.Http.Json;
 
@@ -15,33 +15,33 @@ namespace pdfTemplator.Client.Services.Models
             _httpClient = httpClient;
         }
 
-        public async Task<IResult<int>> DeleteAsync(int id)
+        public async Task<IResult<List<PdfTemplate>>> GetAllAsync()
         {
-            var response = await _httpClient.DeleteAsync($"{PdfTemplateEndpoints.Delete}/{id}");
-            return await response.ToResult<int>();
+            var response = await _httpClient.GetAsync(PdfTemplateEndpoints.BaseUrl);
+            return await response.ToResult<List<PdfTemplate>>();
         }
 
-        public async Task<IResult<PdfTemplateDto>> GetPdfTemplate(int id)
+        public async Task<IResult<PdfTemplate>> GetAsync(int id)
         {
-            var response = await _httpClient.GetAsync($"{PdfTemplateEndpoints.Get}/{id}");
-            return await response.ToResult<PdfTemplateDto>();
+            var response = await _httpClient.GetAsync($"{PdfTemplateEndpoints.BaseUrl}/{id}");
+            return await response.ToResult<PdfTemplate>();
         }
 
-        public async Task<IResult<List<PdfTemplateDto>>> GetPdfTemplates()
-        {
-            var response = await _httpClient.GetAsync(PdfTemplateEndpoints.GetList);
-            return await response.ToResult<List<PdfTemplateDto>>();
-        }
-
-        public async Task<IResult<int>> SaveAsync(PdfTemplateDto request)
+        public async Task<IResult<PdfTemplate>> SaveAsync(PdfTemplate request)
         {
             HttpResponseMessage response;
 
             if (request.Id > 0)
-                response = await _httpClient.PutAsJsonAsync($"{PdfTemplateEndpoints.Put}/{request.Id}", request);
+                response = await _httpClient.PutAsJsonAsync($"{PdfTemplateEndpoints.BaseUrl}/{request.Id}", request);
             else
-                response = await _httpClient.PostAsJsonAsync(PdfTemplateEndpoints.Post, request);
+                response = await _httpClient.PostAsJsonAsync(PdfTemplateEndpoints.BaseUrl, request);
 
+            return await response.ToResult<PdfTemplate>();
+        }
+
+        public async Task<IResult<int>> DeleteAsync(int id)
+        {
+            var response = await _httpClient.DeleteAsync($"{PdfTemplateEndpoints.BaseUrl}/{id}");
             return await response.ToResult<int>();
         }
     }

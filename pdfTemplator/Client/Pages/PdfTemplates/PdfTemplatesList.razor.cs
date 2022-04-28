@@ -1,12 +1,12 @@
 ﻿using MudBlazor;
-using pdfTemplator.Shared.Models;
+using pdfTemplator.Client.Models;
 
 namespace pdfTemplator.Client.Pages.PdfTemplates
 {
-    public partial class PdfTemplates
+    public partial class PdfTemplatesList
     {
-        private List<PdfTemplateDto> _list = new();
-        private PdfTemplateDto _template = new();
+        private List<PdfTemplate> _list = new();
+        private PdfTemplate _template = new();
         private string _searchString = "";
         private bool _loaded = false;
 
@@ -17,7 +17,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 
         private async Task GetPdfTemplates()
         {
-            var response = await _pdfTemplateService.GetPdfTemplates();
+            var response = await _pdfTemplateService.GetAllAsync();
             if (response != null)
             {
                 _list = response.Data.ToList();
@@ -25,7 +25,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             }
         }
 
-        private bool Search(PdfTemplateDto template)
+        private bool Search(PdfTemplate template)
         {
             if (string.IsNullOrWhiteSpace(_searchString)) return true;
             if (template.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true)

@@ -2,14 +2,13 @@
 @page "/templates/{id:int}"
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
-@using pdfTemplator.Shared.Models
 @using TinyMCE.Blazor
 @using pdfTemplator.Client.Pages.PdfInsertables
 @inject Microsoft.Extensions.Localization.IStringLocalizer<EditPdfTemplate> _localizer
 
 <PageTitle>Edit template</PageTitle>
 
-<EditForm Model="@Template" OnValidSubmit="SaveAsync">
+<EditForm Model="Template" OnValidSubmit="SaveAsync">
     <FluentValidationValidator />
     @if (Template.Id == 0)
     {

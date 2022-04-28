@@ -1,6 +1,6 @@
-﻿namespace pdfTemplator.Shared.Models
+﻿namespace pdfTemplator.Client.Models
 {
-    public class BaseModelDto
+    public class BaseModel
     {
         public int Id { get; set; }
         public DateTime CreatedAt { get; set; }

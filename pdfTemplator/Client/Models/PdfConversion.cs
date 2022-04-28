@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace pdfTemplator.Shared.Models
+namespace pdfTemplator.Client.Models
 {
-    public class PdfConversionDto : BaseModelDto
+    public class PdfConversion : BaseModel
     {
         [Required]
         public string DataJSON { get; set; } = null!;

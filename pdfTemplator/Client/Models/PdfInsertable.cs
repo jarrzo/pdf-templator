@@ -1,9 +1,9 @@
 ﻿using pdfTemplator.Shared.Constants.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace pdfTemplator.Shared.Models
+namespace pdfTemplator.Client.Models
 {
-    public class PdfInsertableDto : BaseModelDto
+    public class PdfInsertable : BaseModel
     {
         [Required]
         public string Key { get; set; } = null!;

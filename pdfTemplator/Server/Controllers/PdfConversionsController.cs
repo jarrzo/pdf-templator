@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
@@ -12,11 +14,13 @@ namespace pdfTemplator.Server.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly ILogger<PdfConversionsController> _logger;
+        private readonly HtmlToPdfConverter _converter;
 
-        public PdfConversionsController(ILogger<PdfConversionsController> logger, ApplicationDbContext db)
+        public PdfConversionsController(ILogger<PdfConversionsController> logger, ApplicationDbContext db, HtmlToPdfConverter converter)
         {
             _logger = logger;
             _db = db;
+            _converter = converter;
         }
 
         [HttpGet]
@@ -37,13 +41,20 @@ namespace pdfTemplator.Server.Controllers
             return Ok(await Result<PdfConversion>.SuccessAsync(pdfConversion));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(PdfConversion pdfConversion)
+        [HttpPost("{id}/convert")]
+        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] List<PdfKeyValue> data)
         {
-            _db.PdfConversions.Add(pdfConversion);
-            await _db.SaveChangesAsync();
+            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
-            return Ok(await Result<PdfConversion>.SuccessAsync(pdfConversion, "Template created"));
+            if (pdfTemplate == null)
+                return Ok(await Result<string>.FailAsync("Not found!"));
+
+            _converter.Template = pdfTemplate;
+            _converter.Data = data;
+
+            var pdfBase64String = _converter.CreatePdf();
+
+            return Ok(await Result<string>.SuccessAsync(pdfBase64String, "Template converted"));
         }
     }
 }
