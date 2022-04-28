@@ -7,6 +7,6 @@ namespace pdfTemplator.Client.Services.Models
     {
         Task<IResult<PdfConversion>> GetAsync(int id);
         Task<IResult<PdfConversion>> SaveAsync(PdfConversion pdfConversion);
-        Task<IResult<string>> ConvertAsync(int id);
+        Task<IResult<string>> ConvertAsync(int id, List<PdfKeyValue> data);
     }
 }

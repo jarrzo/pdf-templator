@@ -33,9 +33,9 @@ namespace pdfTemplator.Client.Services.Models
             return await response.ToResult<PdfConversion>();
         }
 
-        public async Task<IResult<string>> ConvertAsync(int id)
+        public async Task<IResult<string>> ConvertAsync(int id, List<PdfKeyValue> data)
         {
-            var response = await _httpClient.GetAsync($"{PdfConversionEndpoints.BaseUrl}/{id}/convert");
+            var response = await _httpClient.PostAsJsonAsync($"{PdfConversionEndpoints.BaseUrl}/{id}/convert", data);
             return await response.ToResult<string>();
         }
     }

@@ -6,7 +6,7 @@ namespace pdfTemplator.Client.Shared.Charts
 {
     public partial class WeeklyConversionsChart
     {
-        [Inject] private IChartService _chartManager { get; set; }
+        [Inject] private IChartService _chartManager { get; set; } = null!;
         private List<ChartSeries> _series = new();
         private string[] _dates = Array.Empty<string>();
         private readonly int _numberOfDays = 7;

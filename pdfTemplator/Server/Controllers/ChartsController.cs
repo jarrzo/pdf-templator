@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
+using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
@@ -33,6 +34,19 @@ namespace pdfTemplator.Server.Controllers
                 counts.Add(await _db.PdfConversions.Where(x => x.CreatedAt.Date == today.AddDays(-1 * i)).CountAsync());
             }
             return Ok(await Result<List<double>>.SuccessAsync(counts));
+        }
+
+        [HttpGet]
+        [Route("topPdfTemplates")]
+        public async Task<IActionResult> GetTopPdfTemplates()
+        {
+            List<KeyValuePair<PdfTemplate, int>> pairs = new();
+            var topTenConversions = _db.PdfConversions.GroupBy(x => x.PdfTemplateId).Select(x => new { PdfTemplateId = x.Key, Count = x.Count() }).OrderByDescending(x => x.Count).Take(5).ToList();
+            foreach (var pair in topTenConversions)
+            {
+                pairs.Add(new KeyValuePair<PdfTemplate, int>(await _db.PdfTemplates.FirstAsync(x => x.Id == pair.PdfTemplateId), pair.Count));
+            }
+            return Ok(await Result<List<KeyValuePair<PdfTemplate, int>>>.SuccessAsync(pairs));
         }
     }
 }

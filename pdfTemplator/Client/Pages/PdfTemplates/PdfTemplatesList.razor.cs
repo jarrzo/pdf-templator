@@ -69,7 +69,16 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             parameters.Add(nameof(PreviewPdfTemplate.Template), template);
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true, DisableBackdropClick = true };
-            _dialogService.Show<PreviewPdfTemplate>("Create", parameters, options);
+            _dialogService.Show<PreviewPdfTemplate>("Preview", parameters, options);
+        }
+
+        private void FillForm(PdfTemplate template)
+        {
+            var parameters = new DialogParameters();
+            parameters.Add(nameof(FillPdfTemplate.Template), template);
+
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Medium, FullWidth = true, DisableBackdropClick = true };
+            _dialogService.Show<FillPdfTemplate>("Form", parameters, options);
         }
 
         private async Task Reset()

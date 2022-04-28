@@ -1,0 +1,13 @@
+﻿@namespace pdfTemplator.Client.Shared.Charts
+@inject Microsoft.Extensions.Localization.IStringLocalizer<WeeklyConversionsChart> _localizer
+
+<MudTable Items="@_list" Hover="true" Loading="@_loading" LoadingProgressColor="Color.Info">
+    <HeaderContent>
+        <MudTh><strong>Template name</strong></MudTh>
+        <MudTh><strong>Count</strong></MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Sign">@context.Key.Name</MudTd>
+        <MudTd DataLabel="Name">@context.Value</MudTd>
+    </RowTemplate>
+</MudTable>

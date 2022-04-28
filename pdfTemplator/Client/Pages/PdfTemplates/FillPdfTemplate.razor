@@ -1,0 +1,20 @@
+﻿<EditForm Model="Fields" OnValidSubmit="GenerateDocument">
+    <MudDialog>
+        <TitleContent>
+            <MudText Typo="Typo.h6">
+                <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                Template filling
+            </MudText>
+        </TitleContent>
+        <DialogContent>
+            @foreach (var field in Fields)
+            {
+                <MudTextField Label="@field.Key" @bind-Value="field.Value" For="@(() => field.Value)" />
+            }
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">Generate</MudButton>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">Close form</MudButton>
+        </DialogActions>
+    </MudDialog>
+</EditForm>
