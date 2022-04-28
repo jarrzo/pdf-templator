@@ -1,31 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
 using pdfTemplator.Client.Services.Identity;
 
-namespace pdfTemplator.Client.Shared
+namespace pdfTemplator.Client.Shared.Components
 {
-    public partial class MainBody
+    public partial class UserCard
     {
         [Inject] private IdentityAuthenticationStateProvider authStateProvider { get; set; } = null!;
-        [Parameter] public RenderFragment ChildContent { get; set; } = null!;
-        private bool _drawerOpen = true;
-        [Parameter] public EventCallback OnDarkModeToggle { get; set; }
+        [Parameter] public string Class { get; set; }
+        private string Username { get; set; }
         private char FirstLetterOfUsername { get; set; }
-
-        private void DrawerToggle()
-        {
-            _drawerOpen = !_drawerOpen;
-        }
-
-        public async Task ToggleDarkMode()
-        {
-            await OnDarkModeToggle.InvokeAsync();
-        }
-
-        public async Task Logout()
-        {
-            await authStateProvider.Logout();
-            _navigationManager.NavigateTo("/login");
-        }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
@@ -39,9 +22,11 @@ namespace pdfTemplator.Client.Shared
         {
             var state = await authStateProvider.GetAuthenticationStateAsync();
             var user = state.User;
-            if(user != null)
+            if (user != null)
             {
                 FirstLetterOfUsername = user.Identity.Name[0];
+                Username = user.Identity.Name;
+                StateHasChanged();
             }
         }
     }

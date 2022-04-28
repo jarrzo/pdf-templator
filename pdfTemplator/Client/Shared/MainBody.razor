@@ -1,6 +1,5 @@
 ﻿@using pdfTemplator.Client.Shared.Components
 @inject Microsoft.Extensions.Localization.IStringLocalizer<MainLayout> _localizer
-@inherits LayoutComponentBase
 
 <MudAppBar Elevation="25">
     <MudText Typo="Typo.h6" Class="ml-4"><MudIcon Icon="@Icons.Filled.PictureAsPdf" /> PDF Templator</MudText>
@@ -12,6 +11,16 @@
     <MudTooltip Text="@_localizer["Toggle Dark Mode"]">
         <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="@((e) => ToggleDarkMode())" />
     </MudTooltip>
+    <MudMenu OffsetX="true" Dense="true" Class="mt-1 ml-4">
+        <ActivatorContent>
+            <MudAvatar Color="Color.Secondary">@FirstLetterOfUsername</MudAvatar>
+        </ActivatorContent>
+        <ChildContent>
+            <UserCard Class="mt-n2" />
+            <MudDivider Class="mb-2" />
+            <MudListItem Text="@_localizer["Logout"]" Icon="@Icons.Material.Filled.Logout" OnClick="Logout" />
+        </ChildContent>
+    </MudMenu>
 </MudAppBar>
 
 <MudDrawer @bind-Open="_drawerOpen" Elevation="25" ClipMode="DrawerClipMode.Always">
@@ -20,6 +29,6 @@
 
 <MudMainContent>
     <MudContainer MaxWidth="MaxWidth.False" Class="mt-4">
-        @Body
+        @ChildContent
     </MudContainer>
 </MudMainContent>

@@ -1,48 +1,55 @@
 ﻿@page "/login"
 @using pdfTemplator.Client.Services.Identity
 @using pdfTemplator.Shared;
+@using pdfTemplator.Shared.Constants
 @using pdfTemplator.Shared.Models
 @inject IdentityAuthenticationStateProvider authStateProvider
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Login> _localizer
 
 <PageTitle>Login</PageTitle>
 
-<h1 class="h2 font-weight-normal login-title">
-    Blazor with Identity Sample
-</h1>
-
 <EditForm class="form-signin" OnValidSubmit="OnSubmit" Model="loginParameters">
-    <DataAnnotationsValidator />
-    <h4 class="font-weight-normal text-center">Login</h4>
+    <MudGrid>
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudIcon Icon="@CustomIcons.Pdf" Color="Color.Primary" Size="Size.Large" ViewBox="0 0 500 500" Style="width: 100px; height: 100px;" />
+            </div>
+        </MudItem>
 
-    <label for="inputUsername" class="sr-only">User Name</label>
-    <InputText id="inputUsername" class="form-control" @bind-Value="loginParameters.UserName" autofocus placeholder="Username" />
-    <ValidationMessage For="@(() => loginParameters.UserName)" />
+        <DataAnnotationsValidator />
 
-    <label for="inputPassword" class="sr-only">Password</label>
-    <InputText type="password" id="inputPassword" class="form-control" placeholder="Password" @bind-Value="loginParameters.Password" />
-    <ValidationMessage For="@(() => loginParameters.Password)" />
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudText Typo="Typo.h4">@_localizer["Login"]</MudText>
+            </div>
+        </MudItem>
 
-    <div class="form-check m-3">
-        <InputCheckbox id="inputRememberMe" class="form-check-input" @bind-Value="@loginParameters.RememberMe" />
-        <label class="form-check-label" for="inputRememberMe">Remember Me</label>
-    </div>
+        <MudItem xs="12">
+            <MudTextField Label="@_localizer["Username"]" T="string" @bind-Value="loginParameters.UserName" Variant="Variant.Outlined" For="@(() => loginParameters.UserName)" />
+        </MudItem>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <MudItem xs="12">
+            <MudTextField Label="@_localizer["Password"]" InputType="InputType.Password" Variant="Variant.Outlined" @bind-Value="loginParameters.Password" For="@(() => loginParameters.Password)" />
+        </MudItem>
 
-    <label class="text-danger">@error</label>
+        <MudItem xs="12" Class="d-flex justify-space-between align-center">
+            <MudCheckBox Label="@_localizer["Remember me?"]" T="bool" @bind-Checked="loginParameters.RememberMe" Color="Color.Primary" Class="ml-n1"></MudCheckBox>
+        </MudItem>
 
-    <NavLink href="register">
-        <h6 class="font-weight-normal text-center">Create account</h6>
-    </NavLink>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Sign In"]</MudButton>
+        </MudItem>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton ButtonType="ButtonType.Button" Href="/register" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" Style="width: 100%;">@_localizer["Register"]</MudButton>
+        </MudItem>
+    </MudGrid>
 </EditForm>
 
 @code {
     LoginParameters loginParameters { get; set; } = new LoginParameters();
-    string error { get; set; }
 
     async Task OnSubmit()
     {
-        error = null;
         try
         {
             await authStateProvider.Login(loginParameters);
@@ -50,7 +57,7 @@
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            _snackBar.Add(ex.Message, Severity.Error);
         }
     }
 }

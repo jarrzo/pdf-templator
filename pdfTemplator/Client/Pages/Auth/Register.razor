@@ -1,47 +1,51 @@
 ﻿@page "/register"
 @using pdfTemplator.Client.Services.Identity
 @using pdfTemplator.Shared;
+@using pdfTemplator.Shared.Constants
 @using pdfTemplator.Shared.Models
 @inject IdentityAuthenticationStateProvider authStateProvider
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Register> _localizer
 
 <PageTitle>Register</PageTitle>
 
-<h1 class="h2 font-weight-normal login-title">
-    Blazor with Identity Sample
-</h1>
-
 <EditForm class="form-signin" OnValidSubmit="OnSubmit" Model="registerParameters">
-    <DataAnnotationsValidator />
-    <h4 class="font-weight-normal text-center">Create Account</h4>
+    <MudGrid>
+        <MudItem xs="12">
+            <div class="d-flex justify-center">
+                <MudIcon Icon="@CustomIcons.Pdf" Color="Color.Primary" Size="Size.Large" ViewBox="0 0 500 500" Style="width: 100px; height: 100px;" />
+            </div>
+        </MudItem>
 
-    <label for="inputUsername" class="sr-only">User Name</label>
-    <InputText id="inputUsername" class="form-control" placeholder="Username" autofocus @bind-Value="@registerParameters.UserName" />
-    <ValidationMessage For="@(() => registerParameters.UserName)" />
+        <DataAnnotationsValidator />
 
-    <label for="inputPassword" class="sr-only">Password</label>
-    <InputText type="password" id="inputPassword" class="form-control" placeholder="Password" @bind-Value="@registerParameters.Password" />
-    <ValidationMessage For="@(() => registerParameters.Password)" />
+        <MudItem xs="12">
+            <MudTextField Label="@_localizer["Username"]" T="string" @bind-Value="registerParameters.UserName" Variant="Variant.Outlined" For="@(() => registerParameters.UserName)" />
+        </MudItem>
 
-    <label for="inputPasswordConfirm" class="sr-only">Password Confirmation</label>
-    <InputText type="password" id="inputPasswordConfirm" class="form-control" placeholder="Password Confirmation" @bind-Value="@registerParameters.PasswordConfirm" />
-    <ValidationMessage For="@(() => registerParameters.PasswordConfirm)" />
+        <MudItem xs="12">
+            <MudTextField Label="@_localizer["Password"]" InputType="InputType.Password" Variant="Variant.Outlined" @bind-Value="registerParameters.Password" For="@(() => registerParameters.Password)" />
+        </MudItem>
 
-    <button class="btn btn-lg btn-primary btn-block" type="submit">Create account</button>
+        <MudItem xs="12">
+            <MudTextField Label="@_localizer["Confirm Password"]" InputType="InputType.Password" Variant="Variant.Outlined" @bind-Value="registerParameters.PasswordConfirm" For="@(() => registerParameters.PasswordConfirm)" />
+        </MudItem>
 
-    <label class="text-danger">@error</label>
-    <NavLink href="login">
-        <h6 class="font-weight-normal text-center">Already have an account? Click here to login</h6>
-    </NavLink>
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" Style="width: 100%;">@_localizer["Register"]</MudButton>
+        </MudItem>
+
+        <MudItem xs="12" Class="d-flex justify-center">
+            <MudButton ButtonType="ButtonType.Button" Href="/login" Variant="Variant.Filled" Color="Color.Secondary" Size="Size.Large" Style="width: 100%;">@_localizer["Login"]</MudButton>
+        </MudItem>
+    </MudGrid>
 </EditForm>
 
-@functions{
+@functions {
 
     RegisterParameters registerParameters { get; set; } = new RegisterParameters();
-    string error { get; set; }
 
     async Task OnSubmit()
     {
-        error = null;
         try
         {
             await authStateProvider.Register(registerParameters);
@@ -49,7 +53,7 @@
         }
         catch (Exception ex)
         {
-            error = ex.Message;
+            _snackBar.Add(ex.Message, Severity.Error);
         }
     }
 }
