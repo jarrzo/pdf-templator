@@ -108,6 +108,40 @@ namespace pdfTemplator.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PdfConversions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PdfTemplateId = table.Column<int>(type: "int", nullable: false),
+                    DataJSON = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PdfPath = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PdfConversions", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PdfInsertables",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    PdfTemplateId = table.Column<int>(type: "int", nullable: false),
+                    Key = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PdfInsertables", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "PersistedGrants",
                 columns: table => new
                 {
@@ -256,52 +290,6 @@ namespace pdfTemplator.Server.Migrations
                         principalColumn: "Id");
                 });
 
-            migrationBuilder.CreateTable(
-                name: "PdfConversions",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PdfTemplateId = table.Column<int>(type: "int", nullable: false),
-                    DataJSON = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PdfPath = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PdfConversions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PdfConversions_PdfTemplates_PdfTemplateId",
-                        column: x => x.PdfTemplateId,
-                        principalTable: "PdfTemplates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "PdfInsertables",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PdfTemplateId = table.Column<int>(type: "int", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PdfInsertables", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PdfInsertables_PdfTemplates_PdfTemplateId",
-                        column: x => x.PdfTemplateId,
-                        principalTable: "PdfTemplates",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -363,16 +351,6 @@ namespace pdfTemplator.Server.Migrations
                 column: "Use");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PdfConversions_PdfTemplateId",
-                table: "PdfConversions",
-                column: "PdfTemplateId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PdfInsertables_PdfTemplateId",
-                table: "PdfInsertables",
-                column: "PdfTemplateId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PdfTemplates_CategoryId",
                 table: "PdfTemplates",
                 column: "CategoryId");
@@ -428,6 +406,9 @@ namespace pdfTemplator.Server.Migrations
                 name: "PdfInsertables");
 
             migrationBuilder.DropTable(
+                name: "PdfTemplates");
+
+            migrationBuilder.DropTable(
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
@@ -435,9 +416,6 @@ namespace pdfTemplator.Server.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
-                name: "PdfTemplates");
 
             migrationBuilder.DropTable(
                 name: "Categories");

@@ -58,5 +58,52 @@ namespace pdfTemplator.Server.Data
         public DbSet<PdfConversion> PdfConversions { get; set; } = null!;
         public DbSet<PdfInsertable> PdfInsertables { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<PdfTemplate>().HasData(
+                new PdfTemplate
+                {
+                    Id = 1,
+                    Name = "Test1",
+                    Description = "Description1",
+                    Content = "Content1",
+                },
+                new PdfTemplate
+                {
+                    Id = 2,
+                    Name = "Test2",
+                    Description = "Description2",
+                    Content = "Content2",
+                },
+                new PdfTemplate
+                {
+                    Id = 3,
+                    Name = "Test3",
+                    Description = "Description3",
+                    Content = "Content3",
+                }
+            );
+            builder.Entity<PdfConversion>().HasData(
+                new PdfConversion { Id = 1, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(0) },
+                new PdfConversion { Id = 2, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(0) },
+                new PdfConversion { Id = 3, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(0) },
+                new PdfConversion { Id = 4, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(0) },
+                new PdfConversion { Id = 5, PdfTemplateId = 2, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(0) },
+                new PdfConversion { Id = 6, PdfTemplateId = 2, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(0) },
+                new PdfConversion { Id = 7, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-1) },
+                new PdfConversion { Id = 8, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-1) },
+                new PdfConversion { Id = 9, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-2) },
+                new PdfConversion { Id = 10, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-2) },
+                new PdfConversion { Id = 11, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-2) },
+                new PdfConversion { Id = 12, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-2) },
+                new PdfConversion { Id = 13, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-2) },
+                new PdfConversion { Id = 14, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-2) },
+                new PdfConversion { Id = 15, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-2) },
+                new PdfConversion { Id = 16, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-3) },
+                new PdfConversion { Id = 17, PdfTemplateId = 1, DataJSON = "", PdfPath = "", CreatedAt = DateTime.Now.AddDays(-3) }
+            );
+            base.OnModelCreating(builder);
+        }
     }
 }

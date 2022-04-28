@@ -12,7 +12,7 @@ using pdfTemplator.Server.Data;
 namespace pdfTemplator.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220428120826_InitialCreate")]
+    [Migration("20220428134356_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -367,7 +367,7 @@ namespace pdfTemplator.Server.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("pdfTemplator.Server.Models.Category", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -403,7 +403,7 @@ namespace pdfTemplator.Server.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("pdfTemplator.Server.Models.PdfConversion", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.PdfConversion", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -433,12 +433,10 @@ namespace pdfTemplator.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PdfTemplateId");
-
                     b.ToTable("PdfConversions");
                 });
 
-            modelBuilder.Entity("pdfTemplator.Server.Models.PdfInsertable", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.PdfInsertable", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -467,12 +465,10 @@ namespace pdfTemplator.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PdfTemplateId");
-
                     b.ToTable("PdfInsertables");
                 });
 
-            modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.PdfTemplate", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -563,56 +559,27 @@ namespace pdfTemplator.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("pdfTemplator.Server.Models.Category", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.Category", b =>
                 {
-                    b.HasOne("pdfTemplator.Server.Models.Category", "Parent")
+                    b.HasOne("pdfTemplator.Shared.Models.Category", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
 
                     b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("pdfTemplator.Server.Models.PdfConversion", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.PdfTemplate", b =>
                 {
-                    b.HasOne("pdfTemplator.Server.Models.PdfTemplate", "PdfTemplate")
-                        .WithMany("Conversions")
-                        .HasForeignKey("PdfTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PdfTemplate");
-                });
-
-            modelBuilder.Entity("pdfTemplator.Server.Models.PdfInsertable", b =>
-                {
-                    b.HasOne("pdfTemplator.Server.Models.PdfTemplate", "PdfTemplate")
-                        .WithMany("Insertables")
-                        .HasForeignKey("PdfTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PdfTemplate");
-                });
-
-            modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
-                {
-                    b.HasOne("pdfTemplator.Server.Models.Category", null)
+                    b.HasOne("pdfTemplator.Shared.Models.Category", null)
                         .WithMany("PdfTemplates")
                         .HasForeignKey("CategoryId");
                 });
 
-            modelBuilder.Entity("pdfTemplator.Server.Models.Category", b =>
+            modelBuilder.Entity("pdfTemplator.Shared.Models.Category", b =>
                 {
                     b.Navigation("Children");
 
                     b.Navigation("PdfTemplates");
-                });
-
-            modelBuilder.Entity("pdfTemplator.Server.Models.PdfTemplate", b =>
-                {
-                    b.Navigation("Conversions");
-
-                    b.Navigation("Insertables");
                 });
 #pragma warning restore 612, 618
         }
