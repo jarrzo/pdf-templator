@@ -80,9 +80,10 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
         {
             TableParams insertableParams = JsonSerializer.Deserialize<TableParams>(insertable.ParamsJSON)!;
 
-            string data = $"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><colgroup><col style=\"width: 50%;\"><col style=\"width: 50%;\"></colgroup><tbody pdfInsertable=\"" + insertable.Key + "\"><tr>";
+            string data = $"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><colgroup><col style=\"width: 50%;\"><col style=\"width: 50%;\"></colgroup><tbody data-pdfinsertable=\"" + insertable.Key + "\"><tr>";
             foreach (var tableElement in insertableParams!.TableElements) data += "<td>{{" + tableElement.Key + "}}</td>";
             data += $"</tr></tbody></table>";
+            Console.WriteLine(data);
             await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
         }
     }

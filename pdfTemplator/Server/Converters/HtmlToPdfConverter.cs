@@ -81,7 +81,7 @@ namespace pdfTemplator.Server.Converters
 
         public void FillTemplate()
         {
-            _pdfContent = Template.Content;
+            _pdfContent = Template.Content.ReplaceLineEndings("");
             _logger.LogInformation(_pdfContent);
             if (Data != null)
             {
@@ -100,17 +100,13 @@ namespace pdfTemplator.Server.Converters
                 string endKey = $"<p>@end_{sequence.Key}</p>";
 
                 int start = _pdfContent.IndexOf(startKey);
-                _logger.LogInformation(startKey);
-                _logger.LogInformation(start.ToString());
                 if (start == -1) continue;
                 int end = _pdfContent.IndexOf(endKey, start);
-                _logger.LogInformation(endKey);
-                _logger.LogInformation(end.ToString());
                 if (end == -1) continue;
 
-                var innerContentRaw = _pdfContent.Substring(start + startKey.Length, end - start + endKey.Length);
+                var innerContentRaw = _pdfContent.Substring(start + startKey.Length, end - start - startKey.Length);
 
-                foreach(var element in sequence.Elements)
+                foreach (var element in sequence.Elements)
                 {
                     var elementContent = innerContentRaw;
                     foreach(var elementField in element)
@@ -132,7 +128,7 @@ namespace pdfTemplator.Server.Converters
             {
                 string preparedContent = "";
 
-                string startKey = "pdfInsertable=\"" + table.Key + "\"";
+                string startKey = "data-pdfinsertable=\"" + table.Key + "\"";
                 string endKey = "</tbody>";
 
                 int startKeyPosition = _pdfContent.IndexOf(startKey);
