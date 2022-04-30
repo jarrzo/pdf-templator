@@ -7,9 +7,9 @@ using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/pdfInsertable")]
+    [Authorize]
     public class PdfInsertableController : ControllerBase
     {
         private readonly ApplicationDbContext _db;

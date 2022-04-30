@@ -4,6 +4,8 @@ using MudBlazor;
 using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
+using pdfTemplator.Shared.Models.Insertables;
+using System.Text.Json;
 
 namespace pdfTemplator.Client.Pages.PdfInsertables
 {
@@ -47,14 +49,41 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
             InsertableType.Text => Icons.Material.Filled.ShortText,
             InsertableType.Sequence => Icons.Material.Filled.DataArray,
             InsertableType.Table => Icons.Material.Filled.TableChart,
-            InsertableType.Date => Icons.Material.Filled.DateRange,
-            InsertableType.DateTime => Icons.Material.Filled.AccessTime,
+            InsertableType.Date => Icons.Material.Filled.AccessTime,
             _ => Icons.Material.Filled.Texture,
         };
 
-        private async Task InsertIntoTextEditor(string key)
+        private async Task InsertIntoTextEditor(PdfInsertable insertable)
         {
-            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", key);
+            if (insertable.Type == InsertableType.Text) await InsertText(insertable);
+            if (insertable.Type == InsertableType.Sequence) await InsertSequence(insertable);
+            if (insertable.Type == InsertableType.Table) await InsertTable(insertable);
+            if (insertable.Type == InsertableType.Date) await InsertText(insertable);
+        }
+
+        private async Task InsertText(PdfInsertable insertable)
+        {
+            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", "{{" + insertable.Key + "}}");
+        }
+
+        private async Task InsertSequence(PdfInsertable insertable)
+        {
+            SequenceParams insertableParams = JsonSerializer.Deserialize<SequenceParams>(insertable.ParamsJSON)!;
+
+            string data = $"<p>@start_{insertable.Key}</p>";
+            foreach (var seqElement in insertableParams!.SequenceElements) data += "<p>{{" + seqElement.Key + "}}</p>";
+            data += $"<p>@end_{insertable.Key}</p>";
+            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
+        }
+
+        private async Task InsertTable(PdfInsertable insertable)
+        {
+            TableParams insertableParams = JsonSerializer.Deserialize<TableParams>(insertable.ParamsJSON)!;
+
+            string data = $"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><colgroup><col style=\"width: 50%;\"><col style=\"width: 50%;\"></colgroup><tbody pdfInsertable=\"" + insertable.Key + "\"><tr>";
+            foreach (var tableElement in insertableParams!.TableElements) data += "<td>{{" + tableElement.Key + "}}</td>";
+            data += $"</tr></tbody></table>";
+            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
         }
     }
 }

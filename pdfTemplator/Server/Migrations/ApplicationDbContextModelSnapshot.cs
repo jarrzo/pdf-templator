@@ -305,6 +305,10 @@ namespace pdfTemplator.Server.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
 
+                    b.Property<string>("ParamsJSON")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("PdfTemplateId")
                         .HasColumnType("int");
 

@@ -8,9 +8,9 @@ using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/chart")]
+    [Authorize]
     public class ChartsController : ControllerBase
     {
         private readonly ApplicationDbContext _db;

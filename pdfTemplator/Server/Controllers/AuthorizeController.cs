@@ -6,7 +6,7 @@ using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Server.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/authorize")]
     [ApiController]
     public class AuthorizeController : ControllerBase
     {
@@ -20,6 +20,7 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPost]
+        [Route("login")]
         public async Task<IActionResult> Login(LoginParameters parameters)
         {
             var user = await _userManager.FindByNameAsync(parameters.UserName);
@@ -34,6 +35,7 @@ namespace pdfTemplator.Server.Controllers
 
 
         [HttpPost]
+        [Route("register")]
         public async Task<IActionResult> Register(RegisterParameters parameters)
         {
             var user = new ApplicationUser();
@@ -50,6 +52,7 @@ namespace pdfTemplator.Server.Controllers
 
         [Authorize]
         [HttpPost]
+        [Route("logout")]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
@@ -57,6 +60,7 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpGet]
+        [Route("userInfo")]
         public UserInfo UserInfo()
         {
             //var user = await _userManager.GetUserAsync(HttpContext.User);

@@ -1,6 +1,7 @@
 ﻿using pdfTemplator.Client.Services.Routes;
 using pdfTemplator.Shared.Extensions;
 using pdfTemplator.Shared.Models;
+using pdfTemplator.Shared.Models.Insertables;
 using pdfTemplator.Shared.Wrapper;
 using System.Net.Http.Json;
 
@@ -33,7 +34,7 @@ namespace pdfTemplator.Client.Services.Models
             return await response.ToResult<PdfConversion>();
         }
 
-        public async Task<IResult<string>> ConvertAsync(int id, List<PdfKeyValue> data)
+        public async Task<IResult<string>> ConvertAsync(int id, InsertablesData data)
         {
             var response = await _httpClient.PostAsJsonAsync($"{PdfConversionEndpoints.BaseUrl}/{id}/convert", data);
             return await response.ToResult<string>();

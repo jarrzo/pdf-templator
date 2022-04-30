@@ -5,7 +5,6 @@
         Text,
         Sequence,
         Table,
-        Date,
-        DateTime
+        Date
     }
 }

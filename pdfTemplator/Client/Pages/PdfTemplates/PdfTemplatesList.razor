@@ -52,8 +52,8 @@ else
             </MudTd>
             <MudTd DataLabel="Actions" Style="text-align: right">
                 <MudIconButton Icon="@Icons.Material.Filled.Search" @onclick="@(() => Preview(@context))" Color="Color.Dark" Size="Size.Small" />
-                <MudIconButton Icon="@Icons.Material.Filled.DynamicForm" @onclick="@(() => FillForm(@context))" Color="Color.Primary" Size="Size.Small" />
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@("/templates/"+context.Id)" Color="Color.Dark" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.DynamicForm" Href="@($"/templates/{context.Id}/fill")" Color="Color.Primary" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/templates/{context.Id}")" Color="Color.Dark" Size="Size.Small" />
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="@(() => Delete(@context.Id))" Color="Color.Error" Size="Size.Small" />
             </MudTd>
         </RowTemplate>

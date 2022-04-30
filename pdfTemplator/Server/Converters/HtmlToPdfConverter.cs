@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
 using pdfTemplator.Shared.Models;
+using pdfTemplator.Shared.Models.Insertables;
 using System.Text.Json;
 
 namespace pdfTemplator.Server.Converters
@@ -13,10 +14,11 @@ namespace pdfTemplator.Server.Converters
         private readonly ILogger<HtmlToPdfConverter> _logger;
         private readonly PathsOptions _paths;
         private readonly ConverterProperties _converterProperties;
-        public PdfTemplate? Template;
-        public List<PdfKeyValue>? Data;
-        private string? _pdfPath;
-        private string? _pdfName;
+        public PdfTemplate Template = null!;
+        public InsertablesData? Data;
+        private string _pdfPath = null!;
+        private string _pdfName = null!;
+        private string _pdfContent = null!;
 
         public HtmlToPdfConverter() { }
 
@@ -41,7 +43,7 @@ namespace pdfTemplator.Server.Converters
             FileStream pdf = File.Open(_pdfPath + _pdfName, FileMode.Create);
             try
             {
-                HtmlConverter.ConvertToPdf(Template.Content, pdf, _converterProperties);
+                HtmlConverter.ConvertToPdf(_pdfContent, pdf, _converterProperties);
                 _logger.LogInformation("Converted file: {fileName}", _pdfName);
             }
             catch (Exception ex)
@@ -54,19 +56,6 @@ namespace pdfTemplator.Server.Converters
             CreatePdfConversion();
 
             return Convert.ToBase64String(File.ReadAllBytes(_pdfPath + _pdfName));
-        }
-
-        public void FillTemplate()
-        {
-            if (Data != null)
-            {
-                foreach (var item in Data)
-                {
-                    var key = "{{" + item.Key + "}}";
-                    var value = item.Value;
-                    Template.Content = Template.Content.Replace(key, value);
-                }
-            }
         }
 
         private void GenerateFileName()
@@ -83,11 +72,102 @@ namespace pdfTemplator.Server.Converters
         {
             _db.PdfConversions.Add(new PdfConversion
             {
-                DataJSON = JsonSerializer.Serialize<List<PdfKeyValue>>(Data),
+                DataJSON = JsonSerializer.Serialize<InsertablesData>(Data),
                 PdfTemplateId = Template!.Id,
                 PdfPath = _pdfPath + _pdfName,
             });
             _db.SaveChanges();
+        }
+
+        public void FillTemplate()
+        {
+            _pdfContent = Template.Content;
+            _logger.LogInformation(_pdfContent);
+            if (Data != null)
+            {
+                FillSequences();
+                FillTables();
+                FillTexts();
+            }
+        }
+
+        private void FillSequences()
+        {
+            foreach (var sequence in Data!.SequenceFields)
+            {
+                string preparedContent = "";
+                string startKey = $"<p>@start_{sequence.Key}</p>";
+                string endKey = $"<p>@end_{sequence.Key}</p>";
+
+                int start = _pdfContent.IndexOf(startKey);
+                _logger.LogInformation(startKey);
+                _logger.LogInformation(start.ToString());
+                if (start == -1) continue;
+                int end = _pdfContent.IndexOf(endKey, start);
+                _logger.LogInformation(endKey);
+                _logger.LogInformation(end.ToString());
+                if (end == -1) continue;
+
+                var innerContentRaw = _pdfContent.Substring(start + startKey.Length, end - start + endKey.Length);
+
+                foreach(var element in sequence.Elements)
+                {
+                    var elementContent = innerContentRaw;
+                    foreach(var elementField in element)
+                    {
+                        var key = "{{" + elementField.Key + "}}";
+                        var value = elementField.Value;
+                        elementContent = elementContent.Replace(key, value);
+                    }
+                    preparedContent += elementContent;
+                }
+
+                _pdfContent = _pdfContent.Replace(startKey + innerContentRaw + endKey, preparedContent);
+            }
+        }
+
+        private void FillTables()
+        {
+            foreach (var table in Data!.TableFields)
+            {
+                string preparedContent = "";
+
+                string startKey = "pdfInsertable=\"" + table.Key + "\"";
+                string endKey = "</tbody>";
+
+                int startKeyPosition = _pdfContent.IndexOf(startKey);
+                if (startKeyPosition == -1) continue;
+                string afterStartKey = _pdfContent.Substring(startKeyPosition);
+
+                int start = afterStartKey.IndexOf(">");
+                int end = afterStartKey.IndexOf(endKey);
+
+                var innerContentRaw = afterStartKey.Substring(start + 1, end - start - 1);
+
+                foreach (var element in table.Elements)
+                {
+                    var elementContent = innerContentRaw;
+                    foreach (var elementField in element)
+                    {
+                        var key = "{{" + elementField.Key + "}}";
+                        var value = elementField.Value;
+                        elementContent = elementContent.Replace(key, value);
+                    }
+                    preparedContent += elementContent;
+                }
+
+                _pdfContent = _pdfContent.Replace(innerContentRaw, preparedContent);
+            }
+        }
+
+        private void FillTexts()
+        {
+            foreach (var textFields in Data!.TextFields)
+            {
+                var key = "{{" + textFields.Key + "}}";
+                var value = textFields.Value;
+                _pdfContent = _pdfContent.Replace(key, value);
+            }
         }
     }
 }

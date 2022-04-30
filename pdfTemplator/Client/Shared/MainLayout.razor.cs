@@ -6,11 +6,10 @@ namespace pdfTemplator.Client.Shared
 {
     public partial class MainLayout
     {
-        private MudTheme _currentTheme;
+        private MudTheme _currentTheme = BlazorHeroTheme.DefaultTheme;
 
         protected override async Task OnInitializedAsync()
         {
-            _currentTheme = BlazorHeroTheme.DefaultTheme;
             _currentTheme = await _clientPreferenceManager.GetCurrentThemeAsync();
         }
 

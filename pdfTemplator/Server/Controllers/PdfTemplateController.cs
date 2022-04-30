@@ -7,9 +7,9 @@ using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/pdfTemplate")]
+    [Authorize]
     public class PdfTemplateController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -25,7 +25,7 @@ namespace pdfTemplator.Server.Controllers
         public async Task<IActionResult> GetAll()
         {
             var pdfTemplates = await _db.PdfTemplates.ToListAsync();
-            return base.Ok(await Result<List<PdfTemplate>>.SuccessAsync(pdfTemplates));
+            return Ok(await Result<List<PdfTemplate>>.SuccessAsync(pdfTemplates));
         }
 
         [HttpGet("{id}")]
@@ -34,9 +34,9 @@ namespace pdfTemplator.Server.Controllers
             var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
             if (pdfTemplate == null)
-                return base.Ok(await Result<PdfTemplate>.FailAsync("Not found!"));
+                return Ok(await Result<PdfTemplate>.FailAsync("Not found!"));
 
-            return base.Ok(await Result<PdfTemplate>.SuccessAsync(pdfTemplate));
+            return Ok(await Result<PdfTemplate>.SuccessAsync(pdfTemplate));
         }
 
         [HttpPost]
@@ -102,7 +102,7 @@ namespace pdfTemplator.Server.Controllers
 
             var pdfConversions = _db.PdfConversions.Where(x => x.PdfTemplateId == id).ToList() ?? new();
 
-            return base.Ok(await Result<List<PdfConversion>>.SuccessAsync(pdfConversions));
+            return Ok(await Result<List<PdfConversion>>.SuccessAsync(pdfConversions));
         }
     }
 }

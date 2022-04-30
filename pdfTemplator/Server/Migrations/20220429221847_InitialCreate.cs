@@ -96,6 +96,7 @@ namespace pdfTemplator.Server.Migrations
                     PdfTemplateId = table.Column<int>(type: "int", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
                     Type = table.Column<int>(type: "int", nullable: false),
+                    ParamsJSON = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2(3)", precision: 3, nullable: false)
                 },

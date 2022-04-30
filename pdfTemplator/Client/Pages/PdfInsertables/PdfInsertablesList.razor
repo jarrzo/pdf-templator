@@ -14,7 +14,7 @@
                     {
                         @foreach (var insertable in Insertables.Where(x => x.Type == type))
                         {
-                            <MudListItem Icon="@GetInsertableIcon(type)" @onclick="() => InsertIntoTextEditor(insertable.Key)">{{ @insertable.Key }}</MudListItem>
+                            <MudListItem Icon="@GetInsertableIcon(type)" @onclick="() => InsertIntoTextEditor(insertable)">{{ @insertable.Key }}</MudListItem>
                         }
                     }
                 </NestedList>

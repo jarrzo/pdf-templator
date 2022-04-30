@@ -6,5 +6,5 @@
 }
 
 function insertIntoEditor(text) {
-    tinymce.activeEditor.execCommand('mceInsertContent', false, "{{"+text+"}}");
+    tinymce.activeEditor.execCommand('mceInsertContent', false, text);
 }

@@ -12,7 +12,7 @@ using pdfTemplator.Server.Data;
 namespace pdfTemplator.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220428230838_InitialCreate")]
+    [Migration("20220429221847_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -306,6 +306,10 @@ namespace pdfTemplator.Server.Migrations
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("ParamsJSON")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PdfTemplateId")
                         .HasColumnType("int");

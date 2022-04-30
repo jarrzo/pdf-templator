@@ -6,8 +6,8 @@ namespace pdfTemplator.Client.Shared.Components
     public partial class UserCard
     {
         [Inject] private IdentityAuthenticationStateProvider authStateProvider { get; set; } = null!;
-        [Parameter] public string Class { get; set; }
-        private string Username { get; set; }
+        [Parameter] public string Class { get; set; } = null!;
+        private string Username { get; set; } = "";
         private char FirstLetterOfUsername { get; set; }
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -22,7 +22,7 @@ namespace pdfTemplator.Client.Shared.Components
         {
             var state = await authStateProvider.GetAuthenticationStateAsync();
             var user = state.User;
-            if (user != null)
+            if (user != null && user.Identity != null && user.Identity.Name != null)
             {
                 FirstLetterOfUsername = user.Identity.Name[0];
                 Username = user.Identity.Name;

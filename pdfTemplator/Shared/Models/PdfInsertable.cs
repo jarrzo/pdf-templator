@@ -11,5 +11,6 @@ namespace pdfTemplator.Shared.Models
         [Required, MaxLength(64)]
         public string Key { get; set; } = null!;
         public InsertableType Type { get; set; }
+        public string ParamsJSON { get; set; } = null!;
     }
 }

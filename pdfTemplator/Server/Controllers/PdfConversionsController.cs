@@ -4,13 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Shared.Models;
+using pdfTemplator.Shared.Models.Insertables;
 using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/pdfConversion")]
+    [Authorize]
     public class PdfConversionsController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
@@ -50,7 +51,7 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPost("{id}/convert")]
-        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] List<PdfKeyValue> data)
+        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] InsertablesData data)
         {
             var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
