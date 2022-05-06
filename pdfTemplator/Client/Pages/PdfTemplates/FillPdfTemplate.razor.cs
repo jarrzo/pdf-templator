@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using MudBlazor;
 using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
@@ -82,7 +81,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             field.HasElements = true;
 
             List<InsertableField> elements = new();
-            foreach (var seqElement in JsonSerializer.Deserialize<SequenceParams>(field.Insertable.ParamsJSON)!.SequenceElements)
+            foreach (var seqElement in JsonSerializer.Deserialize<ArrayParams>(field.Insertable.ParamsJSON)!.ArrayElements)
             {
                 elements.Add(new() { Key = seqElement.Key, Value = "" });
             }
@@ -94,7 +93,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             field.HasElements = true;
 
             List<InsertableField> elements = new();
-            foreach (var tableElement in JsonSerializer.Deserialize<TableParams>(field.Insertable.ParamsJSON)!.TableElements)
+            foreach (var tableElement in JsonSerializer.Deserialize<ArrayParams>(field.Insertable.ParamsJSON)!.ArrayElements)
             {
                 elements.Add(new() { Key = tableElement.Key, Value = "" });
             }

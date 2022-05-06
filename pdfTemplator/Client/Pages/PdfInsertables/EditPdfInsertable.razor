@@ -20,25 +20,15 @@
                         }
                     </MudSelect>
                 </MudItem>
-                @if (Insertable.Type == InsertableType.Sequence)
+                @if (Insertable.Type == InsertableType.Sequence || Insertable.Type == InsertableType.Table)
                 {
                     <MudItem xs="12">
-                        @foreach (var seqElement in SequenceElements)
+                        @foreach (var arrElement in ArrayElements)
                         {
-                            <MudTextField T="string" For="@(() => seqElement.Key)" @bind-Value="seqElement.Key" Label="Key" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Remove" OnAdornmentClick="@(() => SequenceElements.Remove(seqElement))" />
+                            <MudTextField T="string" For="@(() => arrElement.Key)" @bind-Value="arrElement.Key" Label="Key" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Remove" OnAdornmentClick="@(() => ArrayElements.Remove(arrElement))" />
                         }
                     </MudItem>
-                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="@(() => SequenceElements.Add(new() { Key = ""}))"><MudIcon Icon="@Icons.Material.Filled.Add" />Add field</MudButton>
-                }
-                @if (Insertable.Type == InsertableType.Table)
-                {
-                    <MudItem xs="12">
-                        @foreach (var tableElement in TableElements)
-                        {
-                            <MudTextField T="string" For="@(() => tableElement.Key)" @bind-Value="tableElement.Key" Label="Key" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Remove" OnAdornmentClick="@(() => TableElements.Remove(tableElement))" />
-                        }
-                    </MudItem>
-                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="@(() => TableElements.Add(new() { Key = ""}))"><MudIcon Icon="@Icons.Material.Filled.Add" />Add field</MudButton>
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="@(() => ArrayElements.Add(new() { Key = ""}))"><MudIcon Icon="@Icons.Material.Filled.Add" />Add field</MudButton>
                 }
                 @if (Insertable.Type == InsertableType.Date)
                 {

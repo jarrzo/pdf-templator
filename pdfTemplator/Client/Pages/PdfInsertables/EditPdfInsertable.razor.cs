@@ -14,8 +14,7 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
         [Parameter] public PdfTemplate Template { get; set; } = null!;
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
         public PdfInsertable Insertable = new();
-        public List<SequenceElement> SequenceElements = new();
-        public List<TableElement> TableElements = new();
+        public List<ArrayElement> ArrayElements = new();
         public string DateFormat = "yyyy-MM-dd";
         public string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
 
@@ -36,8 +35,8 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
         {
             Insertable.PdfTemplateId = Template.Id;
             if (Insertable.Type == InsertableType.Text) SetupTextParams();
-            if (Insertable.Type == InsertableType.Sequence) SetupSequenceParams();
-            if (Insertable.Type == InsertableType.Table) SetupTableParams();
+            if (Insertable.Type == InsertableType.Sequence) SetupArrayParams();
+            if (Insertable.Type == InsertableType.Table) SetupArrayParams();
             if (Insertable.Type == InsertableType.Date) SetupDateParams();
         }
 
@@ -46,34 +45,24 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
             Insertable.ParamsJSON = "";
         }
 
-        private void SetupSequenceParams()
+        private void SetupArrayParams()
         {
-            SequenceParams insertableParams = new()
+            ArrayParams arrayParams = new()
             {
-                SequenceElements = SequenceElements,
+                ArrayElements = ArrayElements,
             };
 
-            Insertable.ParamsJSON = JsonSerializer.Serialize(insertableParams);
-        }
-
-        private void SetupTableParams()
-        {
-            TableParams insertableParams = new()
-            {
-                TableElements = TableElements,
-            };
-
-            Insertable.ParamsJSON = JsonSerializer.Serialize(insertableParams);
+            Insertable.ParamsJSON = JsonSerializer.Serialize(arrayParams);
         }
 
         private void SetupDateParams()
         {
-            DateParams insertableParams = new()
+            DateParams inserArrayParams = new()
             {
                 DateFormat = DateFormat,
             };
 
-            Insertable.ParamsJSON = JsonSerializer.Serialize(insertableParams);
+            Insertable.ParamsJSON = JsonSerializer.Serialize(inserArrayParams);
         }
     }
 }

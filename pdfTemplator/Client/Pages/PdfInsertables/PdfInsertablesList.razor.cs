@@ -68,20 +68,20 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
 
         private async Task InsertSequence(PdfInsertable insertable)
         {
-            SequenceParams insertableParams = JsonSerializer.Deserialize<SequenceParams>(insertable.ParamsJSON)!;
+            ArrayParams arrayParams = JsonSerializer.Deserialize<ArrayParams>(insertable.ParamsJSON)!;
 
             string data = $"<p>@start_{insertable.Key}</p>";
-            foreach (var seqElement in insertableParams!.SequenceElements) data += "<p>{{" + seqElement.Key + "}}</p>";
+            foreach (var seqElement in arrayParams!.ArrayElements) data += "<p>{{" + seqElement.Key + "}}</p>";
             data += $"<p>@end_{insertable.Key}</p>";
             await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
         }
 
         private async Task InsertTable(PdfInsertable insertable)
         {
-            TableParams insertableParams = JsonSerializer.Deserialize<TableParams>(insertable.ParamsJSON)!;
+            ArrayParams arrayParams = JsonSerializer.Deserialize<ArrayParams>(insertable.ParamsJSON)!;
 
-            string data = $"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><colgroup><col style=\"width: 50%;\"><col style=\"width: 50%;\"></colgroup><tbody data-pdfinsertable=\"" + insertable.Key + "\"><tr>";
-            foreach (var tableElement in insertableParams!.TableElements) data += "<td>{{" + tableElement.Key + "}}</td>";
+            string data = $"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><tbody data-pdfinsertable=\"" + insertable.Key + "\"><tr>";
+            foreach (var tableElement in arrayParams!.ArrayElements) data += "<td>{{" + tableElement.Key + "}}</td>";
             data += $"</tr></tbody></table>";
             Console.WriteLine(data);
             await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);

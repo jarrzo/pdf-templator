@@ -1,6 +1,6 @@
 ﻿namespace pdfTemplator.Shared.Models.Insertables
 {
-    public class TableElement
+    public class ArrayElement
     {
         public string Key { get; set; } = null!;
     }
