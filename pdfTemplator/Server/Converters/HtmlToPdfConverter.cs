@@ -1,9 +1,12 @@
 ﻿using iText.Html2pdf;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
+using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Models.Insertables;
+using System.Dynamic;
 using System.Text.Json;
 
 namespace pdfTemplator.Server.Converters
@@ -15,7 +18,8 @@ namespace pdfTemplator.Server.Converters
         private readonly PathsOptions _paths;
         private readonly ConverterProperties _converterProperties;
         public PdfTemplate Template = null!;
-        public InsertablesData? Data;
+        public List<PdfInsertable> Insertables = new();
+        public JObject Data = null!;
         private string _pdfPath = null!;
         private string _pdfName = null!;
         private string _pdfContent = null!;
@@ -34,6 +38,8 @@ namespace pdfTemplator.Server.Converters
         public string CreatePdf()
         {
             if (Template == null) return "";
+
+            GetInsertables();
 
             FillTemplate();
 
@@ -58,6 +64,11 @@ namespace pdfTemplator.Server.Converters
             return Convert.ToBase64String(File.ReadAllBytes(_pdfPath + _pdfName));
         }
 
+        private void GetInsertables()
+        {
+            Insertables = _db.PdfInsertables.Where(x => x.PdfTemplateId == Template.Id).ToList();
+        }
+
         private void GenerateFileName()
         {
             _pdfName = Path.GetRandomFileName() + ".pdf";
@@ -72,7 +83,7 @@ namespace pdfTemplator.Server.Converters
         {
             _db.PdfConversions.Add(new PdfConversion
             {
-                DataJSON = JsonSerializer.Serialize<InsertablesData>(Data),
+                DataJSON = JsonSerializer.Serialize(Data),
                 PdfTemplateId = Template!.Id,
                 PdfPath = _pdfPath + _pdfName,
             });
@@ -82,88 +93,106 @@ namespace pdfTemplator.Server.Converters
         public void FillTemplate()
         {
             _pdfContent = Template.Content.ReplaceLineEndings("");
-            _logger.LogInformation(_pdfContent);
-            if (Data != null)
+            if (Data.Count == 0) return;
+
+            Dictionary<string, JArray> arrays = new();
+            Dictionary<string, JValue> strings = new();
+
+            foreach (JProperty item in (JToken)Data)
             {
-                FillSequences();
-                FillTables();
-                FillTexts();
+                string key = item.Name;
+                JToken value = item.Value;
+
+                if (value.GetType() == typeof(JArray)) arrays.Add(key, (JArray)value);
+                if (value.GetType() == typeof(JValue)) strings.Add(key, (JValue)value);
+            }
+
+            FillArrays(arrays);
+            FillStrings(strings);
+        }
+
+        private void FillArrays(Dictionary<string, JArray> arrays)
+        {
+            foreach (var item in arrays)
+            {
+                var insertable = Insertables.FirstOrDefault(x => x.Key == item.Key);
+
+                if (insertable == null) continue;
+
+                if (insertable.Type == InsertableType.Sequence)
+                    FillSequence(item.Key, item.Value);
+
+                if (insertable.Type == InsertableType.Table)
+                    FillTable(item.Key, item.Value);
             }
         }
 
-        private void FillSequences()
+        private void FillStrings(Dictionary<string, JValue> strings)
         {
-            foreach (var sequence in Data!.SequenceFields)
+            foreach (var item in strings)
             {
-                string preparedContent = "";
-                string startKey = $"<p>@start_{sequence.Key}</p>";
-                string endKey = $"<p>@end_{sequence.Key}</p>";
-
-                int start = _pdfContent.IndexOf(startKey);
-                if (start == -1) continue;
-                int end = _pdfContent.IndexOf(endKey, start);
-                if (end == -1) continue;
-
-                var innerContentRaw = _pdfContent.Substring(start + startKey.Length, end - start - startKey.Length);
-
-                foreach (var element in sequence.Elements)
+                if (Insertables.Any(x => x.Key == item.Key))
                 {
-                    var elementContent = innerContentRaw;
-                    foreach(var elementField in element)
-                    {
-                        var key = "{{" + elementField.Key + "}}";
-                        var value = elementField.Value;
-                        elementContent = elementContent.Replace(key, value);
-                    }
-                    preparedContent += elementContent;
+                    FillText(item.Key, item.Value);
                 }
-
-                _pdfContent = _pdfContent.Replace(startKey + innerContentRaw + endKey, preparedContent);
             }
         }
 
-        private void FillTables()
+        private void FillSequence(string key, JArray objects)
         {
-            foreach (var table in Data!.TableFields)
+            string startKey = $"<p>@start_{key}</p>";
+            string endKey = $"<p>@end_{key}</p>";
+
+            int start = _pdfContent.IndexOf(startKey);
+            if (start == -1) return;
+            int end = _pdfContent.IndexOf(endKey, start);
+            if (end == -1) return;
+
+            var innerContentRaw = _pdfContent.Substring(start + startKey.Length, end - start - startKey.Length);
+
+            _pdfContent = _pdfContent.Replace(startKey + innerContentRaw + endKey, FillObject(innerContentRaw, objects));
+        }
+
+        private void FillTable(string key, JArray objects)
+        {
+            string startKey = "data-pdfinsertable=\"" + key + "\"";
+            string endKey = "</tbody>";
+
+            int startKeyPosition = _pdfContent.IndexOf(startKey);
+            if (startKeyPosition == -1) return;
+            string afterStartKey = _pdfContent.Substring(startKeyPosition);
+
+            int start = afterStartKey.IndexOf(">");
+            int end = afterStartKey.IndexOf(endKey);
+
+            var innerContentRaw = afterStartKey.Substring(start + 1, end - start - 1);
+
+            _pdfContent = _pdfContent.Replace(innerContentRaw, FillObject(innerContentRaw, objects));
+        }
+
+        private static string FillObject(string content, JArray objects)
+        {
+            string preparedContent = "";
+
+            foreach (JToken element in objects)
             {
-                string preparedContent = "";
-
-                string startKey = "data-pdfinsertable=\"" + table.Key + "\"";
-                string endKey = "</tbody>";
-
-                int startKeyPosition = _pdfContent.IndexOf(startKey);
-                if (startKeyPosition == -1) continue;
-                string afterStartKey = _pdfContent.Substring(startKeyPosition);
-
-                int start = afterStartKey.IndexOf(">");
-                int end = afterStartKey.IndexOf(endKey);
-
-                var innerContentRaw = afterStartKey.Substring(start + 1, end - start - 1);
-
-                foreach (var element in table.Elements)
+                var elementContent = content;
+                foreach (JProperty prop in element)
                 {
-                    var elementContent = innerContentRaw;
-                    foreach (var elementField in element)
-                    {
-                        var key = "{{" + elementField.Key + "}}";
-                        var value = elementField.Value;
-                        elementContent = elementContent.Replace(key, value);
-                    }
-                    preparedContent += elementContent;
+                    string propKey = "{{" + prop.Name + "}}";
+                    var propValue = prop.Value.ToString();
+                    elementContent = elementContent.Replace(propKey, propValue);
                 }
-
-                _pdfContent = _pdfContent.Replace(innerContentRaw, preparedContent);
+                preparedContent += elementContent;
             }
+
+            return preparedContent;
         }
 
-        private void FillTexts()
+        private void FillText(string key, JValue value)
         {
-            foreach (var textFields in Data!.TextFields)
-            {
-                var key = "{{" + textFields.Key + "}}";
-                var value = textFields.Value;
-                _pdfContent = _pdfContent.Replace(key, value);
-            }
+            key = "{{" + key + "}}";
+            _pdfContent = _pdfContent.Replace(key, value.ToString());
         }
     }
 }

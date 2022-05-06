@@ -3,6 +3,7 @@ using pdfTemplator.Shared.Extensions;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Models.Insertables;
 using pdfTemplator.Shared.Wrapper;
+using System.Dynamic;
 using System.Net.Http.Json;
 
 namespace pdfTemplator.Client.Services.Models
@@ -34,9 +35,9 @@ namespace pdfTemplator.Client.Services.Models
             return await response.ToResult<PdfConversion>();
         }
 
-        public async Task<IResult<string>> ConvertAsync(int id, InsertablesData data)
+        public async Task<IResult<string>> ConvertAsync(int id, dynamic data)
         {
-            var response = await _httpClient.PostAsJsonAsync($"{PdfConversionEndpoints.BaseUrl}/{id}/convert", data);
+            var response = await _httpClient.PostAsJsonAsync($"{PdfConversionEndpoints.BaseUrl}/{id}/convert", (object)data);
             return await response.ToResult<string>();
         }
     }

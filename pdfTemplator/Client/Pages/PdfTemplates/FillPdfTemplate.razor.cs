@@ -17,6 +17,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
         public PdfTemplate Template { get; set; } = null!;
         public List<PdfInsertable> Insertables { get; set; } = new();
         public List<InsertableField> Fields { get; set; } = new();
+        public Dictionary<string, dynamic> PreparedData { get; set; } = new();
         public int SimpleFieldsCount = 0;
 
         protected override async Task OnInitializedAsync()
@@ -47,8 +48,9 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 
         public async Task GenerateDocument()
         {
-            var response = await pdfConversionService.ConvertAsync(Template.Id, PrepareData());
-            await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/pdf", response.Data, $"{Template.Name}.pdf");
+            PrepareData();
+            var response = await pdfConversionService.ConvertAsync(Template.Id, PreparedData);
+            await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/pdf", (string)response.Data, $"{Template.Name}.pdf");
         }
 
         private void SetupFields()
@@ -121,84 +123,43 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
             return JsonSerializer.Deserialize<DateParams>(field.Insertable.ParamsJSON)!.DateFormat;
         }
 
-        private InsertablesData PrepareData()
+        private void PrepareData()
         {
-            return new()
-            {
-                TextFields = GetTextFields(),
-                SequenceFields = GetSequenceFields(),
-                TableFields = GetTableFields(),
-            };
+            PreparedData = new();
+            GetTextFields();
+            GetArrayFields();
         }
 
-        private List<PdfKeyValue> GetTextFields()
+        private void GetTextFields()
         {
-            List<PdfKeyValue> textFields = new();
             foreach (var field in Fields.Where(x => !x.HasElements))
             {
-                textFields.Add(new PdfKeyValue
-                {
-                    Key = field.Key,
-                    Value = field.Value,
-                });
+                PreparedData.Add(field.Key, field.Value);
             }
-            return textFields;
         }
 
-        private List<Sequence> GetSequenceFields()
+        private void GetArrayFields()
         {
-            List<Sequence> sequences = new();
-            foreach (var field in Fields.Where(x => x.Type == InsertableType.Sequence))
-            {
-                sequences.Add(GetSequence(field));
-            }
-            return sequences;
+            foreach (var field in Fields.Where(x => x.Type == InsertableType.Sequence || x.Type == InsertableType.Table))
+                GetObject(field);
         }
 
-        private Sequence GetSequence(InsertableField field)
+        private void GetObject(InsertableField field)
         {
-            Sequence sequence = new()
-            {
-                Key = field.Key,
-                Elements = new(),
-            };
+            List<Dictionary<string, string>> objects = new();
             foreach (var element in field.Elements)
             {
-                sequence.Elements.Add(GetElement(element));
+                objects.Add(GetElement(element));
             }
-            return sequence;
+            PreparedData.Add(field.Key, objects);
         }
 
-        private List<Table> GetTableFields()
+        private Dictionary<string, string> GetElement(List<InsertableField> fields)
         {
-            List<Table> tables = new();
-            foreach (var field in Fields.Where(x => x.Type == InsertableType.Table))
-            {
-                tables.Add(GetTable(field));
-            }
-            return tables;
-        }
-
-        private Table GetTable(InsertableField field)
-        {
-            Table table = new()
-            {
-                Key = field.Key,
-                Elements = new(),
-            };
-            foreach (var element in field.Elements)
-            {
-                table.Elements.Add(GetElement(element));
-            }
-            return table;
-        }
-
-        private List<PdfKeyValue> GetElement(List<InsertableField> fields)
-        {
-            List<PdfKeyValue> element = new();
+            Dictionary<string, string> element = new();
             foreach (var field in fields)
             {
-                element.Add(new() { Key = field.Key, Value = field.Value, });
+                element.Add(field.Key, field.Value);
             }
             return element;
         }

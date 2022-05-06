@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Shared.Models;
-using pdfTemplator.Shared.Models.Insertables;
 using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
@@ -51,15 +51,16 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPost("{id}/convert")]
-        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] InsertablesData data)
+        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] dynamic data)
         {
+            var jObject = JObject.Parse(data.ToString());
             var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
 
             if (pdfTemplate == null)
                 return Ok(await Result<string>.FailAsync("Not found!"));
 
             _converter.Template = pdfTemplate;
-            _converter.Data = data;
+            _converter.Data = jObject;
 
             var pdfBase64String = _converter.CreatePdf();
 
