@@ -114,28 +114,21 @@ namespace pdfTemplator.Server.Converters
         private void FillArrays(Dictionary<string, JArray> arrays)
         {
             foreach (var item in arrays)
-            {
-                var insertable = Insertables.FirstOrDefault(x => x.Key == item.Key);
-
-                if (insertable == null) continue;
-
-                if (insertable.Type == InsertableType.Sequence)
-                    FillSequence(item.Key, item.Value);
-
-                if (insertable.Type == InsertableType.Table)
-                    FillTable(item.Key, item.Value);
-            }
+                if (Insertables.Any(x => x.Key == item.Key))
+                    FillObjects(item.Key, item.Value);
         }
 
         private void FillStrings(Dictionary<string, JValue> strings)
         {
             foreach (var item in strings)
-            {
                 if (Insertables.Any(x => x.Key == item.Key))
-                {
                     FillText(item.Key, item.Value);
-                }
-            }
+        }
+
+        private void FillObjects(string key, JArray objects)
+        {
+            FillSequence(key, objects);
+            FillTable(key, objects);
         }
 
         private void FillSequence(string key, JArray objects)

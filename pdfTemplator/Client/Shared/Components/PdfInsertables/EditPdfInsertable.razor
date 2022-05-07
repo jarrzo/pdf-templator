@@ -20,7 +20,7 @@
                         }
                     </MudSelect>
                 </MudItem>
-                @if (Insertable.Type == InsertableType.Sequence || Insertable.Type == InsertableType.Table)
+                @if (Insertable.Type == InsertableType.Object)
                 {
                     <MudItem xs="12">
                         @foreach (var arrElement in ArrayElements)

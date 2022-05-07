@@ -7,7 +7,7 @@ using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Models.Insertables;
 using System.Text.Json;
 
-namespace pdfTemplator.Client.Pages.PdfInsertables
+namespace pdfTemplator.Client.Shared.Components.PdfInsertables
 {
     public partial class PdfInsertablesList
     {
@@ -15,9 +15,12 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
         [Parameter] public PdfTemplate Template { get; set; } = null!;
         public List<PdfInsertable> Insertables { get; set; } = new();
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await GetPdfInsertables();
+            if (firstRender)
+            {
+                await GetPdfInsertables();
+            }
         }
 
         private async Task GetPdfInsertables()
@@ -44,21 +47,21 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
                 await GetPdfInsertables();
             }
         }
-        private static string GetInsertableIcon(InsertableType type) => type switch
+        private static string GetInsertableIcon(InsertableFormType type) => type switch
         {
-            InsertableType.Text => Icons.Material.Filled.ShortText,
-            InsertableType.Sequence => Icons.Material.Filled.DataArray,
-            InsertableType.Table => Icons.Material.Filled.TableChart,
-            InsertableType.Date => Icons.Material.Filled.AccessTime,
+            InsertableFormType.Text => Icons.Material.Filled.ShortText,
+            InsertableFormType.Sequence => Icons.Material.Filled.DataArray,
+            InsertableFormType.Table => Icons.Material.Filled.TableChart,
+            InsertableFormType.Date => Icons.Material.Filled.AccessTime,
             _ => Icons.Material.Filled.Texture,
         };
 
-        private async Task InsertIntoTextEditor(PdfInsertable insertable)
+        private async Task InsertIntoTextEditor(PdfInsertable insertable, InsertableFormType type)
         {
-            if (insertable.Type == InsertableType.Text) await InsertText(insertable);
-            if (insertable.Type == InsertableType.Sequence) await InsertSequence(insertable);
-            if (insertable.Type == InsertableType.Table) await InsertTable(insertable);
-            if (insertable.Type == InsertableType.Date) await InsertText(insertable);
+            if (type == InsertableFormType.Text) await InsertText(insertable);
+            if (type == InsertableFormType.Sequence) await InsertSequence(insertable);
+            if (type == InsertableFormType.Table) await InsertTable(insertable);
+            if (type == InsertableFormType.Date) await InsertText(insertable);
         }
 
         private async Task InsertText(PdfInsertable insertable)

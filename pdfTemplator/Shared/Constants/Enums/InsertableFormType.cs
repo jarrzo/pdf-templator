@@ -1,9 +1,10 @@
 ﻿namespace pdfTemplator.Shared.Constants.Enums
 {
-    public enum InsertableType
+    public enum InsertableFormType
     {
         Text,
-        Object,
+        Sequence,
+        Table,
         Date
     }
 }

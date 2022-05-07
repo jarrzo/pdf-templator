@@ -42,7 +42,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
                 SetupFields();
             }
 
-            SimpleFieldsCount = Fields.Where(x => x.Type != InsertableType.Sequence && x.Type != InsertableType.Table).Count();
+            SimpleFieldsCount = Fields.Where(x => x.Type != InsertableType.Object).Count();
         }
 
         public async Task GenerateDocument()
@@ -70,40 +70,26 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
                 Value = "",
             };
 
-            if (insertable.Type == InsertableType.Sequence) SetupSequenceSubFields(field);
-            if (insertable.Type == InsertableType.Table) SetupTableSubFields(field);
+            if (insertable.Type == InsertableType.Object) SetupObjectSubFields(field);
 
             return field;
         }
 
-        private static void SetupSequenceSubFields(InsertableField field)
+        private static void SetupObjectSubFields(InsertableField field)
         {
             field.HasElements = true;
 
             List<InsertableField> elements = new();
-            foreach (var seqElement in JsonSerializer.Deserialize<ArrayParams>(field.Insertable.ParamsJSON)!.ArrayElements)
+            foreach (var objField in JsonSerializer.Deserialize<ArrayParams>(field.Insertable.ParamsJSON)!.ArrayElements)
             {
-                elements.Add(new() { Key = seqElement.Key, Value = "" });
-            }
-            field.Elements.Add(elements);
-        }
-
-        private static void SetupTableSubFields(InsertableField field)
-        {
-            field.HasElements = true;
-
-            List<InsertableField> elements = new();
-            foreach (var tableElement in JsonSerializer.Deserialize<ArrayParams>(field.Insertable.ParamsJSON)!.ArrayElements)
-            {
-                elements.Add(new() { Key = tableElement.Key, Value = "" });
+                elements.Add(new() { Key = objField.Key, Value = "" });
             }
             field.Elements.Add(elements);
         }
 
         private static void AddElement(InsertableField field)
         {
-            if (field.Type == InsertableType.Sequence) SetupSequenceSubFields(field);
-            if (field.Type == InsertableType.Table) SetupTableSubFields(field);
+            if (field.Type == InsertableType.Object) SetupObjectSubFields(field);
         }
 
         private static int CountSize(int maxCount, int objectsCount)
@@ -139,7 +125,7 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 
         private void GetArrayFields()
         {
-            foreach (var field in Fields.Where(x => x.Type == InsertableType.Sequence || x.Type == InsertableType.Table))
+            foreach (var field in Fields.Where(x => x.Type == InsertableType.Object))
                 GetObject(field);
         }
 

@@ -2,7 +2,7 @@
 using MudBlazor;
 using pdfTemplator.Shared.Models;
 
-namespace pdfTemplator.Client.Pages.PdfTemplates
+namespace pdfTemplator.Client.Shared.Components.PdfTemplates
 {
     public partial class PreviewPdfTemplate
     {

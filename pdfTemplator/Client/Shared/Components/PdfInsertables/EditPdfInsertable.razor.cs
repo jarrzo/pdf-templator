@@ -6,7 +6,7 @@ using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Models.Insertables;
 using System.Text.Json;
 
-namespace pdfTemplator.Client.Pages.PdfInsertables
+namespace pdfTemplator.Client.Shared.Components.PdfInsertables
 {
     public partial class EditPdfInsertable
     {
@@ -35,8 +35,7 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
         {
             Insertable.PdfTemplateId = Template.Id;
             if (Insertable.Type == InsertableType.Text) SetupTextParams();
-            if (Insertable.Type == InsertableType.Sequence) SetupArrayParams();
-            if (Insertable.Type == InsertableType.Table) SetupArrayParams();
+            if (Insertable.Type == InsertableType.Object) SetupObjectParams();
             if (Insertable.Type == InsertableType.Date) SetupDateParams();
         }
 
@@ -45,7 +44,7 @@ namespace pdfTemplator.Client.Pages.PdfInsertables
             Insertable.ParamsJSON = "";
         }
 
-        private void SetupArrayParams()
+        private void SetupObjectParams()
         {
             ArrayParams arrayParams = new()
             {
