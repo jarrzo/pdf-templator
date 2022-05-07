@@ -21,6 +21,12 @@ namespace pdfTemplator.Client.Services.Models
             return await response.ToResult<List<PdfTemplate>>();
         }
 
+        public async Task<IResult<List<PdfTemplate>>> GetAllByCategoryAsync(int categoryId)
+        {
+            var response = await _httpClient.GetAsync($"{CategoryEndpoints.BaseUrl}/{categoryId}/{CategoryEndpoints.PdfTemplates}");
+            return await response.ToResult<List<PdfTemplate>>();
+        }
+
         public async Task<IResult<PdfTemplate>> GetAsync(int id)
         {
             var response = await _httpClient.GetAsync($"{PdfTemplateEndpoints.BaseUrl}/{id}");

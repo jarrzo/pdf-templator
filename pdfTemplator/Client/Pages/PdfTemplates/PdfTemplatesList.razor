@@ -1,4 +1,5 @@
 ﻿@page "/templates"
+@page "/category/{categoryId:int}"
 @using pdfTemplator.Client.Shared.Components
 @using pdfTemplator.Shared.Models
 @attribute [Authorize]
@@ -27,11 +28,13 @@ else
             <col />
             <col />
             <col />
+            <col />
         </ColGroup>
         <HeaderContent>
             <MudTh Class="clm-row-small"><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.Category.Name)">@_localizer["Category"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.CreatedAt)">@_localizer["CreatedAt"]</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel SortBy="new Func<PdfTemplate, object>(x => x.UpdatedAt)">@_localizer["UpdatedAt"]</MudTableSortLabel></MudTh>
             <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
@@ -44,6 +47,9 @@ else
             <MudTd DataLabel="Description">
                 <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
             </MudTd>
+            <MudTd DataLabel="Category">
+                <MudHighlighter Text="@context.Category?.Name" HighlightedText="@_searchString" />
+            </MudTd>
             <MudTd DataLabel="Created At">
                 <MudHighlighter Text="@context.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")" HighlightedText="@_searchString" />
             </MudTd>
@@ -52,8 +58,8 @@ else
             </MudTd>
             <MudTd DataLabel="Actions" Style="text-align: right">
                 <MudIconButton Icon="@Icons.Material.Filled.Search" @onclick="@(() => Preview(@context))" Color="Color.Dark" Size="Size.Small" />
-                <MudIconButton Icon="@Icons.Material.Filled.DynamicForm" Href="@($"/templates/{context.Id}/fill")" Color="Color.Primary" Size="Size.Small" />
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/templates/{context.Id}")" Color="Color.Dark" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.DynamicForm" Href="@($"/templates/fill/{context.Id}")" Color="Color.Primary" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/templates/edit/{context.Id}")" Color="Color.Dark" Size="Size.Small" />
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="@(() => Delete(@context.Id))" Color="Color.Error" Size="Size.Small" />
             </MudTd>
         </RowTemplate>

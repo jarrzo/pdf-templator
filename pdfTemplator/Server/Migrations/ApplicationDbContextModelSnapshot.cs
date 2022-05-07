@@ -231,26 +231,16 @@ namespace pdfTemplator.Server.Migrations
                         .HasPrecision(3)
                         .HasColumnType("datetime2(3)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("nvarchar(64)");
-
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasPrecision(3)
                         .HasColumnType("datetime2(3)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
                 });
@@ -332,7 +322,7 @@ namespace pdfTemplator.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CategoryId")
+                    b.Property<int>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("Content")
@@ -415,26 +405,17 @@ namespace pdfTemplator.Server.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("pdfTemplator.Shared.Models.Category", b =>
-                {
-                    b.HasOne("pdfTemplator.Shared.Models.Category", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("Parent");
-                });
-
             modelBuilder.Entity("pdfTemplator.Shared.Models.PdfTemplate", b =>
                 {
                     b.HasOne("pdfTemplator.Shared.Models.Category", null)
                         .WithMany("PdfTemplates")
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("pdfTemplator.Shared.Models.Category", b =>
                 {
-                    b.Navigation("Children");
-
                     b.Navigation("PdfTemplates");
                 });
 #pragma warning restore 612, 618

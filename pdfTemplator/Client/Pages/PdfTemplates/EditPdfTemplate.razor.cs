@@ -8,8 +8,10 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
     public partial class EditPdfTemplate
     {
         [Inject] private IPdfTemplateService pdfTemplateService { get; set; } = null!;
+        [Inject] private ICategoryService categoryService { get; set; } = null!;
         [Parameter] public int Id { get; set; }
         public PdfTemplate Template { get; set; } = new();
+        public List<Category> Categories { get; set; } = new();
 
         private async Task SaveAsync()
         {
@@ -34,21 +36,22 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
 
         private async Task LoadDataAsync()
         {
+            Categories = (await categoryService.GetAllAsync()).Data.ToList();
+
             if (Id > 0)
             {
                 var response = await pdfTemplateService.GetAsync(Id);
                 Template = response.Data;
+                _navigationManager.NavigateTo($"/templates/edit/{Template.Id}", false, true);
             }
             else
             {
-                var response = await pdfTemplateService.SaveAsync(new()
+                Template = new()
                 {
                     Name = "New Template",
                     Description = "",
-                    Content = "",
-                });
-                Template = response.Data;
-                _navigationManager.NavigateTo($"/templates/{Template.Id}", false, true);
+                    Content = ""
+                };
             }
             await Task.CompletedTask;
         }

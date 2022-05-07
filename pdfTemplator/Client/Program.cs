@@ -38,6 +38,7 @@ builder.Services.AddMudServices(configuration =>
     configuration.SnackbarConfiguration.ShowCloseIcon = false;
 });
 
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IPdfTemplateService, PdfTemplateService>();
 builder.Services.AddScoped<IPdfInsertableService, PdfInsertableService>();
 builder.Services.AddScoped<IPdfConversionService, PdfConversionService>();

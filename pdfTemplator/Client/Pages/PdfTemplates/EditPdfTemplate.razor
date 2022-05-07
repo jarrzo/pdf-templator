@@ -1,5 +1,5 @@
 ﻿@page "/templates/new"
-@page "/templates/{id:int}"
+@page "/templates/edit/{id:int}"
 @using Microsoft.AspNetCore.Authorization
 @using TinyMCE.Blazor
 @using pdfTemplator.Client.Shared.Components.PdfInsertables
@@ -27,7 +27,16 @@
         <MudItem xs="12" md="3">
             <MudTextField T="string" For="@(() => Template.Name)" @bind-Value="Template.Name" Label="@_localizer["Name"]" />
         </MudItem>
-        <MudItem xs="12" md="9">
+        <MudItem xs="12" md="3">
+            <MudSelect T="int" For="@(() => Template.CategoryId)" @bind-Value="Template.CategoryId" Label="@_localizer["Category"]">
+                <MudSelectItem T="int" Value="0" Disabled>Not selected</MudSelectItem>
+                @foreach(var category in Categories)
+                {
+                    <MudSelectItem T="int" Value="@category.Id">@category.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="12" md="6">
             <MudTextField For="@(() => Template.Description)" @bind-Value="Template.Description" Label="@_localizer["Description"]" />
         </MudItem>
         <MudItem xs="12">

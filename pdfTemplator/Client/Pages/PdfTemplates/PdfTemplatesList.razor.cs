@@ -9,21 +9,21 @@ namespace pdfTemplator.Client.Pages.PdfTemplates
     public partial class PdfTemplatesList
     {
         [Inject] private IPdfTemplateService pdfTemplateService { get; set; } = null!;
+        [Parameter] public int categoryId { get; set; }
         private List<PdfTemplate> _list = new();
         private string _searchString = "";
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnParametersSetAsync()
         {
             await GetPdfTemplates();
         }
 
         private async Task GetPdfTemplates()
         {
-            var response = await pdfTemplateService.GetAllAsync();
-            if (response != null)
-            {
-                _list = response.Data.ToList();
-            }
+            if(categoryId > 0)
+                _list = (await pdfTemplateService.GetAllByCategoryAsync(categoryId)).Data.ToList();
+            else
+                _list = (await pdfTemplateService.GetAllAsync()).Data.ToList();
         }
 
         private bool Search(PdfTemplate template)

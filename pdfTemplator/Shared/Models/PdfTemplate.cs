@@ -10,5 +10,7 @@ namespace pdfTemplator.Shared.Models
         public string Description { get; set; } = null!;
         [Required(AllowEmptyStrings = true)]
         public string Content { get; set; } = null!;
+        public int CategoryId { get; set; }
+        public virtual Category? Category { get; set; }
     }
 }

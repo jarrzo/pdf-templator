@@ -24,14 +24,14 @@ namespace pdfTemplator.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var pdfTemplates = await _db.PdfTemplates.ToListAsync();
+            var pdfTemplates = await _db.PdfTemplates.Include(x => x.Category).ToListAsync();
             return Ok(await Result<List<PdfTemplate>>.SuccessAsync(pdfTemplates));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var pdfTemplate = await _db.PdfTemplates.FirstOrDefaultAsync(x => x.Id == id);
+            var pdfTemplate = await _db.PdfTemplates.Include(x => x.Category).FirstOrDefaultAsync(x => x.Id == id);
 
             if (pdfTemplate == null)
                 return Ok(await Result<PdfTemplate>.FailAsync("Not found!"));
