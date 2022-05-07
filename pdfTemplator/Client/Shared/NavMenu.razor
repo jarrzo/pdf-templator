@@ -7,7 +7,7 @@
     <MudNavLink Href="/templates" Icon="@Icons.Filled.Menu">All templates</MudNavLink>
     @foreach(var category in Categories)
     {
-        <MudNavLink Href="@GetUrl(category)" Icon="@Icons.Filled.Menu">@category.Name</MudNavLink>
+        <MudNavLink Href="@GetUrl(category)" Icon="@Icons.Filled.FilterList">@category.Name</MudNavLink>
     }
     <MudDivider Class="my-2" />
     <MudNavLink Href="/users" Icon="@Icons.Filled.SupervisedUserCircle">Users</MudNavLink>

@@ -59,15 +59,6 @@ namespace pdfTemplator.Client.Pages.Categories
             }
         }
 
-        private void Preview(PdfTemplate template)
-        {
-            var parameters = new DialogParameters();
-            parameters.Add(nameof(PreviewPdfTemplate.Template), template);
-
-            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true, DisableBackdropClick = true };
-            _dialogService.Show<PreviewPdfTemplate>("Preview", parameters, options);
-        }
-
         private async Task Reset()
         {
             await GetCategories();
