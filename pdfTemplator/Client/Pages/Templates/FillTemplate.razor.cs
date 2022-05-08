@@ -43,7 +43,7 @@ namespace pdfTemplator.Client.Pages.Templates
             PrepareData();
             var response = await templateService.ConvertAsync(Template.Id, PreparedData);
 
-            if(response.Succeeded)
+            if (response.Succeeded)
                 await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/pdf", response.Data, $"{Template.Name}.pdf");
             else
                 foreach (var msg in response.Messages)

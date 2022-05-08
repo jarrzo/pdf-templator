@@ -1,18 +1,22 @@
 {
-    "name": "Testas",
-    "surname": "Testauskas",
-    "payments":[
-        {
-            "name": "Apple",
-            "price": "1"
-        },
-        {
-            "name": "Banana",
-            "price": "0.89"
-        },
-        {
-            "name": "BMW",
-            "price": "399"
-        }
-    ]
+  "name": "Testas",
+  "surname": "Testauskas",
+  "payments": [
+    {
+      "name": "Apple",
+      "price": "1"
+    },
+    {
+      "name": "Banana",
+      "price": "0.89"
+    },
+    {
+      "name": "BMW",
+      "price": "399"
+    },
+    {
+      "name": "Audi",
+      "price": "0"
+    }
+  ]
 }

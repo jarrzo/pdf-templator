@@ -4,7 +4,6 @@ using Microsoft.Extensions.Options;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
-using pdfTemplator.Server.Services;
 using Serilog;
 using System.Net;
 using System.Net.Mail;

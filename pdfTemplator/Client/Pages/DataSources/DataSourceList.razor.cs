@@ -92,10 +92,10 @@ namespace pdfTemplator.Client.Pages.DataSources
         private async Task GetData(DataSource dataSource)
         {
             var response = await dataSourceService.GetDataAsync(dataSource.Id);
-            if(response.Succeeded)
+            if (response.Succeeded)
                 await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/json", response.Data, $"{dataSource.Name}.json");
             else
-                foreach(var msg in response.Messages)
+                foreach (var msg in response.Messages)
                     _snackBar.Add(msg, Severity.Error);
         }
     }

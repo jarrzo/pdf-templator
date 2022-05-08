@@ -5,7 +5,6 @@ using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Services;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
-using pdfTemplator.Shared.Extensions;
 
 namespace pdfTemplator.Server.Controllers
 {
@@ -94,7 +93,7 @@ namespace pdfTemplator.Server.Controllers
 
             var dataGetter = await DataGetter.GetData(dataSource);
 
-            if(!dataGetter.Succeeded)
+            if (!dataGetter.Succeeded)
                 return Ok(await Result<List<string>>.FailAsync(dataGetter.Messages));
 
             var dataEncoded = Convert.ToBase64String(await dataGetter.Data.Content.ReadAsByteArrayAsync());
