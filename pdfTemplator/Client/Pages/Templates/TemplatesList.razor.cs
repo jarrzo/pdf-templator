@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
-using pdfTemplator.Client.Services.Models;
+using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Client.Shared.Components.Templates;
 using pdfTemplator.Shared.Models;
 

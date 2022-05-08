@@ -1,8 +1,8 @@
 ﻿using pdfTemplator.Shared.Models;
 
-namespace pdfTemplator.Client.Services.Identity
+namespace pdfTemplator.Client.Services.Interfaces
 {
-    public interface IAuthorizeApi
+    public interface IAuthorizeService : IService
     {
         Task Login(LoginParameters loginParameters);
         Task Register(RegisterParameters registerParameters);

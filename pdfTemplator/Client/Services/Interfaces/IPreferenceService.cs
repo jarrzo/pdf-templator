@@ -1,9 +1,9 @@
 ﻿using pdfTemplator.Client.Settings;
 using pdfTemplator.Shared.Wrapper;
 
-namespace pdfTemplator.Client.Services.Preferences
+namespace pdfTemplator.Client.Services.Interfaces
 {
-    public interface IPreferenceManager
+    public interface IPreferenceService : IService
     {
         Task SetPreference(ClientPreference preference);
 

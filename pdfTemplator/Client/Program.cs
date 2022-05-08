@@ -6,6 +6,7 @@ using MudBlazor;
 using MudBlazor.Services;
 using pdfTemplator.Client;
 using pdfTemplator.Client.Services.Identity;
+using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Client.Services.Preferences;
 
@@ -27,7 +28,7 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
 builder.Services.AddScoped<IdentityAuthenticationStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(s => s.GetRequiredService<IdentityAuthenticationStateProvider>());
-builder.Services.AddScoped<IAuthorizeApi, AuthorizeApi>();
+builder.Services.AddScoped<IAuthorizeService, AuthorizeService>();
 
 builder.Services.AddMudServices(configuration =>
 {
@@ -44,6 +45,8 @@ builder.Services.AddScoped<ITemplateService, TemplateService>();
 builder.Services.AddScoped<IFieldService, FieldService>();
 builder.Services.AddScoped<IConversionService, ConversionService>();
 builder.Services.AddScoped<IChartService, ChartService>();
+builder.Services.AddScoped<IDataSourceService, DataSourceService>();
+builder.Services.AddScoped<IAutomatedTemplateService, AutomatedTemplateService>();
 builder.Services.AddScoped<ClientPreferenceManager>();
 
 await builder.Build().RunAsync();

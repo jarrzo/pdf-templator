@@ -1,8 +1,8 @@
 ﻿using MudBlazor;
 
-namespace pdfTemplator.Client.Services.Preferences
+namespace pdfTemplator.Client.Services.Interfaces
 {
-    public interface IClientPreferenceManager : IPreferenceManager
+    public interface IClientPreferenceService : IPreferenceService
     {
         Task<MudTheme> GetCurrentThemeAsync();
 

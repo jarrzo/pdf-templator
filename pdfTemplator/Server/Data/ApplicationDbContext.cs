@@ -55,5 +55,7 @@ namespace pdfTemplator.Server.Data
         public DbSet<Conversion> Conversions { get; set; } = null!;
         public DbSet<Field> Fields { get; set; } = null!;
         public DbSet<Category> Categories { get; set; } = null!;
+        public DbSet<DataSource> DataSources { get; set; } = null!;
+        public DbSet<AutomatedTemplate> AutomatedTemplates { get; set; } = null!;
     }
 }

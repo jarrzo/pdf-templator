@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components.Authorization;
+using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Shared.Models;
 using System.Security.Claims;
 
@@ -7,9 +8,9 @@ namespace pdfTemplator.Client.Services.Identity
     public class IdentityAuthenticationStateProvider : AuthenticationStateProvider
     {
         private UserInfo? _userInfoCache;
-        private readonly IAuthorizeApi _authorizeApi;
+        private readonly IAuthorizeService _authorizeApi;
 
-        public IdentityAuthenticationStateProvider(IAuthorizeApi authorizeApi)
+        public IdentityAuthenticationStateProvider(IAuthorizeService authorizeApi)
         {
             this._authorizeApi = authorizeApi;
         }

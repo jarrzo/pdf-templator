@@ -1,0 +1,73 @@
+﻿@using pdfTemplator.Shared.Constants.Enums
+@using pdfTemplator.Shared.Models
+<EditForm Model="DataSource" OnValidSubmit="AddDataSource">
+    <MudDialog>
+        <TitleContent>
+
+            @if (DataSource.Id > 0)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />Edit Data Source
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />Add Data Source
+                </MudText>
+            }
+
+        </TitleContent>
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => DataSource.Name)" @bind-Value="DataSource.Name" Label="Name" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="RequestMethod" Label="Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="DataSource.Method">
+                        @foreach (RequestMethod method in Enum.GetValues(typeof(RequestMethod)))
+                        {
+                            <MudSelectItem T="RequestMethod" Value="method">@method.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => DataSource.Url)" @bind-Value="DataSource.Url" Label="Url" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="DataSourceType" Label="Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="DataSource.Type">
+                        @foreach (DataSourceType type in Enum.GetValues(typeof(DataSourceType)))
+                        {
+                            <MudSelectItem T="DataSourceType" Value="type">@type.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12">
+                    <MudGrid>
+                        @foreach (var header in Headers)
+                        {
+                            <MudItem xs="12" md="6">
+                                <MudTextField T="string" For="@(() => header.Key)" @bind-Value="header.Key" Label="Key" />
+                            </MudItem>
+                            <MudItem xs="12" md="6">
+                                <MudTextField T="string" For="@(() => header.Value)" @bind-Value="header.Value" Label="Value" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Remove" OnAdornmentClick="@(() => Headers.Remove(header))" />
+                            </MudItem>
+                        }
+                    </MudGrid>
+                    <MudButton Class="mt-2" Variant="Variant.Filled" OnClick="@(() => Headers.Add(new(){Key="", Value=""}))"><MudIcon Icon="@Icons.Material.Filled.Add" />Add header</MudButton>
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">Cancel</MudButton>
+            @if (DataSource.Id > 0)
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">Edit</MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">Add</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>

@@ -1,4 +1,5 @@
-﻿using Blazored.LocalStorage;
+﻿using pdfTemplator.Client.Services.Interfaces;
+using Blazored.LocalStorage;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
 using pdfTemplator.Client.Settings;
@@ -7,7 +8,7 @@ using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Client.Services.Preferences
 {
-    public class ClientPreferenceManager : IClientPreferenceManager
+    public class ClientPreferenceManager : IClientPreferenceService
     {
         private readonly ILocalStorageService _localStorageService;
         private readonly IStringLocalizer<ClientPreferenceManager> _localizer;

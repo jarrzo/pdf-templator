@@ -1,13 +1,14 @@
-﻿using pdfTemplator.Shared.Models;
+﻿using pdfTemplator.Client.Services.Interfaces;
+using pdfTemplator.Shared.Models;
 using System.Net.Http.Json;
 
 namespace pdfTemplator.Client.Services.Identity
 {
-    public class AuthorizeApi : IAuthorizeApi
+    public class AuthorizeService : IAuthorizeService
     {
         private readonly HttpClient _httpClient;
 
-        public AuthorizeApi(HttpClient httpClient)
+        public AuthorizeService(HttpClient httpClient)
         {
             _httpClient = httpClient;
         }

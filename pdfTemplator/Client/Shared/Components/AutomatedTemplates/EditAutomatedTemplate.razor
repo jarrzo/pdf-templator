@@ -1,0 +1,70 @@
+﻿@using pdfTemplator.Shared.Constants.Enums
+@using pdfTemplator.Shared.Models
+<EditForm Model="AutomatedTemplate" OnValidSubmit="AddDataSource">
+    <MudDialog>
+        <TitleContent>
+
+            @if (AutomatedTemplate.Id > 0)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />Edit Data Source
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />Add Data Source
+                </MudText>
+            }
+
+        </TitleContent>
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AutomatedTemplate.Name)" @bind-Value="AutomatedTemplate.Name" Label="Name" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AutomatedTemplate.TimeParams)" @bind-Value="AutomatedTemplate.TimeParams" Label="Time parameters" />
+                </MudItem>
+                <MudItem xs="12">
+                    <MudTextField T="string" For="@(() => AutomatedTemplate.Description)" @bind-Value="AutomatedTemplate.Description" Label="Description" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AutomatedTemplate.SendEmail)" @bind-Value="AutomatedTemplate.SendEmail" Label="Sending email" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => AutomatedTemplate.SavePath)" @bind-Value="AutomatedTemplate.SavePath" Label="Saving path" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="int" Label="Template" AnchorOrigin="Origin.BottomCenter" @bind-Value="AutomatedTemplate.TemplateId">
+                        <MudSelectItem T="int" Value="0" Disabled>Not selected</MudSelectItem>
+                        @foreach (var item in Templates)
+                        {
+                            <MudSelectItem T="int" Value="item.Id">@item.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="int" Label="DataSource" AnchorOrigin="Origin.BottomCenter" @bind-Value="AutomatedTemplate.DataSourceId">
+                        <MudSelectItem T="int" Value="0" Disabled>Not selected</MudSelectItem>
+                        @foreach (var item in DataSources)
+                        {
+                            <MudSelectItem T="int" Value="item.Id">@item.Name</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">Cancel</MudButton>
+            @if (AutomatedTemplate.Id > 0)
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">Edit</MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">Add</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>

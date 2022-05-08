@@ -4,7 +4,7 @@ namespace pdfTemplator.Shared.Models
 {
     public class Template : BaseModel
     {
-        [Required(AllowEmptyStrings = true), MaxLength(64)]
+        [Required, MaxLength(64)]
         public string Name { get; set; } = null!;
         [Required(AllowEmptyStrings = true), MaxLength(512)]
         public string Description { get; set; } = null!;

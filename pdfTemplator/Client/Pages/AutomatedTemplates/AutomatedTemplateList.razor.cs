@@ -1,36 +1,36 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using pdfTemplator.Client.Services.Interfaces;
+using pdfTemplator.Client.Shared.Components.AutomatedTemplates;
+using pdfTemplator.Client.Shared.Components.DataSources;
 using pdfTemplator.Shared.Models;
 
-namespace pdfTemplator.Client.Shared.Components.Fields
+namespace pdfTemplator.Client.Pages.AutomatedTemplates
 {
-    public partial class FieldTable
+    public partial class AutomatedTemplateList
     {
-        [Inject] private IFieldService fieldService { get; set; } = null!;
-        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
-        [Parameter] public Template? Template { get; set; }
-        private List<Field> _list = new();
+        [Inject] private IAutomatedTemplateService automatedTemplateService { get; set; } = null!;
+        private List<AutomatedTemplate> _list = new();
         private string _searchString = "";
 
         protected override async Task OnInitializedAsync()
         {
-            await GetFields();
+            await GetTemplates();
         }
 
-        private async Task GetFields()
+        private async Task GetTemplates()
         {
-            var response = await fieldService.GetAllAsync();
+            var response = await automatedTemplateService.GetAllAsync();
             if (response != null)
             {
                 _list = response.Data.ToList();
             }
         }
 
-        private bool Search(Field field)
+        private bool Search(AutomatedTemplate template)
         {
             if (string.IsNullOrWhiteSpace(_searchString)) return true;
-            return field.Key?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
+            return template.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
         }
 
         private async Task Delete(int id)
@@ -45,7 +45,7 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
-                var response = await fieldService.DeleteAsync(id);
+                var response = await automatedTemplateService.DeleteAsync(id);
                 if (response.Succeeded)
                 {
                     await Reset();
@@ -61,14 +61,14 @@ namespace pdfTemplator.Client.Shared.Components.Fields
 
         private async Task Reset()
         {
-            await GetFields();
+            await GetTemplates();
         }
 
-        private async Task AddField()
+        private async Task AddAutomatedTemplate()
         {
             var parameters = new DialogParameters();
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<EditField>("Create", parameters, options);
+            var dialog = _dialogService.Show<EditAutomatedTemplate>("Create", parameters, options);
             var response = await dialog.Result;
             if (!response.Cancelled)
             {
@@ -76,33 +76,17 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             }
         }
 
-        private async Task UpdateField(Field field)
+        private async Task UpdateAutomatedTemplate(AutomatedTemplate template)
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(EditField.Field), field);
+            parameters.Add(nameof(EditAutomatedTemplate.AutomatedTemplate), template);
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<EditField>("Edit", parameters, options);
+            var dialog = _dialogService.Show<EditAutomatedTemplate>("Edit", parameters, options);
             var response = await dialog.Result;
             if (!response.Cancelled)
             {
                 await Reset();
             }
-        }
-
-        private async Task AddToTemplate(Field field)
-        {
-            if (Template != null)
-            {
-                if (field.Templates == null) field.Templates = new List<Template>();
-                field.Templates.Add(Template);
-                await fieldService.SaveAsync(field);
-                Cancel();
-            }
-        }
-
-        public void Cancel()
-        {
-            MudDialog.Cancel();
         }
     }
 }
