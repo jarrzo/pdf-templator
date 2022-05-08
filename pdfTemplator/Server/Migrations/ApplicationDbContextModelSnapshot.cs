@@ -346,6 +346,8 @@ namespace pdfTemplator.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TemplateId");
+
                     b.ToTable("Conversions");
                 });
 
@@ -542,6 +544,17 @@ namespace pdfTemplator.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("DataSource");
+
+                    b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("pdfTemplator.Shared.Models.Conversion", b =>
+                {
+                    b.HasOne("pdfTemplator.Shared.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Template");
                 });

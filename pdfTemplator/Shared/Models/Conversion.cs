@@ -10,5 +10,7 @@ namespace pdfTemplator.Shared.Models
         public string DataJSON { get; set; } = null!;
         [Required, MaxLength(128)]
         public string PdfPath { get; set; } = null!;
+
+        public virtual Template? Template { get; set; }
     }
 }

@@ -12,8 +12,8 @@ using pdfTemplator.Server.Data;
 namespace pdfTemplator.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220508143839_AddAutomations")]
-    partial class AddAutomations
+    [Migration("20220508230213_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -348,6 +348,8 @@ namespace pdfTemplator.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TemplateId");
+
                     b.ToTable("Conversions");
                 });
 
@@ -544,6 +546,17 @@ namespace pdfTemplator.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("DataSource");
+
+                    b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("pdfTemplator.Shared.Models.Conversion", b =>
+                {
+                    b.HasOne("pdfTemplator.Shared.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Template");
                 });
