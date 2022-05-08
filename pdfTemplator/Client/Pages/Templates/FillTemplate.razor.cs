@@ -29,7 +29,7 @@ namespace pdfTemplator.Client.Pages.Templates
             var response = await templateService.GetAsync(Id);
             Template = response.Data;
 
-            if(Template.Fields != null)
+            if (Template.Fields != null)
             {
                 Fields = Template.Fields.ToList();
                 SetupFields();

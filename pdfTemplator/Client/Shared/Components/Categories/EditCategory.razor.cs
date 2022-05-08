@@ -7,7 +7,7 @@ namespace pdfTemplator.Client.Shared.Components.Categories
 {
     public partial class EditCategory
     {
-        [Inject] private ICategoryService categoryService{ get; set; } = null!;
+        [Inject] private ICategoryService categoryService { get; set; } = null!;
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
         [Parameter] public Category CategoryParams { get; set; } = new();
 

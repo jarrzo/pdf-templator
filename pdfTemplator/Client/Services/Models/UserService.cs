@@ -2,7 +2,6 @@
 using pdfTemplator.Shared.Extensions;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
-using System.Net.Http.Json;
 
 namespace pdfTemplator.Client.Services.Models
 {

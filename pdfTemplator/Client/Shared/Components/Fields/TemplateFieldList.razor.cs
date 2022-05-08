@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
-using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Models.Fields;

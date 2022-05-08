@@ -3,10 +3,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
-using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
-using pdfTemplator.Shared.Models.Fields;
-using System.Dynamic;
 using System.Text.Json;
 
 namespace pdfTemplator.Server.Converters

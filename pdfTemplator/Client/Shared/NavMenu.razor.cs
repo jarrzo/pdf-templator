@@ -18,7 +18,7 @@ namespace pdfTemplator.Client.Shared
         {
             Categories = (await categoryService.GetAllAsync()).Data.ToList();
         }
-        
+
         public static string GetUrl(Category category)
         {
             return $"/category/{category.Id}";

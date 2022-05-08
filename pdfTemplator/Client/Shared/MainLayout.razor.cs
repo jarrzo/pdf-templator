@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
+﻿using MudBlazor;
 using pdfTemplator.Client.Settings;
 
 namespace pdfTemplator.Client.Shared

@@ -20,7 +20,7 @@ namespace pdfTemplator.Client.Pages.Templates
 
         private async Task GetTemplates()
         {
-            if(categoryId > 0)
+            if (categoryId > 0)
                 _list = (await templateService.GetAllByCategoryAsync(categoryId)).Data.ToList();
             else
                 _list = (await templateService.GetAllAsync()).Data.ToList();

@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Components;
-using MudBlazor;
 using pdfTemplator.Client.Services.Models;
-using pdfTemplator.Client.Shared.Components.Categories;
-using pdfTemplator.Client.Shared.Components.Templates;
 using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Pages.Users
 {
     public partial class UsersList
     {
-        [Inject] private IUserService userService{ get; set; } = null!;
+        [Inject] private IUserService userService { get; set; } = null!;
         private List<UserInfo> _list = new();
         private string _searchString = "";
 

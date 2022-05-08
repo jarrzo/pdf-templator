@@ -2,7 +2,6 @@
 using MudBlazor;
 using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Client.Shared.Components.Categories;
-using pdfTemplator.Client.Shared.Components.Templates;
 using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Pages.Categories

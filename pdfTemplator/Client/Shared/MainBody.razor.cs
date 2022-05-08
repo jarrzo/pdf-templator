@@ -39,7 +39,7 @@ namespace pdfTemplator.Client.Shared
         {
             var state = await authStateProvider.GetAuthenticationStateAsync();
             var user = state.User;
-            if(user != null && user.Identity != null && user.Identity.Name != null)
+            if (user != null && user.Identity != null && user.Identity.Name != null)
             {
                 FirstLetterOfUsername = user.Identity.Name[0];
             }
