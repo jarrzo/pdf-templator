@@ -8,9 +8,9 @@
         </MudListSubheader>
         @foreach (FormFieldType type in Enum.GetValues(typeof(FormFieldType)))
         {
-            <MudListItem Text="@type.ToString()" Icon="@GetFieldIcon(type)" InitiallyExpanded="ShouldExpand(type)" Expanded="ShouldExpand(type)">
+            <MudListItem Text="@type.ToString()" Icon="@GetFieldIcon(type)" InitiallyExpanded="TypeHasFields(type)" Expanded="TypeHasFields(type)">
                 <NestedList>
-                    @if (Fields.Any(x => x.Type == type.ToFieldType()))
+                    @if (TypeHasFields(type))
                     {
                         @foreach (var field in Fields.Where(x => x.Type == type.ToFieldType()))
                         {

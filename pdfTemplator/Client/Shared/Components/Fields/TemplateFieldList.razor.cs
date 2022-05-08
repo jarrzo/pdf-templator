@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using MudBlazor;
+using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Models.Fields;
@@ -10,21 +11,21 @@ namespace pdfTemplator.Client.Shared.Components.Fields
 {
     public partial class TemplateFieldList
     {
+        [Inject] private ITemplateService templateService { get; set; } = null!;
         [Parameter] public Template Template { get; set; } = null!;
         public List<Field> Fields { get; set; } = new();
 
-        protected override Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
         {
-            GetFields();
-            return base.OnInitializedAsync();
+            await GetFields();
         }
 
-        private void GetFields()
+        private async Task GetFields()
         {
+            if(Template.Id > 0) Template = (await templateService.GetAsync(Template.Id)).Data;
             if (Template.Fields != null)
             {
                 Fields = Template.Fields.ToList();
-                Console.WriteLine(Fields.Count);
             }
         }
 
@@ -36,10 +37,7 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true, DisableBackdropClick = true };
             var dialog = _dialogService.Show<FieldTable>("Existing fields", parameters, options);
             var response = await dialog.Result;
-            if (!response.Cancelled)
-            {
-                GetFields();
-            }
+            await GetFields();
         }
 
         private static string GetFieldIcon(FormFieldType type) => type switch
@@ -85,7 +83,7 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
         }
 
-        private bool ShouldExpand(FormFieldType type)
+        private bool TypeHasFields(FormFieldType type)
         {
             return Fields.Any(x => x.Type == type.ToFieldType());
         }

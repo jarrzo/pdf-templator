@@ -51,7 +51,7 @@ namespace pdfTemplator.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(Field field, int id)
         {
-            var dbField = await _db.Fields.FirstOrDefaultAsync(x => x.Id == id);
+            var dbField = await _db.Fields.Include(x => x.Templates).FirstOrDefaultAsync(x => x.Id == id);
 
             if (dbField == null)
                 return Ok(await Result<int>.FailAsync("Field not found!"));
@@ -59,7 +59,26 @@ namespace pdfTemplator.Server.Controllers
             dbField.Key = field.Key;
             dbField.Type = field.Type;
             dbField.ParamsJSON = field.ParamsJSON;
-            dbField.Templates = field.Templates;
+
+            _logger.LogInformation(dbField.Templates.Count.ToString());
+            _logger.LogInformation(field.Templates.Count.ToString());
+
+            if (field.Templates != null)
+            {
+                dbField.Templates.Clear();
+                foreach (var item in field.Templates)
+                {
+                    var template = _db.Templates.FirstOrDefault(x => x.Id == item.Id);
+
+                    if (template == null)
+                        return Ok(await Result<int>.FailAsync("Template not found!"));
+
+                    dbField.Templates.Add(template);
+                }
+            }
+
+            _logger.LogInformation(dbField.Templates.Count.ToString());
+            _logger.LogInformation(field.Templates.Count.ToString());
 
             _db.Update(dbField);
             await _db.SaveChangesAsync();
