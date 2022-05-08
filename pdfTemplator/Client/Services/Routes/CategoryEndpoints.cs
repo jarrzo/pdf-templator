@@ -3,6 +3,6 @@
     public static class CategoryEndpoints
     {
         public static string BaseUrl = "api/category";
-        public static string PdfTemplates = "pdfTemplates";
+        public static string Templates = "templates";
     }
 }

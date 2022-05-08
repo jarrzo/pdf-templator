@@ -16,14 +16,14 @@ namespace pdfTemplator.Client.Services.Models
 
         public async Task<IResult<List<double>>> GetWeeklyConversionsCount()
         {
-            var response = await _httpClient.GetAsync(ChartsEndpoints.GetWeeklyConversionsCount);
+            var response = await _httpClient.GetAsync(ChartEndpoints.GetWeeklyConversionsCount);
             return await response.ToResult<List<double>>();
         }
 
-        public async Task<IResult<List<KeyValuePair<PdfTemplate, int>>>> GetTopPdfTemplates()
+        public async Task<IResult<List<KeyValuePair<Template, int>>>> GetTopTemplates()
         {
-            var response = await _httpClient.GetAsync(ChartsEndpoints.GetTopPdfTemplates);
-            return await response.ToResult<List<KeyValuePair<PdfTemplate, int>>>();
+            var response = await _httpClient.GetAsync(ChartEndpoints.GetTopTemplates);
+            return await response.ToResult<List<KeyValuePair<Template, int>>>();
         }
     }
 }

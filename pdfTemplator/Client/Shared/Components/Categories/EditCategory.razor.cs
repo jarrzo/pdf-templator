@@ -9,7 +9,7 @@ namespace pdfTemplator.Client.Shared.Components.Categories
     {
         [Inject] private ICategoryService categoryService{ get; set; } = null!;
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
-        [Parameter] public CategoryParameters CategoryParams { get; set; } = new();
+        [Parameter] public Category CategoryParams { get; set; } = new();
 
         public void Cancel()
         {

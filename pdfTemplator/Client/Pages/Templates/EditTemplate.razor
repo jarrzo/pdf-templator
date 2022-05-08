@@ -1,0 +1,64 @@
+﻿@page "/templates/new"
+@page "/templates/edit/{id:int}"
+@using Microsoft.AspNetCore.Authorization
+@using TinyMCE.Blazor
+@using pdfTemplator.Client.Shared.Components.Fields
+@inject Microsoft.Extensions.Localization.IStringLocalizer<EditTemplate> _localizer
+
+<PageTitle>Edit template</PageTitle>
+
+<EditForm Model="Template" OnValidSubmit="SaveAsync">
+    <FluentValidationValidator />
+    @if (Template.Id == 0)
+    {
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+            @_localizer["Add template"]
+        </MudText>
+    }
+    else
+    {
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1" />
+            @_localizer["Update template"] #@Template.Id
+        </MudText>
+    }
+    <MudGrid>
+        <MudItem xs="12" md="3">
+            <MudTextField T="string" For="@(() => Template.Name)" @bind-Value="Template.Name" Label="@_localizer["Name"]" />
+        </MudItem>
+        <MudItem xs="12" md="3">
+            <MudSelect T="int" For="@(() => Template.CategoryId)" @bind-Value="Template.CategoryId" Label="@_localizer["Category"]">
+                <MudSelectItem T="int" Value="0" Disabled>Not selected</MudSelectItem>
+                @foreach(var category in Categories)
+                {
+                    <MudSelectItem T="int" Value="@category.Id">@category.Name</MudSelectItem>
+                }
+            </MudSelect>
+        </MudItem>
+        <MudItem xs="12" md="6">
+            <MudTextField For="@(() => Template.Description)" @bind-Value="Template.Description" Label="@_localizer["Description"]" />
+        </MudItem>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem xs="3" md="3">
+                    <FieldList Template="Template"/>
+                </MudItem>
+                <MudItem xs="9" md="9">
+                    <Editor @bind-Value="Template.Content" Field="@(() => Template.Content)" JsConfSrc="tinyMceConfig" ApiKey="rfpfxrfnp78icateetm3og391acozegprg8fs8pxvxqgcwds" />
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+    <div class="mt-3">
+        @if (Template.Id != 0)
+        {
+            <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Info">@_localizer["Update"]</MudButton>
+        }
+        else
+        {
+            <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">@_localizer["Save"]</MudButton>
+        }
+        <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Button" Class="ml-2" Color="Color.Info" Href="/templates">@_localizer["Go back"]</MudButton>
+    </div>
+</EditForm>

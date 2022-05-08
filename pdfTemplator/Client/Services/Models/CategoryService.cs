@@ -27,7 +27,7 @@ namespace pdfTemplator.Client.Services.Models
             return await response.ToResult<Category>();
         }
 
-        public async Task<IResult<Category>> SaveAsync(CategoryParameters request)
+        public async Task<IResult<Category>> SaveAsync(Category request)
         {
             HttpResponseMessage response;
 
@@ -45,10 +45,10 @@ namespace pdfTemplator.Client.Services.Models
             return await response.ToResult<int>();
         }
 
-        public async Task<IResult<List<PdfTemplate>>> GetPdfTemplates(int id)
+        public async Task<IResult<List<Template>>> GetTemplates(int id)
         {
-            var response = await _httpClient.GetAsync($"{CategoryEndpoints.BaseUrl}/{id}/{CategoryEndpoints.PdfTemplates}");
-            return await response.ToResult<List<PdfTemplate>>();
+            var response = await _httpClient.GetAsync($"{CategoryEndpoints.BaseUrl}/{id}/{CategoryEndpoints.Templates}");
+            return await response.ToResult<List<Template>>();
         }
     }
 }

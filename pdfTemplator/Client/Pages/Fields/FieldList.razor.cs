@@ -2,15 +2,15 @@
 using MudBlazor;
 using pdfTemplator.Client.Services.Models;
 using pdfTemplator.Client.Shared.Components.Categories;
-using pdfTemplator.Client.Shared.Components.Templates;
+using pdfTemplator.Client.Shared.Components.Fields;
 using pdfTemplator.Shared.Models;
 
-namespace pdfTemplator.Client.Pages.Categories
+namespace pdfTemplator.Client.Pages.Fields
 {
-    public partial class CategoriesList
+    public partial class FieldList
     {
-        [Inject] private ICategoryService categoryService { get; set; } = null!;
-        private List<Category> _list = new();
+        [Inject] private IFieldService fieldService{ get; set; } = null!;
+        private List<Field> _list = new();
         private string _searchString = "";
 
         protected override async Task OnInitializedAsync()
@@ -20,17 +20,17 @@ namespace pdfTemplator.Client.Pages.Categories
 
         private async Task GetCategories()
         {
-            var response = await categoryService.GetAllAsync();
+            var response = await fieldService.GetAllAsync();
             if (response != null)
             {
                 _list = response.Data.ToList();
             }
         }
 
-        private bool Search(Category category)
+        private bool Search(Field field)
         {
             if (string.IsNullOrWhiteSpace(_searchString)) return true;
-            return category.Name?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
+            return field.Key?.Contains(_searchString, StringComparison.OrdinalIgnoreCase) == true;
         }
 
         private async Task Delete(int id)
@@ -45,7 +45,7 @@ namespace pdfTemplator.Client.Pages.Categories
             var result = await dialog.Result;
             if (!result.Cancelled)
             {
-                var response = await categoryService.DeleteAsync(id);
+                var response = await fieldService.DeleteAsync(id);
                 if (response.Succeeded)
                 {
                     await Reset();
@@ -64,11 +64,11 @@ namespace pdfTemplator.Client.Pages.Categories
             await GetCategories();
         }
 
-        private async Task AddCategory()
+        private async Task AddField()
         {
             var parameters = new DialogParameters();
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<EditCategory>("Create", parameters, options);
+            var dialog = _dialogService.Show<EditField>("Create", parameters, options);
             var response = await dialog.Result;
             if (!response.Cancelled)
             {
@@ -76,12 +76,12 @@ namespace pdfTemplator.Client.Pages.Categories
             }
         }
 
-        private async Task UpdateCategory(Category category)
+        private async Task UpdateField(Field field)
         {
             var parameters = new DialogParameters();
-            parameters.Add(nameof(EditCategory.CategoryParams), category);
+            parameters.Add(nameof(EditField.Field), field);
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<EditCategory>("Create", parameters, options);
+            var dialog = _dialogService.Show<EditField>("Create", parameters, options);
             var response = await dialog.Result;
             if (!response.Cancelled)
             {

@@ -7,9 +7,9 @@ namespace pdfTemplator.Client.Services.Models
     {
         Task<IResult<List<Category>>> GetAllAsync();
         Task<IResult<Category>> GetAsync(int id);
-        Task<IResult<Category>> SaveAsync(CategoryParameters request);
+        Task<IResult<Category>> SaveAsync(Category request);
         Task<IResult<int>> DeleteAsync(int id);
 
-        Task<IResult<List<PdfTemplate>>> GetPdfTemplates(int id);
+        Task<IResult<List<Template>>> GetTemplates(int id);
     }
 }

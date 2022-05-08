@@ -1,0 +1,24 @@
+﻿@using pdfTemplator.Shared.Constants.Enums
+
+<MudPaper>
+    <MudList Clickable="true">
+        <MudListSubheader>
+            Variables:
+            <MudIconButton Color="Color.Primary" Variant="Variant.Outlined" Icon="@Icons.Material.Filled.Add" Size="Size.Small" @onclick="CreateNewField"/>
+        </MudListSubheader>
+        @foreach (FormFieldType type in Enum.GetValues(typeof(FormFieldType)))
+        {
+            <MudListItem Text="@type.ToString()" Icon="@GetFieldIcon(type)" Expanded="Fields.Any(x => x.Type == type.ToFieldType())">
+                <NestedList>
+                    @if (Fields.Any(x => x.Type == type.ToFieldType()))
+                    {
+                        @foreach (var field in Fields.Where(x => x.Type == type.ToFieldType()))
+                        {
+                            <MudListItem Icon="@Icons.Material.Filled.Key" @onclick="() => InsertIntoTextEditor(field, type)">@field.Key</MudListItem>
+                        }
+                    }
+                </NestedList>
+            </MudListItem>
+        }
+    </MudList>
+</MudPaper>

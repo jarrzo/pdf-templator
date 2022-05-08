@@ -40,9 +40,9 @@ builder.Services.AddMudServices(configuration =>
 
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IPdfTemplateService, PdfTemplateService>();
-builder.Services.AddScoped<IPdfInsertableService, PdfInsertableService>();
-builder.Services.AddScoped<IPdfConversionService, PdfConversionService>();
+builder.Services.AddScoped<ITemplateService, TemplateService>();
+builder.Services.AddScoped<IFieldService, FieldService>();
+builder.Services.AddScoped<IConversionService, ConversionService>();
 builder.Services.AddScoped<IChartService, ChartService>();
 builder.Services.AddScoped<ClientPreferenceManager>();
 

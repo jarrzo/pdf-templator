@@ -1,4 +1,4 @@
-﻿namespace pdfTemplator.Shared.Models.Insertables
+﻿namespace pdfTemplator.Shared.Models.Fields
 {
     public class DateParams
     {

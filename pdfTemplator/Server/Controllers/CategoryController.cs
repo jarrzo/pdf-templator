@@ -40,9 +40,8 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CategoryParameters categoryParams)
+        public async Task<IActionResult> Create(Category category)
         {
-            var category = categoryParams.ToCategory();
             _db.Categories.Add(category);
             await _db.SaveChangesAsync();
 
@@ -50,14 +49,14 @@ namespace pdfTemplator.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(CategoryParameters categoryParams, int id)
+        public async Task<IActionResult> Update(Category category, int id)
         {
             var dbCategory = await _db.Categories.FirstOrDefaultAsync(x => x.Id == id);
 
             if (dbCategory == null)
                 return Ok(await Result<int>.FailAsync("Not found!"));
 
-            dbCategory.Name = categoryParams.Name;
+            dbCategory.Name = category.Name;
 
             _db.Update(dbCategory);
             await _db.SaveChangesAsync();
@@ -79,16 +78,16 @@ namespace pdfTemplator.Server.Controllers
             return Ok(await Result<int>.SuccessAsync(dbCategory.Id, "Category deleted"));
         }
 
-        [HttpGet("{id}/pdfTemplates")]
-        public async Task<IActionResult> GetPdfTemplates(int id)
+        [HttpGet("{id}/templates")]
+        public async Task<IActionResult> GetTemplates(int id)
         {
             var category = await _db.Categories.FirstOrDefaultAsync(x => x.Id == id);
 
             if (category == null)
-                return Ok(await Result<PdfTemplate>.FailAsync("Category not found!"));
+                return Ok(await Result<Template>.FailAsync("Category not found!"));
 
-            var pdfTemplates = _db.PdfTemplates.Where(x => x.CategoryId == id).ToList() ?? new();
-            return Ok(await Result<List<PdfTemplate>>.SuccessAsync(pdfTemplates));
+            var templates = _db.Templates.Where(x => x.CategoryId == id).ToList() ?? new();
+            return Ok(await Result<List<Template>>.SuccessAsync(templates));
         }
     }
 }

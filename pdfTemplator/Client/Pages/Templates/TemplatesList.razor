@@ -1,0 +1,70 @@
+﻿@page "/templates"
+@page "/category/{categoryId:int}"
+@using pdfTemplator.Client.Shared.Components
+@using pdfTemplator.Shared.Models
+@attribute [Authorize]
+@inject Microsoft.Extensions.Localization.IStringLocalizer<Template> _localizer
+
+<PageTitle>Templates</PageTitle>
+
+@if (_list == null)
+{
+    <MudProgressCircular Color="Color.Primary" Indeterminate="true" />
+}
+else
+{
+    <MudTable Hover="true" Elevation="25" Items="_list" Filter="new Func<Template, bool>(Search)">
+        <ToolBarContent>
+            <div class="justify-center mud-text-align-center">
+                <MudButton DisableElevation Variant="Variant.Filled" Color="Color.Primary" Href="/templates/new" StartIcon="@Icons.Material.Filled.Add" IconColor="Color.Surface">@_localizer["Create"]</MudButton>
+            </div>
+            <MudSpacer />
+            <MudTextField @bind-Value="_searchString" Immediate="true" Placeholder="@_localizer["Search for templates"]" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0 mb-3"></MudTextField>
+        </ToolBarContent>
+        <ColGroup>
+            <col style="width: 38px;" />
+            <col />
+            <col style="width: 40%;" />
+            <col />
+            <col />
+            <col />
+            <col />
+        </ColGroup>
+        <HeaderContent>
+            <MudTh Class="clm-row-small"><MudTableSortLabel SortBy="new Func<Template, object>(x => x.Id)">@_localizer["Id"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Template, object>(x => x.Name)">@_localizer["Name"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Template, object>(x => x.Description)">@_localizer["Description"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Template, object>(x => x.Category.Name)">@_localizer["Category"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Template, object>(x => x.CreatedAt)">@_localizer["CreatedAt"]</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<Template, object>(x => x.UpdatedAt)">@_localizer["UpdatedAt"]</MudTableSortLabel></MudTh>
+            <MudTh Style="text-align:right">@_localizer["Actions"]</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Id">@context.Id</MudTd>
+            <MudTd DataLabel="Name">
+                <MudHighlighter Text="@context.Name" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Description">
+                <MudHighlighter Text="@context.Description" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Category">
+                <MudHighlighter Text="@context.Category?.Name" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Created At">
+                <MudHighlighter Text="@context.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Updated At">
+                <MudHighlighter Text="@context.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")" HighlightedText="@_searchString" />
+            </MudTd>
+            <MudTd DataLabel="Actions" Style="text-align: right">
+                <MudIconButton Icon="@Icons.Material.Filled.Search" @onclick="@(() => Preview(@context))" Color="Color.Dark" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.DynamicForm" Href="@($"/templates/fill/{context.Id}")" Color="Color.Primary" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/templates/edit/{context.Id}")" Color="Color.Dark" Size="Size.Small" />
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="@(() => Delete(@context.Id))" Color="Color.Error" Size="Size.Small" />
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <TablePager />
+        </PagerContent>
+    </MudTable>
+}

@@ -18,7 +18,7 @@ namespace pdfTemplator.Test
         {
             //string _content = "<h1>Hello</h1>";
 
-            //_converter.Template = new PdfTemplate
+            //_converter.Template = new Template
             //{
             //    Content = _content
             //};
@@ -39,7 +39,7 @@ namespace pdfTemplator.Test
         {
             //string _content = "<h1>Hello {{name}}</h1>";
 
-            //_converter.Template = new PdfTemplate
+            //_converter.Template = new Template
             //{
             //    Content = _content
             //};

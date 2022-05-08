@@ -5,7 +5,7 @@ using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
 using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
-using pdfTemplator.Shared.Models.Insertables;
+using pdfTemplator.Shared.Models.Fields;
 using System.Dynamic;
 using System.Text.Json;
 
@@ -17,8 +17,8 @@ namespace pdfTemplator.Server.Converters
         private readonly ILogger<HtmlToPdfConverter> _logger;
         private readonly PathsOptions _paths;
         private readonly ConverterProperties _converterProperties;
-        public PdfTemplate Template = null!;
-        public List<PdfInsertable> Insertables = new();
+        public Template Template = null!;
+        public List<Field> Fields = new();
         public JObject Data = null!;
         private string _pdfPath = null!;
         private string _pdfName = null!;
@@ -39,7 +39,7 @@ namespace pdfTemplator.Server.Converters
         {
             if (Template == null) return "";
 
-            GetInsertables();
+            GetFields();
 
             FillTemplate();
 
@@ -59,14 +59,14 @@ namespace pdfTemplator.Server.Converters
             }
             pdf.Close();
 
-            CreatePdfConversion();
+            CreateConversion();
 
             return Convert.ToBase64String(File.ReadAllBytes(_pdfPath + _pdfName));
         }
 
-        private void GetInsertables()
+        private void GetFields()
         {
-            Insertables = _db.PdfInsertables.Where(x => x.PdfTemplateId == Template.Id).ToList();
+            Fields = Template.Fields.ToList();
         }
 
         private void GenerateFileName()
@@ -79,12 +79,12 @@ namespace pdfTemplator.Server.Converters
             _pdfPath = Directory.CreateDirectory(_paths.PdfStoringPath + DateTime.Now.ToString("\\\\yyyy\\\\MM\\\\dd") + "\\").FullName;
         }
 
-        private void CreatePdfConversion()
+        private void CreateConversion()
         {
-            _db.PdfConversions.Add(new PdfConversion
+            _db.Conversions.Add(new Conversion
             {
                 DataJSON = JsonSerializer.Serialize(Data),
-                PdfTemplateId = Template!.Id,
+                TemplateId = Template!.Id,
                 PdfPath = _pdfPath + _pdfName,
             });
             _db.SaveChanges();
@@ -114,14 +114,14 @@ namespace pdfTemplator.Server.Converters
         private void FillArrays(Dictionary<string, JArray> arrays)
         {
             foreach (var item in arrays)
-                if (Insertables.Any(x => x.Key == item.Key))
+                if (Fields.Any(x => x.Key == item.Key))
                     FillObjects(item.Key, item.Value);
         }
 
         private void FillStrings(Dictionary<string, JValue> strings)
         {
             foreach (var item in strings)
-                if (Insertables.Any(x => x.Key == item.Key))
+                if (Fields.Any(x => x.Key == item.Key))
                     FillText(item.Key, item.Value);
         }
 
@@ -148,7 +148,7 @@ namespace pdfTemplator.Server.Converters
 
         private void FillTable(string key, JArray objects)
         {
-            string startKey = "data-pdfinsertable=\"" + key + "\"";
+            string startKey = "data-pdffield=\"" + key + "\"";
             string endKey = "</tbody>";
 
             int startKeyPosition = _pdfContent.IndexOf(startKey);

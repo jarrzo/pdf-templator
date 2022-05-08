@@ -6,6 +6,6 @@ namespace pdfTemplator.Client.Services.Models
     public interface IChartService : IService
     {
         Task<IResult<List<double>>> GetWeeklyConversionsCount();
-        Task<IResult<List<KeyValuePair<PdfTemplate, int>>>> GetTopPdfTemplates();
+        Task<IResult<List<KeyValuePair<Template, int>>>> GetTopTemplates();
     }
 }

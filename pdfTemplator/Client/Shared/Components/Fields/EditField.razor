@@ -1,0 +1,63 @@
+﻿@using pdfTemplator.Shared.Constants.Enums
+<EditForm Model="Field" OnValidSubmit="AddField">
+    <MudDialog>
+        <TitleContent>
+            @if (Field.Id > 0)
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                    Edit variable
+                </MudText>
+            }
+            else
+            {
+                <MudText Typo="Typo.h6">
+                    <MudIcon Icon="@Icons.Material.Filled.Add" Class="mr-3 mb-n1" />
+                    Add variable
+                </MudText>
+            }
+        </TitleContent>
+        <DialogContent>
+            <MudGrid>
+                <MudItem xs="12" md="6">
+                    <MudTextField T="string" For="@(() => Field.Key)" @bind-Value="Field.Key" Label="Key" />
+                </MudItem>
+                <MudItem xs="12" md="6">
+                    <MudSelect T="FieldType" Label="Type" AnchorOrigin="Origin.BottomCenter" @bind-Value="Field.Type">
+                        @foreach (FieldType type in Enum.GetValues(typeof(FieldType)))
+                        {
+                            <MudSelectItem T="FieldType" Value="type">@type.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+                </MudItem>
+                @if (Field.Type == FieldType.Object)
+                {
+                    <MudItem xs="12">
+                        @foreach (var arrElement in ArrayElements)
+                        {
+                            <MudTextField T="string" For="@(() => arrElement.Key)" @bind-Value="arrElement.Key" Label="Key" Adornment="Adornment.End" AdornmentIcon="@Icons.Material.Filled.Remove" OnAdornmentClick="@(() => ArrayElements.Remove(arrElement))" />
+                        }
+                    </MudItem>
+                    <MudButton DisableElevation Variant="Variant.Filled" OnClick="@(() => ArrayElements.Add(new() { Key = ""}))"><MudIcon Icon="@Icons.Material.Filled.Add" />Add field</MudButton>
+                }
+                @if (Field.Type == FieldType.Date)
+                {
+                    <MudItem xs="12">
+                        <MudTextField T="string" For="@(() => DateFormat)" @bind-Value="DateFormat" Label="Date format" />
+                    </MudItem>
+                }
+            </MudGrid>
+        </DialogContent>
+        <DialogActions>
+            <MudButton DisableElevation Variant="Variant.Filled" OnClick="Cancel">Cancel</MudButton>
+            @if (Field.Id > 0)
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">Edit</MudButton>
+            }
+            else
+            {
+                <MudButton DisableElevation Variant="Variant.Filled" ButtonType="ButtonType.Submit" Color="Color.Success">Add</MudButton>
+            }
+        </DialogActions>
+    </MudDialog>
+</EditForm>
