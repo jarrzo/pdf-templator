@@ -9,19 +9,15 @@ using System.Text.Json;
 
 namespace pdfTemplator.Client.Shared.Components.Fields
 {
-    public partial class FieldList
+    public partial class TemplateFieldList
     {
         [Parameter] public Template Template { get; set; } = null!;
         public List<Field> Fields { get; set; } = new();
 
-        protected override Task OnAfterRenderAsync(bool firstRender)
+        protected override Task OnInitializedAsync()
         {
-            if (firstRender)
-            {
-                GetFields();
-            }
-
-            return base.OnAfterRenderAsync(firstRender);
+            GetFields();
+            return base.OnInitializedAsync();
         }
 
         private void GetFields()
@@ -32,18 +28,20 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             }
         }
 
-        private async Task CreateNewField()
+        private async Task SelectFromExistingFields()
         {
             var parameters = new DialogParameters();
+            parameters.Add(nameof(FieldTable.Template), Template);
 
-            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<EditField>("Create", parameters, options);
+            var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true, DisableBackdropClick = true };
+            var dialog = _dialogService.Show<FieldTable>("Existing fields", parameters, options);
             var response = await dialog.Result;
             if (!response.Cancelled)
             {
                 GetFields();
             }
         }
+
         private static string GetFieldIcon(FormFieldType type) => type switch
         {
             FormFieldType.Text => Icons.Material.Filled.ShortText,

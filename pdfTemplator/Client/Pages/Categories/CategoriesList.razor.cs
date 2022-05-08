@@ -81,7 +81,7 @@ namespace pdfTemplator.Client.Pages.Categories
             var parameters = new DialogParameters();
             parameters.Add(nameof(EditCategory.CategoryParams), category);
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<EditCategory>("Create", parameters, options);
+            var dialog = _dialogService.Show<EditCategory>("Edit", parameters, options);
             var response = await dialog.Result;
             if (!response.Cancelled)
             {

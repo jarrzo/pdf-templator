@@ -1,24 +1,24 @@
 ﻿using Microsoft.AspNetCore.Components;
 using MudBlazor;
 using pdfTemplator.Client.Services.Models;
-using pdfTemplator.Client.Shared.Components.Categories;
-using pdfTemplator.Client.Shared.Components.Fields;
 using pdfTemplator.Shared.Models;
 
-namespace pdfTemplator.Client.Pages.Fields
+namespace pdfTemplator.Client.Shared.Components.Fields
 {
-    public partial class FieldList
+    public partial class FieldTable
     {
-        [Inject] private IFieldService fieldService{ get; set; } = null!;
+        [Inject] private IFieldService fieldService { get; set; } = null!;
+        [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
+        [Parameter] public Template? Template { get; set; }
         private List<Field> _list = new();
         private string _searchString = "";
 
         protected override async Task OnInitializedAsync()
         {
-            await GetCategories();
+            await GetFields();
         }
 
-        private async Task GetCategories()
+        private async Task GetFields()
         {
             var response = await fieldService.GetAllAsync();
             if (response != null)
@@ -61,7 +61,7 @@ namespace pdfTemplator.Client.Pages.Fields
 
         private async Task Reset()
         {
-            await GetCategories();
+            await GetFields();
         }
 
         private async Task AddField()
@@ -81,12 +81,28 @@ namespace pdfTemplator.Client.Pages.Fields
             var parameters = new DialogParameters();
             parameters.Add(nameof(EditField.Field), field);
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Small, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<EditField>("Create", parameters, options);
+            var dialog = _dialogService.Show<EditField>("Edit", parameters, options);
             var response = await dialog.Result;
             if (!response.Cancelled)
             {
                 await Reset();
             }
+        }
+
+        private async Task AddToTemplate(Field field)
+        {
+            if (Template != null)
+            {
+                if (field.Templates == null) field.Templates = new List<Template>();
+                field.Templates.Add(Template);
+                await fieldService.SaveAsync(field);
+                Cancel();
+            }
+        }
+
+        public void Cancel()
+        {
+            MudDialog.Cancel();
         }
     }
 }

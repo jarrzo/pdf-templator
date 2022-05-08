@@ -24,14 +24,14 @@ namespace pdfTemplator.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int id)
         {
-            var fields = await _db.Fields.ToListAsync();
+            var fields = await _db.Fields.Include(x => x.Templates).ToListAsync();
             return Ok(await Result<List<Field>>.SuccessAsync(fields));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var field = await _db.Fields.FirstOrDefaultAsync(x => x.Id == id);
+            var field = await _db.Fields.Include(x => x.Templates).FirstOrDefaultAsync(x => x.Id == id);
 
             if (field == null)
                 return Ok(await Result<Field>.FailAsync("Field not found!"));
@@ -59,6 +59,7 @@ namespace pdfTemplator.Server.Controllers
             dbField.Key = field.Key;
             dbField.Type = field.Type;
             dbField.ParamsJSON = field.ParamsJSON;
+            dbField.Templates = field.Templates;
 
             _db.Update(dbField);
             await _db.SaveChangesAsync();

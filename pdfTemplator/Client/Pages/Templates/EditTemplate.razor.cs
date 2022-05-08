@@ -50,8 +50,12 @@ namespace pdfTemplator.Client.Pages.Templates
                 {
                     Name = "New Template",
                     Description = "",
-                    Content = ""
+                    Content = "",
+                    CategoryId = Categories.First().Id,
                 };
+                var response = await templateService.SaveAsync(Template);
+                Template = response.Data;
+                _navigationManager.NavigateTo($"/templates/edit/{Template.Id}", false, true);
             }
             await Task.CompletedTask;
         }
