@@ -2,7 +2,6 @@
 using MudBlazor;
 using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Client.Shared.Components.AutomatedTemplates;
-using pdfTemplator.Client.Shared.Components.DataSources;
 using pdfTemplator.Shared.Models;
 
 namespace pdfTemplator.Client.Pages.AutomatedTemplates

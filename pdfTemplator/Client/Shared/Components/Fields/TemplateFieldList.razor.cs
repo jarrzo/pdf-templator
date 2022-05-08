@@ -22,7 +22,7 @@ namespace pdfTemplator.Client.Shared.Components.Fields
 
         private async Task GetFields()
         {
-            if(Template.Id > 0) Template = (await templateService.GetAsync(Template.Id)).Data;
+            if (Template.Id > 0) Template = (await templateService.GetAsync(Template.Id)).Data;
             if (Template.Fields != null)
             {
                 Fields = Template.Fields.ToList();

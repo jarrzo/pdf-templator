@@ -1,7 +1,7 @@
-﻿using pdfTemplator.Client.Services.Interfaces;
-using Blazored.LocalStorage;
+﻿using Blazored.LocalStorage;
 using Microsoft.Extensions.Localization;
 using MudBlazor;
+using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Client.Settings;
 using pdfTemplator.Shared.Constants.Storage;
 using pdfTemplator.Shared.Wrapper;
