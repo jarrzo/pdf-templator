@@ -57,5 +57,11 @@ namespace pdfTemplator.Client.Services.Models
             var response = await _httpClient.GetAsync($"{TemplateEndpoints.BaseUrl}/{id}/{TemplateEndpoints.Conversions}");
             return await response.ToResult<List<Conversion>>();
         }
+
+        public async Task<IResult<string>> ConvertAsync(int id, dynamic data)
+        {
+            var response = await _httpClient.PostAsJsonAsync($"{TemplateEndpoints.BaseUrl}/{id}/convert", (object)data);
+            return await response.ToResult<string>();
+        }
     }
 }

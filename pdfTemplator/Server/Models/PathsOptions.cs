@@ -4,6 +4,6 @@
     {
         public const string Paths = "Paths";
 
-        public string PdfStoringPath { get; set; } = string.Empty;
+        public string PdfStoringPath { get; set; } = null!;
     }
 }

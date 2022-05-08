@@ -11,6 +11,7 @@ namespace pdfTemplator.Client.Services.Interfaces
         Task<IResult<Template>> SaveAsync(Template request);
         Task<IResult<int>> DeleteAsync(int id);
 
+        Task<IResult<string>> ConvertAsync(int id, dynamic data);
         Task<IResult<List<Conversion>>> GetConversionsAsync(int id);
     }
 }

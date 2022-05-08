@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Client.Shared.Components.AutomatedTemplates;
@@ -86,6 +87,17 @@ namespace pdfTemplator.Client.Pages.AutomatedTemplates
             {
                 await Reset();
             }
+        }
+
+        private async Task GetFilled(AutomatedTemplate template)
+        {
+            var response = await automatedTemplateService.ConvertAsync(template.Id);
+
+            if (response.Succeeded)
+                await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/pdf", response.Data, $"{template.Name}.pdf");
+            else
+                foreach (var msg in response.Messages)
+                    _snackBar.Add(msg, Severity.Error);
         }
     }
 }

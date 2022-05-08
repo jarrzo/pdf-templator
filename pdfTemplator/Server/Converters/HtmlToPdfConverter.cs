@@ -32,9 +32,9 @@ namespace pdfTemplator.Server.Converters
             _converterProperties = new();
         }
 
-        public string CreatePdf()
+        public Conversion CreatePdf()
         {
-            if (Template == null) return "";
+            if (Template == null) throw new MissingFieldException("Template is missing");
 
             GetFields();
 
@@ -56,13 +56,17 @@ namespace pdfTemplator.Server.Converters
             }
             pdf.Close();
 
-            CreateConversion();
+            return CreateConversion();
+        }
 
-            return Convert.ToBase64String(File.ReadAllBytes(_pdfPath + _pdfName));
+        public static string GetEncodedContents(Conversion conversion)
+        {
+            return Convert.ToBase64String(File.ReadAllBytes(conversion.PdfPath));
         }
 
         private void GetFields()
         {
+            if (Template.Fields == null) _db.Entry(Template).Collection(x => x.Fields).Load();
             Fields = Template.Fields.ToList();
         }
 
@@ -76,15 +80,18 @@ namespace pdfTemplator.Server.Converters
             _pdfPath = Directory.CreateDirectory(_paths.PdfStoringPath + DateTime.Now.ToString("\\\\yyyy\\\\MM\\\\dd") + "\\").FullName;
         }
 
-        private void CreateConversion()
+        private Conversion CreateConversion()
         {
-            _db.Conversions.Add(new Conversion
+            var conversion = new Conversion
             {
                 DataJSON = JsonSerializer.Serialize(Data),
                 TemplateId = Template!.Id,
                 PdfPath = _pdfPath + _pdfName,
-            });
+            };
+            _db.Conversions.Add(conversion);
             _db.SaveChanges();
+
+            return conversion;
         }
 
         public void FillTemplate()

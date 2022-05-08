@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using MudBlazor;
 using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Client.Shared.Components.DataSources;
@@ -86,6 +87,16 @@ namespace pdfTemplator.Client.Pages.DataSources
             {
                 await Reset();
             }
+        }
+
+        private async Task GetData(DataSource dataSource)
+        {
+            var response = await dataSourceService.GetDataAsync(dataSource.Id);
+            if(response.Succeeded)
+                await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/json", response.Data, $"{dataSource.Name}.json");
+            else
+                foreach(var msg in response.Messages)
+                    _snackBar.Add(msg, Severity.Error);
         }
     }
 }

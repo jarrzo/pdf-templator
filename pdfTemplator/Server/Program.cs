@@ -1,9 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
+using pdfTemplator.Server.Services;
 using Serilog;
+using System.Net;
+using System.Net.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +16,9 @@ var logger = new LoggerConfiguration()
     .CreateLogger();
 
 // Add services to the container.
+builder.Services.Configure<PathsOptions>(builder.Configuration.GetSection(PathsOptions.Paths));
+builder.Services.Configure<SmtpOptions>(builder.Configuration.GetSection(SmtpOptions.Smtp));
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -19,6 +26,20 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole<Guid>>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddScoped<SmtpClient>(serviceProvider =>
+{
+    var smtpConfig = serviceProvider.GetRequiredService<IOptions<SmtpOptions>>().Value;
+    return new SmtpClient
+    {
+        Host = smtpConfig.Host,
+        Port = smtpConfig.Port,
+        EnableSsl = smtpConfig.EnableSsl,
+        Credentials = new NetworkCredential(smtpConfig.Username, smtpConfig.Password)
+    };
+});
+
+builder.Services.AddTransient<HtmlToPdfConverter>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -54,10 +75,6 @@ builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
 builder.Services.AddRazorPages();
 
 builder.Services.AddSwaggerGen();
-
-builder.Services.Configure<PathsOptions>(
-    builder.Configuration.GetSection(PathsOptions.Paths));
-builder.Services.AddTransient<HtmlToPdfConverter>();
 
 builder.Logging.ClearProviders();
 builder.Logging.AddSerilog(logger);

@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using pdfTemplator.Server.Data;
+using pdfTemplator.Server.Services;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
+using pdfTemplator.Shared.Extensions;
 
 namespace pdfTemplator.Server.Controllers
 {
@@ -80,6 +82,23 @@ namespace pdfTemplator.Server.Controllers
             await _db.SaveChangesAsync();
 
             return Ok(await Result<int>.SuccessAsync(dbDataSource.Id, "DataSource deleted"));
+        }
+
+        [HttpGet("{id}/data")]
+        public async Task<IActionResult> GetData(int id)
+        {
+            var dataSource = await _db.DataSources.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (dataSource == null)
+                return Ok(await Result<string>.FailAsync("Not found!"));
+
+            var dataGetter = await DataGetter.GetData(dataSource);
+
+            if(!dataGetter.Succeeded)
+                return Ok(await Result<List<string>>.FailAsync(dataGetter.Messages));
+
+            var dataEncoded = Convert.ToBase64String(await dataGetter.Data.Content.ReadAsByteArrayAsync());
+            return Ok(await Result<string>.SuccessAsync(dataEncoded, "Success"));
         }
     }
 }

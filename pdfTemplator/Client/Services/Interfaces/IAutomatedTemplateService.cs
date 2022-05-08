@@ -9,5 +9,7 @@ namespace pdfTemplator.Client.Services.Interfaces
         Task<IResult<AutomatedTemplate>> GetAsync(int id);
         Task<IResult<AutomatedTemplate>> SaveAsync(AutomatedTemplate request);
         Task<IResult<int>> DeleteAsync(int id);
+
+        Task<IResult<string>> ConvertAsync(int id);
     }
 }

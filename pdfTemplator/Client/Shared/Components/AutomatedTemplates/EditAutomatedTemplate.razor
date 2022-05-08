@@ -30,7 +30,7 @@
                     <MudTextField T="string" For="@(() => AutomatedTemplate.Description)" @bind-Value="AutomatedTemplate.Description" Label="Description" />
                 </MudItem>
                 <MudItem xs="12" md="6">
-                    <MudTextField T="string" For="@(() => AutomatedTemplate.SendEmail)" @bind-Value="AutomatedTemplate.SendEmail" Label="Sending email" />
+                    <MudTextField T="string" For="@(() => AutomatedTemplate.SendEmail)" @bind-Value="AutomatedTemplate.SendEmail" Label="Sending email" InputType="InputType.Email" />
                 </MudItem>
                 <MudItem xs="12" md="6">
                     <MudTextField T="string" For="@(() => AutomatedTemplate.SavePath)" @bind-Value="AutomatedTemplate.SavePath" Label="Saving path" />

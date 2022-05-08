@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using MudBlazor;
 using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
@@ -11,7 +12,6 @@ namespace pdfTemplator.Client.Pages.Templates
     public partial class FillTemplate
     {
         [Inject] private ITemplateService templateService { get; set; } = null!;
-        [Inject] private IConversionService conversionService { get; set; } = null!;
         [Parameter] public int Id { get; set; }
         public Template Template { get; set; } = null!;
         public List<Field> Fields { get; set; } = new();
@@ -41,8 +41,13 @@ namespace pdfTemplator.Client.Pages.Templates
         public async Task GenerateDocument()
         {
             PrepareData();
-            var response = await conversionService.ConvertAsync(Template.Id, PreparedData);
-            await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/pdf", (string)response.Data, $"{Template.Name}.pdf");
+            var response = await templateService.ConvertAsync(Template.Id, PreparedData);
+
+            if(response.Succeeded)
+                await _jsRuntime.InvokeVoidAsync("downloadBase64File", "application/pdf", response.Data, $"{Template.Name}.pdf");
+            else
+                foreach (var msg in response.Messages)
+                    _snackBar.Add(msg, Severity.Error);
         }
 
         private void SetupFields()

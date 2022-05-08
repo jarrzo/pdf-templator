@@ -9,5 +9,7 @@ namespace pdfTemplator.Client.Services.Interfaces
         Task<IResult<DataSource>> GetAsync(int id);
         Task<IResult<DataSource>> SaveAsync(DataSource request);
         Task<IResult<int>> DeleteAsync(int id);
+
+        Task<IResult<string>> GetDataAsync(int id);
     }
 }

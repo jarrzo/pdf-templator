@@ -4,7 +4,7 @@
 @attribute [Authorize]
 @inject Microsoft.Extensions.Localization.IStringLocalizer<AutomatedTemplate> _localizer
 
-<PageTitle>Categories</PageTitle>
+<PageTitle>Automation</PageTitle>
 
 @if (_list == null)
 {
@@ -66,6 +66,7 @@ else
                 <MudHighlighter Text="@context.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")" HighlightedText="@_searchString" />
             </MudTd>
             <MudTd DataLabel="Actions" Style="text-align: right">
+                <MudIconButton Icon="@Icons.Material.Filled.Download" @onclick="@(() => GetFilled(@context))" Color="Color.Dark" Size="Size.Small" />
                 <MudIconButton Icon="@Icons.Material.Filled.Edit" @onclick="@(() => UpdateAutomatedTemplate(@context))" Color="Color.Dark" Size="Size.Small" />
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" @onclick="@(() => Delete(@context.Id))" Color="Color.Error" Size="Size.Small" />
             </MudTd>

@@ -45,5 +45,11 @@ namespace pdfTemplator.Client.Services.Models
             var response = await _httpClient.DeleteAsync($"{DataSourceEndpoints.BaseUrl}/{id}");
             return await response.ToResult<int>();
         }
+
+        public async Task<IResult<string>> GetDataAsync(int id)
+        {
+            var response = await _httpClient.GetAsync($"{DataSourceEndpoints.BaseUrl}/{id}/data");
+            return await response.ToResult<string>();
+        }
     }
 }

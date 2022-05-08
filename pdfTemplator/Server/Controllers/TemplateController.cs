@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
@@ -14,11 +16,13 @@ namespace pdfTemplator.Server.Controllers
     {
         private readonly ApplicationDbContext _db;
         private readonly ILogger<TemplateController> _logger;
+        private readonly HtmlToPdfConverter _converter;
 
-        public TemplateController(ILogger<TemplateController> logger, ApplicationDbContext db)
+        public TemplateController(ILogger<TemplateController> logger, ApplicationDbContext db, HtmlToPdfConverter converter)
         {
             _logger = logger;
             _db = db;
+            _converter = converter;
         }
 
         [HttpGet]
@@ -79,6 +83,24 @@ namespace pdfTemplator.Server.Controllers
             await _db.SaveChangesAsync();
 
             return Ok(await Result<int>.SuccessAsync(dbTemplate.Id, "Template deleted"));
+        }
+
+        [HttpPost("{id}/convert")]
+        public async Task<IActionResult> ConvertToPdf([FromRoute] int id, [FromBody] dynamic data)
+        {
+            var jObject = JObject.Parse(data.ToString());
+            var template = await _db.Templates.Include(x => x.Fields).FirstOrDefaultAsync(x => x.Id == id);
+
+            if (template == null)
+                return Ok(await Result<string>.FailAsync("Not found!"));
+
+            _converter.Template = template;
+            _converter.Data = jObject;
+
+            var conversion = _converter.CreatePdf();
+            var pdfBase64String = HtmlToPdfConverter.GetEncodedContents(conversion);
+
+            return Ok(await Result<string>.SuccessAsync(pdfBase64String, "Template converted"));
         }
 
         [HttpGet("{id}/conversions")]
