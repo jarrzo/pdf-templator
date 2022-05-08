@@ -24,6 +24,7 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             if (Template.Fields != null)
             {
                 Fields = Template.Fields.ToList();
+                Console.WriteLine(Fields.Count);
             }
         }
 
@@ -82,6 +83,11 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             data += $"</tr></tbody></table>";
             Console.WriteLine(data);
             await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
+        }
+
+        private bool ShouldExpand(FormFieldType type)
+        {
+            return Fields.Any(x => x.Type == type.ToFieldType());
         }
     }
 }
