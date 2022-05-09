@@ -63,7 +63,6 @@ namespace pdfTemplator.Server.Controllers
         [Route("userInfo")]
         public UserInfo UserInfo()
         {
-            //var user = await _userManager.GetUserAsync(HttpContext.User);
             return BuildUserInfo();
         }
 

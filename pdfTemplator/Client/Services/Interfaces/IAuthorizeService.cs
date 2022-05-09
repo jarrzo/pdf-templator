@@ -1,4 +1,5 @@
 ﻿using pdfTemplator.Shared.Models;
+using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Client.Services.Interfaces
 {
@@ -7,6 +8,6 @@ namespace pdfTemplator.Client.Services.Interfaces
         Task Login(LoginParameters loginParameters);
         Task Register(RegisterParameters registerParameters);
         Task Logout();
-        Task<UserInfo> GetUserInfo();
+        Task<IResult<UserInfo>> GetUserInfo();
     }
 }

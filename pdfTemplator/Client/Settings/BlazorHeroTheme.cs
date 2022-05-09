@@ -2,7 +2,7 @@
 
 namespace pdfTemplator.Client.Settings
 {
-    public class BlazorHeroTheme
+    public static class BlazorHeroTheme
     {
         private static Typography DefaultTypography = new Typography()
         {
@@ -109,7 +109,7 @@ namespace pdfTemplator.Client.Settings
             DefaultBorderRadius = "3px"
         };
 
-        public static MudTheme DefaultTheme = new MudTheme()
+        public readonly static MudTheme DefaultTheme = new MudTheme()
         {
             Palette = new Palette()
             {
@@ -124,7 +124,7 @@ namespace pdfTemplator.Client.Settings
             LayoutProperties = DefaultLayoutProperties
         };
 
-        public static MudTheme DarkTheme = new MudTheme()
+        public readonly static MudTheme DarkTheme = new MudTheme()
         {
             Palette = new Palette()
             {

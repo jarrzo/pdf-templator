@@ -2,6 +2,6 @@
 {
     public static class FieldEndpoints
     {
-        public static string BaseUrl = "api/field";
+        public const string BaseUrl = "api/field";
     }
 }

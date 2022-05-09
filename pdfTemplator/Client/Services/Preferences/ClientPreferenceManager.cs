@@ -23,7 +23,7 @@ namespace pdfTemplator.Client.Services.Preferences
 
         public async Task<bool> ToggleDarkModeAsync()
         {
-            var preference = await GetPreference() as ClientPreference;
+            var preference = await GetPreference();
             if (preference != null)
             {
                 preference.IsDarkMode = !preference.IsDarkMode;
@@ -57,10 +57,10 @@ namespace pdfTemplator.Client.Services.Preferences
 
         public async Task<MudTheme> GetCurrentThemeAsync()
         {
-            var preference = await GetPreference() as ClientPreference;
-            if (preference != null)
+            var preference = await GetPreference();
+            if (preference != null && preference.IsDarkMode)
             {
-                if (preference.IsDarkMode == true) return BlazorHeroTheme.DarkTheme;
+                return BlazorHeroTheme.DarkTheme;
             }
             return BlazorHeroTheme.DefaultTheme;
         }

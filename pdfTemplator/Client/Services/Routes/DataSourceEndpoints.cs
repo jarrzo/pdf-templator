@@ -2,6 +2,6 @@
 {
     public static class DataSourceEndpoints
     {
-        public static string BaseUrl = "api/dataSources";
+        public const string BaseUrl = "api/dataSources";
     }
 }

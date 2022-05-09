@@ -1,5 +1,7 @@
 ﻿using pdfTemplator.Client.Services.Interfaces;
+using pdfTemplator.Shared.Extensions;
 using pdfTemplator.Shared.Models;
+using pdfTemplator.Shared.Wrapper;
 using System.Net.Http.Json;
 
 namespace pdfTemplator.Client.Services.Identity
@@ -16,7 +18,7 @@ namespace pdfTemplator.Client.Services.Identity
         public async Task Login(LoginParameters loginParameters)
         {
             var result = await _httpClient.PostAsJsonAsync("api/Authorize/Login", loginParameters);
-            if (result.StatusCode == System.Net.HttpStatusCode.BadRequest) throw new Exception(await result.Content.ReadAsStringAsync());
+            if (result.StatusCode == System.Net.HttpStatusCode.BadRequest) throw new FormatException(await result.Content.ReadAsStringAsync());
             result.EnsureSuccessStatusCode();
         }
 
@@ -29,14 +31,14 @@ namespace pdfTemplator.Client.Services.Identity
         public async Task Register(RegisterParameters registerParameters)
         {
             var result = await _httpClient.PostAsJsonAsync("api/Authorize/Register", registerParameters);
-            if (result.StatusCode == System.Net.HttpStatusCode.BadRequest) throw new Exception(await result.Content.ReadAsStringAsync());
+            if (result.StatusCode == System.Net.HttpStatusCode.BadRequest) throw new FormatException(await result.Content.ReadAsStringAsync());
             result.EnsureSuccessStatusCode();
         }
 
-        public async Task<UserInfo> GetUserInfo()
+        public async Task<IResult<UserInfo>> GetUserInfo()
         {
-            var result = await _httpClient.GetFromJsonAsync<UserInfo>("api/Authorize/UserInfo");
-            return result;
+            var response = await _httpClient.GetAsync("api/Authorize/UserInfo");
+            return await response.ToResult<UserInfo>();
         }
     }
 }

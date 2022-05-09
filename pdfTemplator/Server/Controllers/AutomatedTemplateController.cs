@@ -120,7 +120,6 @@ namespace pdfTemplator.Server.Controllers
 
         private void SendMail(AutomatedTemplate template, Conversion conversion)
         {
-            _logger.LogInformation(conversion.PdfPath);
             MailMessage mailMessage = new MailMessage();
             mailMessage.From = new MailAddress("example@test.com", "Example");
             mailMessage.To.Add(new MailAddress(template.SendEmail));

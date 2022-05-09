@@ -2,6 +2,6 @@
 {
     public static class UserEndpoints
     {
-        public static string BaseUrl = "api/user";
+        public const string BaseUrl = "api/user";
     }
 }

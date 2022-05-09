@@ -2,7 +2,7 @@
 {
     public static class CategoryEndpoints
     {
-        public static string BaseUrl = "api/category";
-        public static string Templates = "templates";
+        public const string BaseUrl = "api/category";
+        public const string Templates = "templates";
     }
 }

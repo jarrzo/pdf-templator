@@ -34,7 +34,7 @@ namespace pdfTemplator.Client.Pages.Templates
                 Fields = Template.Fields.ToList();
                 SetupFields();
 
-                SimpleFieldsCount = Fields.Where(x => x.Type != FieldType.Object).Count();
+                SimpleFieldsCount = Fields.Count(x => x.Type != FieldType.Object);
             }
         }
 
@@ -58,7 +58,7 @@ namespace pdfTemplator.Client.Pages.Templates
             }
         }
 
-        private FormField GetField(Field field)
+        private static FormField GetField(Field field)
         {
             FormField formField = new()
             {
@@ -137,7 +137,7 @@ namespace pdfTemplator.Client.Pages.Templates
             PreparedData.Add(field.Key, objects);
         }
 
-        private Dictionary<string, string> GetElement(List<FormField> fields)
+        private static Dictionary<string, string> GetElement(List<FormField> fields)
         {
             Dictionary<string, string> element = new();
             foreach (var field in fields)

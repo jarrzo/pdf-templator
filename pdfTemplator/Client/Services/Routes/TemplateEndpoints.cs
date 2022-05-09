@@ -2,7 +2,7 @@
 {
     public static class TemplateEndpoints
     {
-        public static string BaseUrl = "api/template";
-        public static string Conversions = "conversions";
+        public const string BaseUrl = "api/template";
+        public const string Conversions = "conversions";
     }
 }

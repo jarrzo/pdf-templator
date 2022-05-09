@@ -2,7 +2,7 @@
 {
     public static class ChartEndpoints
     {
-        public static string GetWeeklyConversionsCount = "api/chart/weeklyConversionsCount";
-        public static string GetTopTemplates = "api/chart/topTemplates";
+        public const string GetWeeklyConversionsCount = "api/chart/weeklyConversionsCount";
+        public const string GetTopTemplates = "api/chart/topTemplates";
     }
 }

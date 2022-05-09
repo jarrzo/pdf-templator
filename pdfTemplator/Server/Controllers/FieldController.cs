@@ -60,12 +60,9 @@ namespace pdfTemplator.Server.Controllers
             dbField.Type = field.Type;
             dbField.ParamsJSON = field.ParamsJSON;
 
-            _logger.LogInformation(dbField.Templates.Count.ToString());
-            _logger.LogInformation(field.Templates.Count.ToString());
-
             if (field.Templates != null)
             {
-                dbField.Templates.Clear();
+                dbField.Templates!.Clear();
                 foreach (var item in field.Templates)
                 {
                     var template = _db.Templates.FirstOrDefault(x => x.Id == item.Id);
@@ -76,9 +73,6 @@ namespace pdfTemplator.Server.Controllers
                     dbField.Templates.Add(template);
                 }
             }
-
-            _logger.LogInformation(dbField.Templates.Count.ToString());
-            _logger.LogInformation(field.Templates.Count.ToString());
 
             _db.Update(dbField);
             await _db.SaveChangesAsync();

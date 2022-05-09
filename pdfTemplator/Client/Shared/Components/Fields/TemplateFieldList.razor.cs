@@ -35,8 +35,7 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             parameters.Add(nameof(FieldTable.Template), Template);
 
             var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.Large, FullWidth = true, DisableBackdropClick = true };
-            var dialog = _dialogService.Show<FieldTable>("Existing fields", parameters, options);
-            var response = await dialog.Result;
+            _dialogService.Show<FieldTable>("Existing fields", parameters, options);
             await GetFields();
         }
 

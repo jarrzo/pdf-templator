@@ -2,6 +2,6 @@
 {
     public static class ConversionEndpoints
     {
-        public static string BaseUrl = "api/conversion";
+        public const string BaseUrl = "api/conversion";
     }
 }

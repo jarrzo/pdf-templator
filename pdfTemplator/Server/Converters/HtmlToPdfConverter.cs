@@ -21,8 +21,6 @@ namespace pdfTemplator.Server.Converters
         private string _pdfName = null!;
         private string _pdfContent = null!;
 
-        public HtmlToPdfConverter() { }
-
         public HtmlToPdfConverter(ILogger<HtmlToPdfConverter> logger, IOptions<PathsOptions> options, ApplicationDbContext db)
         {
             _logger = logger;
@@ -66,8 +64,8 @@ namespace pdfTemplator.Server.Converters
 
         private void GetFields()
         {
-            if (Template.Fields == null) _db.Entry(Template).Collection(x => x.Fields).Load();
-            Fields = Template.Fields.ToList();
+            if (Template.Fields == null) _db.Entry(Template).Collection(x => x.Fields!).Load();
+            Fields = Template.Fields!.ToList();
         }
 
         private void GenerateFileName()

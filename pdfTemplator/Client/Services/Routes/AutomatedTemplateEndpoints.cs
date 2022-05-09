@@ -2,6 +2,6 @@
 {
     public static class AutomatedTemplateEndpoints
     {
-        public static string BaseUrl = "api/automatedTemplate";
+        public const string BaseUrl = "api/automatedTemplate";
     }
 }
