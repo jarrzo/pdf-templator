@@ -12,7 +12,7 @@ namespace pdfTemplator.Client.Services.Identity
 
         public IdentityAuthenticationStateProvider(IAuthorizeService authorizeApi)
         {
-            this._authorizeApi = authorizeApi;
+            _authorizeApi = authorizeApi;
         }
 
         public async Task Login(LoginParameters loginParameters)

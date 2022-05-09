@@ -13,9 +13,9 @@ namespace pdfTemplator.Client.Shared.Components.Fields
         [Inject] private IFieldService fieldService { get; set; } = null!;
         [CascadingParameter] private MudDialogInstance MudDialog { get; set; } = null!;
         [Parameter] public Field Field { get; set; } = new();
-        public List<ArrayElement> ArrayElements = new();
-        public string DateFormat = "yyyy-MM-dd";
-        public string DateTimeFormat = "yyyy-MM-dd HH:mm:ss";
+        public List<ArrayElement> ArrayElements { get; set; } = new();
+        public string DateFormat { get; set; } = "yyyy-MM-dd";
+        public string DateTimeFormat { get; set; } = "yyyy-MM-dd HH:mm:ss";
 
         protected override Task OnInitializedAsync()
         {

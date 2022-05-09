@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using pdfTemplator.Server.Converters;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Wrapper;
@@ -14,15 +13,11 @@ namespace pdfTemplator.Server.Controllers
     public class ChartController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<TemplateController> _logger;
-        private readonly HtmlToPdfConverter _converter;
         private readonly int _numberOfDays = 7;
 
-        public ChartController(ILogger<TemplateController> logger, ApplicationDbContext db, HtmlToPdfConverter converter)
+        public ChartController(ApplicationDbContext db)
         {
-            _logger = logger;
             _db = db;
-            _converter = converter;
         }
 
         [HttpGet]

@@ -4,6 +4,7 @@ using Newtonsoft.Json.Linq;
 using pdfTemplator.Server.Data;
 using pdfTemplator.Server.Models;
 using pdfTemplator.Shared.Models;
+using System.Text;
 using System.Text.Json;
 
 namespace pdfTemplator.Server.Converters
@@ -14,9 +15,9 @@ namespace pdfTemplator.Server.Converters
         private readonly ILogger<HtmlToPdfConverter> _logger;
         private readonly PathsOptions _paths;
         private readonly ConverterProperties _converterProperties;
-        public Template Template = null!;
-        public List<Field> Fields = new();
-        public JObject Data = null!;
+        public Template Template { get; set; } = null!;
+        public List<Field> Fields { get; set; } = new();
+        public JObject Data { get; set; } = null!;
         private string _pdfPath = null!;
         private string _pdfName = null!;
         private string _pdfContent = null!;
@@ -100,7 +101,7 @@ namespace pdfTemplator.Server.Converters
             Dictionary<string, JArray> arrays = new();
             Dictionary<string, JValue> strings = new();
 
-            foreach (JProperty item in (JToken)Data)
+            foreach (JProperty item in Data.Children<JProperty>())
             {
                 string key = item.Name;
                 JToken value = item.Value;
@@ -115,16 +116,14 @@ namespace pdfTemplator.Server.Converters
 
         private void FillArrays(Dictionary<string, JArray> arrays)
         {
-            foreach (var item in arrays)
-                if (Fields.Any(x => x.Key == item.Key))
-                    FillObjects(item.Key, item.Value);
+            foreach (var item in arrays.Where(item => Fields.Any(field => field.Key == item.Key)))
+                FillObjects(item.Key, item.Value);
         }
 
         private void FillStrings(Dictionary<string, JValue> strings)
         {
-            foreach (var item in strings)
-                if (Fields.Any(x => x.Key == item.Key))
-                    FillText(item.Key, item.Value);
+            foreach (var item in strings.Where(item => Fields.Any(field => field.Key == item.Key)))
+                FillText(item.Key, item.Value);
         }
 
         private void FillObjects(string key, JArray objects)
@@ -167,21 +166,21 @@ namespace pdfTemplator.Server.Converters
 
         private static string FillObject(string content, JArray objects)
         {
-            string preparedContent = "";
+            StringBuilder preparedContent = new();
 
             foreach (JToken element in objects)
             {
                 var elementContent = content;
-                foreach (JProperty prop in element)
+                foreach (JProperty prop in element.Children<JProperty>())
                 {
                     string propKey = "{{" + prop.Name + "}}";
                     var propValue = prop.Value.ToString();
                     elementContent = elementContent.Replace(propKey, propValue);
                 }
-                preparedContent += elementContent;
+                preparedContent.Append(elementContent);
             }
 
-            return preparedContent;
+            return preparedContent.ToString();
         }
 
         private void FillText(string key, JValue value)

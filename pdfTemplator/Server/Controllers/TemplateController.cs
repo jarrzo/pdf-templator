@@ -15,12 +15,10 @@ namespace pdfTemplator.Server.Controllers
     public class TemplateController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<TemplateController> _logger;
         private readonly HtmlToPdfConverter _converter;
 
-        public TemplateController(ILogger<TemplateController> logger, ApplicationDbContext db, HtmlToPdfConverter converter)
+        public TemplateController(ApplicationDbContext db, HtmlToPdfConverter converter)
         {
-            _logger = logger;
             _db = db;
             _converter = converter;
         }

@@ -13,11 +13,9 @@ namespace pdfTemplator.Server.Controllers
     public class ConversionController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<ConversionController> _logger;
 
-        public ConversionController(ILogger<ConversionController> logger, ApplicationDbContext db)
+        public ConversionController(ApplicationDbContext db)
         {
-            _logger = logger;
             _db = db;
         }
 

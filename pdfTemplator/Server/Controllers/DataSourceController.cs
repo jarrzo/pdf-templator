@@ -14,11 +14,9 @@ namespace pdfTemplator.Server.Controllers
     public class DataSourceController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<DataSourceController> _logger;
 
-        public DataSourceController(ILogger<DataSourceController> logger, ApplicationDbContext db)
+        public DataSourceController(ApplicationDbContext db)
         {
-            _logger = logger;
             _db = db;
         }
 

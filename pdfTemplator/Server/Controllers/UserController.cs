@@ -14,11 +14,9 @@ namespace pdfTemplator.Server.Controllers
     public class UserController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<UserController> _logger;
 
-        public UserController(ILogger<UserController> logger, ApplicationDbContext db)
+        public UserController(ApplicationDbContext db)
         {
-            _logger = logger;
             _db = db;
         }
 

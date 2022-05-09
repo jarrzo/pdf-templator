@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using pdfTemplator.Server.Models;
 using pdfTemplator.Shared.Models;
+using pdfTemplator.Shared.Wrapper;
 
 namespace pdfTemplator.Server.Controllers
 {
@@ -61,21 +62,18 @@ namespace pdfTemplator.Server.Controllers
 
         [HttpGet]
         [Route("userInfo")]
-        public UserInfo UserInfo()
+        public async Task<IActionResult> UserInfo()
         {
-            return BuildUserInfo();
+            return Ok(await Result<UserInfo>.SuccessAsync(BuildUserInfo()));
         }
-
 
         private UserInfo BuildUserInfo()
         {
             return new UserInfo
             {
-                IsAuthenticated = User.Identity.IsAuthenticated,
-                UserName = User.Identity.Name,
+                IsAuthenticated = User.Identity != null ? User.Identity.IsAuthenticated : false,
+                UserName = User.Identity != null ? (User.Identity.Name ?? "") : "",
                 ExposedClaims = User.Claims
-                    //Optionally: filter the claims you want to expose to the client
-                    //.Where(c => c.Type == "test-claim")
                     .ToDictionary(c => c.Type, c => c.Value)
             };
         }

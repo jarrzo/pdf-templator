@@ -5,6 +5,7 @@ using pdfTemplator.Client.Services.Interfaces;
 using pdfTemplator.Shared.Constants.Enums;
 using pdfTemplator.Shared.Models;
 using pdfTemplator.Shared.Models.Fields;
+using System.Text;
 using System.Text.Json;
 
 namespace pdfTemplator.Client.Shared.Components.Fields
@@ -65,21 +66,22 @@ namespace pdfTemplator.Client.Shared.Components.Fields
         {
             ArrayParams arrayParams = JsonSerializer.Deserialize<ArrayParams>(field.ParamsJSON)!;
 
-            string data = $"<p>@start_{field.Key}</p>";
-            foreach (var seqElement in arrayParams!.ArrayElements) data += "<p>{{" + seqElement.Key + "}}</p>";
-            data += $"<p>@end_{field.Key}</p>";
-            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
+            StringBuilder str = new();
+            str.Append($"<p>@start_{field.Key}</p>");
+            foreach (var seqElement in arrayParams!.ArrayElements) str.Append("<p>{{" + seqElement.Key + "}}</p>");
+            str.Append($"<p>@end_{field.Key}</p>");
+            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", str.ToString());
         }
 
         private async Task InsertTable(Field field)
         {
             ArrayParams arrayParams = JsonSerializer.Deserialize<ArrayParams>(field.ParamsJSON)!;
 
-            string data = $"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><tbody data-pdffield=\"" + field.Key + "\"><tr>";
-            foreach (var tableElement in arrayParams!.ArrayElements) data += "<td>{{" + tableElement.Key + "}}</td>";
-            data += $"</tr></tbody></table>";
-            Console.WriteLine(data);
-            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", data);
+            StringBuilder str = new();
+            str.Append($"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><tbody data-pdffield=\"" + field.Key + "\"><tr>");
+            foreach (var tableElement in arrayParams!.ArrayElements) str.Append("<td>{{" + tableElement.Key + "}}</td>");
+            str.Append($"</tr></tbody></table>");
+            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", str);
         }
 
         private bool TypeHasFields(FormFieldType type)

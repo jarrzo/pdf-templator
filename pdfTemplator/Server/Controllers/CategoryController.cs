@@ -13,11 +13,9 @@ namespace pdfTemplator.Server.Controllers
     public class CategoryController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<CategoryController> _logger;
 
-        public CategoryController(ILogger<CategoryController> logger, ApplicationDbContext db)
+        public CategoryController(ApplicationDbContext db)
         {
-            _logger = logger;
             _db = db;
         }
 

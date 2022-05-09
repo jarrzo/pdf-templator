@@ -17,7 +17,7 @@ namespace pdfTemplator.Client.Pages.Templates
         public List<Field> Fields { get; set; } = new();
         public List<FormField> FormFields { get; set; } = new();
         public Dictionary<string, dynamic> PreparedData { get; set; } = new();
-        public int SimpleFieldsCount = 0;
+        public int SimpleFieldsCount { get; set; } = 0;
 
         protected override async Task OnInitializedAsync()
         {

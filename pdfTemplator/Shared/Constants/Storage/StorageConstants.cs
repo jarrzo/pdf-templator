@@ -4,7 +4,7 @@
     {
         public static class Local
         {
-            public static string Preference = "clientPreference";
+            public const string Preference = "clientPreference";
         }
     }
 }

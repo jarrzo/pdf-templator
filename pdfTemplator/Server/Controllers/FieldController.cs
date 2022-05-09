@@ -13,11 +13,9 @@ namespace pdfTemplator.Server.Controllers
     public class FieldController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<FieldController> _logger;
 
-        public FieldController(ILogger<FieldController> logger, ApplicationDbContext db)
+        public FieldController(ApplicationDbContext db)
         {
-            _logger = logger;
             _db = db;
         }
 

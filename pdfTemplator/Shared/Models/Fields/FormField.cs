@@ -9,6 +9,6 @@ namespace pdfTemplator.Shared.Models.Fields
         public string Value { get; set; } = null!;
         public bool HasElements { get; set; } = false;
         public List<List<FormField>> Elements { get; set; } = new();
-        public Field Field = null!;
+        public Field Field { get; set; } = null!;
     }
 }

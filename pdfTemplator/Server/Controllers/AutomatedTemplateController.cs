@@ -17,13 +17,11 @@ namespace pdfTemplator.Server.Controllers
     public class AutomatedTemplateController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
-        private readonly ILogger<AutomatedTemplateController> _logger;
         private readonly HtmlToPdfConverter _converter;
         private readonly SmtpClient _smtpClient;
 
-        public AutomatedTemplateController(ILogger<AutomatedTemplateController> logger, ApplicationDbContext db, HtmlToPdfConverter converter, SmtpClient smtpClient)
+        public AutomatedTemplateController(ApplicationDbContext db, HtmlToPdfConverter converter, SmtpClient smtpClient)
         {
-            _logger = logger;
             _db = db;
             _converter = converter;
             _smtpClient = smtpClient;
