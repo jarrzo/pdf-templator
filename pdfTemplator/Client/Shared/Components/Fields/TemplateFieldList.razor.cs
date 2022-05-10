@@ -81,7 +81,7 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             str.Append($"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><tbody data-pdffield=\"" + field.Key + "\"><tr>");
             foreach (var tableElement in arrayParams!.ArrayElements) str.Append("<td>{{" + tableElement.Key + "}}</td>");
             str.Append($"</tr></tbody></table>");
-            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", str);
+            await _jsRuntime.InvokeVoidAsync("insertIntoEditor", str.ToString());
         }
 
         private bool TypeHasFields(FormFieldType type)
