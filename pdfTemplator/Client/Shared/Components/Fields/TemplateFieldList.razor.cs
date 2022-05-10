@@ -78,7 +78,9 @@ namespace pdfTemplator.Client.Shared.Components.Fields
             ArrayParams arrayParams = JsonSerializer.Deserialize<ArrayParams>(field.ParamsJSON)!;
 
             StringBuilder str = new();
-            str.Append($"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><tbody data-pdffield=\"" + field.Key + "\"><tr>");
+            str.Append($"<table style=\"border-collapse: collapse; width: 100%;\" border=\"1\"><thead><tr>");
+            foreach (var tableElement in arrayParams!.ArrayElements) str.Append("<th>" + tableElement.Key + "</th>");
+            str.Append($"</tr></thead><tbody data-pdffield=\"" + field.Key + "\"><tr>");
             foreach (var tableElement in arrayParams!.ArrayElements) str.Append("<td>{{" + tableElement.Key + "}}</td>");
             str.Append($"</tr></tbody></table>");
             await _jsRuntime.InvokeVoidAsync("insertIntoEditor", str.ToString());
